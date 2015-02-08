@@ -10,7 +10,7 @@
                 width: 500px; 
                 height: 500px;                
                 border: 2px #000 solid;
-                /* overflow: hidden; */
+                overflow: hidden;
             }
             .eCell {
                 position: absolute;
@@ -20,6 +20,7 @@
                 -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
                 -moz-box-sizing: border-box;    /* Firefox, other Gecko */
                 box-sizing: border-box; 
+                opacity: 0.8;
             }
             .eCell img 
             {   
@@ -42,14 +43,23 @@
         {   
             var arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
             $("#divContainer").ecoScroll({
-                onCreate:function($e,x,y) 
+                onShow:function(oParam) 
                 {
-                    $e.text( x + "," + y);
+                    oParam.$e.text( oParam.x + "," + oParam.y);
                     //$e.text( y*5 + x+1);
                     //$e.text( (y*8 + x)%7 +1);
                     //$e.text("row: "+ y + " cell: " + x);
                     //$e.append("<img src='img//img" + Math.abs( (x + y*10)%25 ) + ".jpg' />");
                     //$e.append("<img src='img//img" + Math.abs( (x+y)%25 ) + ".jpg' />");
+                },
+                onHide:function(oParam) 
+                {
+                    //oParam.$e.hide();    
+                    oParam.$e.css({"background-color": "red"});                 
+                },
+                onRemove:function(oParam) 
+                {
+                    return true;
                 }
             });
         });

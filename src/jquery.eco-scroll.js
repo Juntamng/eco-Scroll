@@ -8,9 +8,17 @@
 		containerHeight: 500,
 		itemWidth: 100,
 		itemHeight: 100,
-        onCreate: function($cell, x, y) 
+        onShow: function(oParam) 
         {
-            $cell.text(x + "," + y);
+            oParam.$e.text(oParam.x + "," + oParam.y);
+        },
+        onHide: function(oParam) 
+        {
+            oParam.$e.css({"background-color": "red"}); //.hide();    
+        },
+        onRemove: function(oParam) 
+        {
+            return true;    
         }
 	};
 
@@ -40,7 +48,7 @@
             this.x2 = 0;
             this.y1 = 0;
             this.y2 = 0;
-			this.arr = {};	
+			this.arr = {};
 			this.iLeftS = 0;
             this.iLeftE = 0;
             this.iTopS = 0;
@@ -87,31 +95,37 @@
             {
                 for(var iCntY = this.y1; iCntY < this.y2; iCntY++)
                 {
-                    if (this.arr[iCntX+"_"+iCntY] === undefined)
-                        this.createCell(iCntX, iCntY);
+                    this.showCell(iCntX, iCntY);
                 }
             }
         },
-        createCell: function(x, y) 
-        {            
-            this.arr[x+"_"+y] = true;
-            var iX = x * this.settings.itemWidth;
-            var iY = y * this.settings.itemHeight;
-            var i = Math.abs(x * y) % 25;
-            var $e = $("<div class='eCell' id='c" + x + "_" + y + "'></div>")
-                .appendTo(this.$wrapper)
-                .attr({              
-                    col: x,
-                    row: y
-                }).css({
-                    position: "absolute",
-                    left: iX,
-                    top: iY,
-                    width: this.settings.itemWidth,
-                    height: this.settings.itemHeight
-                });
+        showCell: function(x, y) 
+        {    
+            var bNew = false, $e;
+            if (this.arr["c"+x+"_"+y] === undefined)
+            {
+                bNew = true;
+                this.arr["c"+x+"_"+y] = {"x": x, "y": y};
+                var iX = x * this.settings.itemWidth;
+                var iY = y * this.settings.itemHeight;
+                var i = Math.abs(x * y) % 25;
+                $e = $("<div class='eCell' id='c" + x + "_" + y + "'></div>")
+                    .appendTo(this.$wrapper)
+                    .attr({              
+                        col: x,
+                        row: y
+                    }).css({
+                        position: "absolute",
+                        left: iX,
+                        top: iY,
+                        width: this.settings.itemWidth,
+                        height: this.settings.itemHeight
+                    });
+            }
+            else
+                $e = $("#c"+x+"_"+y).css({"background-color": "#fff"}).show();
 
-            this.settings.onCreate($e, x, y);
+            this.settings.onShow({"bNew":bNew, "$e":$e, "x":x, "y":y});
         },           
         mStart: function(e)
         {
@@ -152,10 +166,45 @@
             
             this.unbind("mousemove", document);
             this.unbind("mouseup", document);                    
-
             e.preventDefault();
             e.stopPropagation();
+
+            this.hideCells();
             return false;                        
+        },
+        hideCells: function()
+        {
+            //console.log(this.x1 + ":" + this.x2 + " " + this.y1 + ":" + this.y2);
+            var sKey;
+            for (sKey in this.arr)
+            {
+                if (this.arr.hasOwnProperty(sKey))
+                {
+                    if (this.arr[sKey].x < this.x1 || this.arr[sKey].x >= this.x2 || this.arr[sKey].y < this.y1 || this.arr[sKey].y >= this.y2)
+                    {
+                        this.settings.onHide({"$e": $("#" + sKey), "x": this.arr[sKey].x, "y": this.arr[sKey].y});
+                        this.removeCell({"$e": $("#" + sKey), "x": this.arr[sKey].x, "y": this.arr[sKey].y});
+                    }
+                }
+            }
+            this.checkObjProp();
+        },
+        removeCell: function(oParam)
+        {
+            if (this.settings.onRemove(oParam))
+            {
+                oParam.$e.remove();
+                delete this.arr["c"+oParam.x+"_"+oParam.y];
+            }    
+        },
+        checkObjProp: function() {
+            var sKey, iCnt=0;
+            for (sKey in this.arr)
+            {
+                if (this.arr.hasOwnProperty(sKey))
+                    iCnt++;
+            }
+            console.log("prop count = " + iCnt);
         }
 	});
 
