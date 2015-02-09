@@ -14,7 +14,7 @@
         },
         onHide: function(oParam) 
         {
-            oParam.$e.css({"background-color": "red"}); //.hide();    
+            oParam.$e.hide();    
         },
         onRemove: function(oParam) 
         {
@@ -37,18 +37,21 @@
 	{
 		init: function() 
 		{
-			this.initData();	
-			this.bind("mousedown", this.element);				
+			this.arr = {};
+            this.initData();	
+			this.bind("mousedown", this.element);	
+            this.bind("resize", window);			
 		},
 		initData: function()
 		{
-			this.iColTotal = Math.round(this.settings.containerWidth / this.settings.itemWidth);
-			this.iRowTotal = Math.round(this.settings.containerHeight / this.settings.itemHeight);
+            this.settings.containerWidth = this.$element.outerWidth();
+            this.settings.containerHeight = this.$element.outerHeight();            
+			this.iColTotal = Math.round(this.settings.containerWidth / this.settings.itemWidth)+1;
+			this.iRowTotal = Math.round(this.settings.containerHeight / this.settings.itemHeight)+1;
             this.x1 = 0;
             this.x2 = 0;
             this.y1 = 0;
-            this.y2 = 0;
-			this.arr = {};
+            this.y2 = 0;			
 			this.iLeftS = 0;
             this.iLeftE = 0;
             this.iTopS = 0;
@@ -58,7 +61,7 @@
             this.$wrapper.css({position: "absolute"});
 
             this.updateCells();
-		},
+		},        
 		handleEvent: function (e) 
         {
             switch ( e.type ) 
@@ -72,65 +75,26 @@
                 case "mouseup":
                     this.mEnd(e);
                     break;
+                case "resize":
+                    this.wResize(e);                    
+                    break;
             }
         },
        	bind: function (type, el, bubble) 
        	{
             el.addEventListener(type, this);
         },
-
         unbind: function (type, el, bubble) 
         {
             el.removeEventListener(type, this);
-        },
-        updateCells: function() 
-        {        
-            var oPos = this.$wrapper.position();
-            this.x1 = Math[(this.iDistX<0) ? "ceil": "floor"](-oPos.left / this.settings.itemWidth)-1,
-            this.x2 = this.x1 + this.iColTotal+2;
-            this.y1 = Math[(this.iDistY<0) ? "ceil": "floor"](-oPos.top / this.settings.itemHeight)-1,
-            this.y2 = this.y1 + this.iRowTotal+2;
-
-            for(var iCntX = this.x1; iCntX< this.x2; iCntX++)             
-            {
-                for(var iCntY = this.y1; iCntY < this.y2; iCntY++)
-                {
-                    this.showCell(iCntX, iCntY);
-                }
-            }
-        },
-        showCell: function(x, y) 
-        {    
-            var bNew = false, $e;
-            if (this.arr["c"+x+"_"+y] === undefined)
-            {
-                bNew = true;
-                this.arr["c"+x+"_"+y] = {"x": x, "y": y};
-                var iX = x * this.settings.itemWidth;
-                var iY = y * this.settings.itemHeight;
-                var i = Math.abs(x * y) % 25;
-                $e = $("<div class='eCell' id='c" + x + "_" + y + "'></div>")
-                    .appendTo(this.$wrapper)
-                    .attr({              
-                        col: x,
-                        row: y
-                    }).css({
-                        position: "absolute",
-                        left: iX,
-                        top: iY,
-                        width: this.settings.itemWidth,
-                        height: this.settings.itemHeight
-                    });
-            }
-            else
-                $e = $("#c"+x+"_"+y).css({"background-color": "#fff"}).show();
-
-            this.settings.onShow({"bNew":bNew, "$e":$e, "x":x, "y":y});
-        },           
+        },         
+        wResize: function(e) {
+            this.initData();
+        },     
         mStart: function(e)
         {
 			this.iLeftS = e.pageX;
-            this.iTopS = e.pageY;
+            this.iTopS = e.pageY;            
             this.bind("mousemove", document);
             this.bind("mouseup", document);
             this.iDistX = 0;
@@ -172,6 +136,44 @@
             this.hideCells();
             return false;                        
         },
+        updateCells: function() 
+        {        
+            var oPos = this.$wrapper.position();
+            this.x1 = Math[(this.iDistX<0) ? "ceil": "floor"](-oPos.left / this.settings.itemWidth)-1,
+            this.x2 = this.x1 + this.iColTotal+2;
+            this.y1 = Math[(this.iDistY<0) ? "ceil": "floor"](-oPos.top / this.settings.itemHeight)-1,
+            this.y2 = this.y1 + this.iRowTotal+2;
+
+            for(var iCntX = this.x1; iCntX< this.x2; iCntX++)             
+            {
+                for(var iCntY = this.y1; iCntY < this.y2; iCntY++)
+                {
+                    this.showCell(iCntX, iCntY);
+                }
+            }
+        },
+        showCell: function(x, y) 
+        {    
+            var bNew = false, $e;
+            if (this.arr["c"+x+"_"+y] === undefined)
+            {
+                bNew = true;
+                this.arr["c"+x+"_"+y] = {"x": x, "y": y};
+                var iX = x * this.settings.itemWidth;
+                var iY = y * this.settings.itemHeight;
+                var i = Math.abs(x * y) % 25;
+                $e = $("<div class='eCell' id='c" + x + "_" + y + "'></div>")
+                    .appendTo(this.$wrapper)
+                    .css({
+                        left: iX,
+                        top: iY
+                    });
+            }
+            else
+                $e = $("#c"+x+"_"+y).css({"background-color": "#fff"}).show();
+
+            this.settings.onShow({"bNew":bNew, "$e":$e, "x":x, "y":y});
+        },  
         hideCells: function()
         {
             //console.log(this.x1 + ":" + this.x2 + " " + this.y1 + ":" + this.y2);

@@ -1,0 +1,60 @@
+    <!DOCTYPE html>
+
+    <html>
+    <head>
+		<title></title>
+        <style>
+            html, body {
+                height: 100%;
+                width: 100%;
+            }
+            #divContainer {
+                margin: 100px auto;
+                position: relative;
+                width: 500px; 
+                height: 400px;                
+                border: 2px #000 solid;
+                overflow: hidden;
+            }
+            .eCell {
+                position: absolute;
+                width: 100px;
+                height: 100px;
+                border: 1px blue solid;
+                -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+                -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+                box-sizing: border-box; 
+            }
+        </style>
+    </head>
+    <body>        
+        <div id="divContainer">
+            <div id="divWrapper">                                
+            </div>        
+        </div>        
+        
+        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+        <script src="../src/jquery.eco-Scroll.js"></script>        
+		<script>            
+		$(function()
+        {   
+            $("#divContainer").ecoScroll({
+                onShow:function(oParam) 
+                {
+                    if (oParam.bNew)
+                        oParam.$e.text( oParam.x + "," + oParam.y);
+                },
+                onHide:function(oParam) 
+                {
+                    oParam.$e.hide();                        
+                },
+                onRemove:function(oParam) 
+                {
+                    return true;
+                }
+            });
+        });
+		</script>
+    </body>
+    </html>
