@@ -8,6 +8,10 @@
 		containerHeight: 500,
 		itemWidth: 100,
 		itemHeight: 100,
+        rangeX : [0,10],
+        rangeY : [0,10],
+        axis : "xy",
+        snap : false,
         onShow: function(oParam) 
         {
             oParam.$e.text(oParam.x + "," + oParam.y);
@@ -44,8 +48,8 @@
 		},
 		initData: function()
 		{
-            this.settings.containerWidth = this.$element.outerWidth();
-            this.settings.containerHeight = this.$element.outerHeight();            
+            this.settings.containerWidth = this.$element.width();
+            this.settings.containerHeight = this.$element.height();            
 			this.iColTotal = Math.round(this.settings.containerWidth / this.settings.itemWidth)+1;
 			this.iRowTotal = Math.round(this.settings.containerHeight / this.settings.itemHeight)+1;
             this.x1 = 0;
@@ -57,7 +61,11 @@
             this.iTopS = 0;
             this.iTopE = 0;
             this.iDistX = 0;
-            this.iDistY = 0;
+            this.iDistY = 0;            
+            this.iRangeX1 = -( this.settings.rangeX[0] * this.settings.itemWidth );
+            this.iRangeX2 = -( (this.settings.rangeX[1] * this.settings.itemWidth) - (this.settings.containerWidth - this.settings.itemWidth) );
+            this.iRangeY1 = -( this.settings.rangeY[0] * this.settings.itemHeight );                
+            this.iRangeY2 = -( (this.settings.rangeY[1] * this.settings.itemHeight) - (this.settings.containerHeight - this.settings.itemHeight) );
             this.$wrapper.css({position: "absolute"});
 
             this.updateCells();
@@ -110,20 +118,25 @@
             this.iDistX = this.iLeftE-this.iLeftS;
             this.iDistY = this.iTopE-this.iTopS;
 
-            this.mMoveTo(this.iDistX, this.iDistY);
+            this.mMoveBy(this.iDistX, this.iDistY);
                                     
             this.iLeftS = e.pageX;
             this.iTopS = e.pageY;            
             e.preventDefault();
             e.stopPropagation();
             return false;
+        },        
+        mMoveTo: function(iX, iY)
+        {            
+            var oRange = this.checkRange(iX, iY);
+            this.$wrapper.css({"left": oRange.left, "top": oRange.top});                        
+            this.updateCells();
         },
-        mMoveTo: function(iDistX, iDistY)
+        mMoveBy: function(iDistX, iDistY)
         {            
             var oPos = this.$wrapper.position();
             var iLeft = oPos.left+iDistX, iTop = oPos.top+iDistY;
-            this.$wrapper.css({"left": iLeft, "top": iTop});                        
-            this.updateCells();
+            this.mMoveTo(iLeft, iTop);            
         },                                    
         mEnd: function (e) {                 	            
             var that = this;
@@ -134,14 +147,16 @@
             e.stopPropagation();
 
             this.hideCells();
+            if (this.settings.snap)
+                this.snapOn();
             return false;                        
         },
         updateCells: function() 
         {        
             var oPos = this.$wrapper.position();
-            this.x1 = Math[(this.iDistX<0) ? "ceil": "floor"](-oPos.left / this.settings.itemWidth)-1,
+            this.x1 = Math[(this.iDistX<0) ? "ceil": "floor"](-oPos.left / this.settings.itemWidth)-1;
             this.x2 = this.x1 + this.iColTotal+2;
-            this.y1 = Math[(this.iDistY<0) ? "ceil": "floor"](-oPos.top / this.settings.itemHeight)-1,
+            this.y1 = Math[(this.iDistY<0) ? "ceil": "floor"](-oPos.top / this.settings.itemHeight)-1;
             this.y2 = this.y1 + this.iRowTotal+2;
 
             for(var iCntX = this.x1; iCntX< this.x2; iCntX++)             
@@ -198,6 +213,40 @@
                 oParam.$e.remove();
                 delete this.arr["c"+oParam.x+"_"+oParam.y];
             }    
+        },
+        checkRange: function(iLeft, iTop)
+        {
+            if (this.settings.axis.indexOf("x") > -1)
+            {
+                if (iLeft > this.iRangeX1)
+                    iLeft = this.iRangeX1;
+                else if (iLeft < this.iRangeX2)
+                    iLeft = this.iRangeX2;
+            }
+            else
+                iLeft = 0;
+
+            if (this.settings.axis.indexOf("y") > -1)
+            {
+                if (iTop > this.iRangeY1)
+                    iTop = this.iRangeY1;
+                else if (iTop < this.iRangeY2)
+                    iTop = this.iRangeY2;
+            }
+            else
+                iTop = 0;
+
+            return {left: iLeft, top: iTop};
+        },
+        snapOn: function()
+        {
+            var oPos = this.$wrapper.position(),
+                iRemind = oPos.left % this.settings.itemWidth;
+
+            if (Math.abs(iRemind) > this.settings.itemWidth/2)
+                this.mMoveBy( (this.settings.itemWidth-Math.abs(iRemind)) * iRemind/Math.abs(iRemind), 0);
+            else
+                this.mMoveBy( -iRemind, 0);
         },
         checkObjProp: function() {
             var sKey, iCnt=0;
