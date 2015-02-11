@@ -11,8 +11,8 @@
             #divContainer {
                 margin: 100px auto;
                 position: relative;
-                width: 80%; 
-                height: 80%;                
+                width: 60%; 
+                height: 60%;                
                 border: 2px #000 solid;
                 overflow: hidden;
             }
@@ -23,7 +23,7 @@
                 border: 1px blue solid;
                 -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
                 -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-                box-sizing: border-box; 
+                box-sizing: border-box;     
             }
             .eCell img 
             {   
@@ -48,7 +48,8 @@
                 itemWidth: 150,
                 itemHeight: 150,
                 rangeX : [undefined, undefined],
-                rangeY : [undefined, undefined],                
+                rangeY : [undefined, undefined],         
+                snap : false,       
                 onShow:function(oParam) 
                 {
                     if (oParam.bNew) 

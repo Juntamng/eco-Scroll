@@ -144,7 +144,7 @@
         mMoveTo: function(iX, iY, options)
         {            
             var oRange = this.checkRange(iX, iY);
-            console.log(typeof(options))
+
             if (typeof(options) === "object")
                 this.$wrapper.animate({"left": oRange.left, "top": oRange.top}, options);
             else    
@@ -179,14 +179,19 @@
         {        
             var oPos = this.$wrapper.position();
             this.visibleX1 = Math.floor(-oPos.left / this.settings.itemWidth);
-            this.visibleX2 = this.visibleX1 + this.iColTotal-1;
+            this.visibleX2 = Math.floor( (-oPos.left+this.settings.containerWidth) / this.settings.itemWidth );            
             this.visibleY1 = Math.floor(-oPos.top / this.settings.itemHeight);
-            this.visibleY2 = this.visibleY1 + this.iRowTotal-1;
+            this.visibleY2 = Math.floor( (-oPos.top+this.settings.containerHeight) / this.settings.itemHeight );
+            this.x1 = this.visibleX1 - 1;
+            this.x2 = this.visibleX2 + 2;
+            this.y1 = this.visibleY1 - 1;
+            this.y2 = this.visibleY2 + 2;
+            /*
             this.x1 = Math[(this.iDistX<0) ? "ceil": "floor"](-oPos.left / this.settings.itemWidth) - 1;
             this.x2 = this.x1 + this.iColTotal + 2;
             this.y1 = Math[(this.iDistY<0) ? "ceil": "floor"](-oPos.top / this.settings.itemHeight) - 1;
             this.y2 = this.y1 + this.iRowTotal + 2;
-
+            */
             for(var iCntX = this.x1; iCntX< this.x2; iCntX++)             
             {
                 for(var iCntY = this.y1; iCntY < this.y2; iCntY++)
@@ -269,28 +274,84 @@
         snapOn: function()
         {
             var oPos = this.$wrapper.position();                            
-            var iOffsetL=0, iOffsetT=0;
+            this.mMoveBy( snapH(this), snapV(this), {duration: 400} );        
 
-            /*
-            if (Math.abs(iRemind) > this.settings.itemWidth/2)
-                this.mMoveBy( (this.settings.itemWidth-Math.abs(iRemind)) * iRemind/Math.abs(iRemind), 0);
-            else
-                this.mMoveBy( -iRemind, 0);
-            */
-            
-            if (this.iDistX < 0)
-                iOffsetL = this.settings.itemWidth + ((oPos.left - this.settings.itemWidth*this.iColTotal) % this.settings.itemWidth);
-            else            
-                iOffsetL = (oPos.left - this.settings.itemWidth*this.iColTotal - this.settings.containerWidth ) % this.settings.itemWidth;
+            function snapH(that)
+            {
+                var iRemind=0, iOffsetL=0, iOffsetR=0, iReturn=0;
+                
+                //console.log("L = " + oPos.left % that.settings.itemWidth );           
+                //console.log("R = " + (oPos.left - (that.settings.containerWidth-that.settings.itemWidth*(that.visibleX2 - that.visibleX1)) ) % that.settings.itemWidth ); 
 
-            /*
-            if (this.iDistY < 0)
-                iOffsetT = this.settings.itemHeight + ((oPos.top - this.settings.itemHeight*this.iRowTotal) % this.settings.itemHeight);
-            else                        
-                iOffsetT = (oPos.top - this.settings.itemHeight*this.iRowTotal - this.settings.containerHeight ) % this.settings.itemHeight;                
-            */
+                iRemind = oPos.left % that.settings.itemWidth;
+                if (iRemind < 0)
+                    iOffsetL = that.settings.itemWidth + iRemind;
+                else
+                    iOffsetL = iRemind;
+                
+                iRemind = (oPos.left - (that.settings.containerWidth-that.settings.itemWidth*(that.visibleX2 - that.visibleX1)) ) % that.settings.itemWidth;
+                if (iRemind < 0)
+                    iOffsetR = -iRemind; 
+                else
+                    iOffsetR = that.settings.itemWidth - iRemind;
+                //console.log(iOffsetL + ":" + iOffsetR);
+                
+                if (that.iDistX < 0)
+                {
+                    if (iOffsetL > that.settings.itemWidth*0.7 )
+                        iReturn = that.settings.itemWidth-iOffsetL;                        
+                    else
+                        iReturn = -iOffsetL;        
+                } 
+                else
+                {
+                    if (iOffsetR > that.settings.itemWidth*0.7 )
+                        iReturn = -(that.settings.itemWidth-iOffsetR);
+                    else
+                        iReturn = iOffsetR;                        
+                }    
 
-            this.mMoveBy( -iOffsetL, -iOffsetT, {duration: 400});        
+                return iReturn;
+            }    
+
+            function snapV(that)
+            {
+                var iRemind=0, iOffsetT=0, iOffsetB=0, iReturn=0;
+                
+                console.log("T = " + oPos.top % that.settings.itemHeight );           
+                console.log("B = " + (oPos.top - (that.settings.containerHeight-that.settings.itemHeight*(that.visibleY2 - that.visibleY1)) ) % that.settings.itemHeight ); 
+
+                iRemind = oPos.top % that.settings.itemHeight;
+                if (iRemind < 0)
+                    iOffsetT = that.settings.itemHeight + iRemind;
+                else
+                    iOffsetT = iRemind;
+                
+                iRemind = (oPos.top - (that.settings.containerHeight-that.settings.itemHeight*(that.visibleY2 - that.visibleY1)) ) % that.settings.itemHeight;
+                if (iRemind < 0)
+                    iOffsetB = -iRemind; 
+                else
+                    iOffsetB = that.settings.itemHeight - iRemind;
+                console.log(iOffsetT + ":" + iOffsetB);
+                
+                if (that.iDistX < 0)
+                {
+                    if (iOffsetT > that.settings.itemHeight*0.7 )
+                        iReturn = that.settings.itemHeight-iOffsetT;
+                    else
+                        iReturn = -iOffsetT;
+                } 
+                else
+                {
+                    if (iOffsetB > that.settings.itemHeight*0.7 )
+                        iReturn = -(that.settings.itemHeight-iOffsetB);  
+                    else
+                        iReturn = iOffsetB;
+                        
+                }  
+
+                return iReturn;  
+            }      
         },
         checkObjProp: function() {
             var sKey, iCnt=0;
