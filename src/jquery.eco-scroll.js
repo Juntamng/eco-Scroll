@@ -23,6 +23,10 @@
         onRemove: function(oParam) 
         {
             return true;    
+        },
+        onStop: function(oParam) 
+        {
+            
         }
 	};
 
@@ -41,10 +45,17 @@
 	{
 		init: function() 
 		{
-			this.arr = {};
-            this.initData();	
-			this.bind("mousedown", this.element);	
-            this.bind("resize", window);			
+			this.arr = {};            
+            this.initData();				
+            this.bTouch = 'ontouchstart' in window;
+            this.resizeEvent = 'onorientationchange' in window ? 'orientationchange' : 'resize';
+            this.startEvent  = this.bTouch ? 'touchstart' : 'mousedown';
+            this.moveEvent  = this.bTouch ? 'touchmove' : 'mousemove';
+            this.endEvent  = this.bTouch ? 'touchend' : 'mouseup';
+            this.cancelEvent  = this.bTouch ? 'touchcancel' : 'mouseup';
+            this.bind(this.startEvent, this.element);	
+            this.bind(this.resizeEvent, window);			
+
 		},
 		initData: function()
 		{
@@ -74,16 +85,17 @@
         {
             switch ( e.type ) 
             {
-                case "mousedown":                             
+                case this.startEvent:                             
                     this.mStart(e);
                     break;
-                case "mousemove":
+                case this.moveEvent:
                     this.mMove(e);
                     break;
-                case "mouseup":
+                case this.endEvent:
+                case this.cancelEvent:
                     this.mEnd(e);
                     break;
-                case "resize":
+                case this.resizeEvent:
                     this.wResize(e);                    
                     break;
             }
@@ -101,10 +113,12 @@
         },     
         mStart: function(e)
         {
-			this.iLeftS = e.pageX;
-            this.iTopS = e.pageY;            
-            this.bind("mousemove", document);
-            this.bind("mouseup", document);
+            var point = this.bTouch ? e.touches[0] : e;
+
+			this.iLeftS = point.pageX;
+            this.iTopS = point.pageY;            
+            this.bind(this.moveEvent, document);
+            this.bind(this.endEvent, document);
             this.iDistX = 0;
             this.iDistY = 0;
             e.preventDefault();
@@ -113,51 +127,65 @@
         },
         mMove: function(e)
         {
-            this.iLeftE = e.pageX;
-            this.iTopE = e.pageY;                        
+            var point = this.bTouch ? e.touches[0] : e;
+            this.iLeftE = point.pageX;
+            this.iTopE = point.pageY;                        
             this.iDistX = this.iLeftE-this.iLeftS;
             this.iDistY = this.iTopE-this.iTopS;
 
             this.mMoveBy(this.iDistX, this.iDistY);
                                     
-            this.iLeftS = e.pageX;
-            this.iTopS = e.pageY;            
+            this.iLeftS = point.pageX;
+            this.iTopS = point.pageY;            
             e.preventDefault();
             e.stopPropagation();
             return false;
         },        
-        mMoveTo: function(iX, iY)
+        mMoveTo: function(iX, iY, options)
         {            
             var oRange = this.checkRange(iX, iY);
-            this.$wrapper.css({"left": oRange.left, "top": oRange.top});                        
+            console.log(typeof(options))
+            if (typeof(options) === "object")
+                this.$wrapper.animate({"left": oRange.left, "top": oRange.top}, options);
+            else    
+                this.$wrapper.css({"left": oRange.left, "top": oRange.top});                        
             this.updateCells();
         },
-        mMoveBy: function(iDistX, iDistY)
+        mMoveBy: function(iDistX, iDistY, options)
         {            
             var oPos = this.$wrapper.position();
             var iLeft = oPos.left+iDistX, iTop = oPos.top+iDistY;
-            this.mMoveTo(iLeft, iTop);            
+            this.mMoveTo(iLeft, iTop, options);            
         },                                    
         mEnd: function (e) {                 	            
             var that = this;
             
-            this.unbind("mousemove", document);
-            this.unbind("mouseup", document);                    
+            this.unbind(this.moveEvent, document);
+            this.unbind(this.endEvent, document);                    
             e.preventDefault();
             e.stopPropagation();
 
             this.hideCells();
             if (this.settings.snap)
                 this.snapOn();
+
+            $("#c" + this.visibleX1 + "_" + this.visibleY1).css({"background-color": "yellow"});
+            $("#c" + this.visibleX2 + "_" + this.visibleY1).css({"background-color": "yellow"});
+            $("#c" + this.visibleX1 + "_" + this.visibleY2).css({"background-color": "yellow"});
+            $("#c" + this.visibleX2 + "_" + this.visibleY2).css({"background-color": "yellow"});
             return false;                        
         },
         updateCells: function() 
         {        
             var oPos = this.$wrapper.position();
-            this.x1 = Math[(this.iDistX<0) ? "ceil": "floor"](-oPos.left / this.settings.itemWidth)-1;
-            this.x2 = this.x1 + this.iColTotal+2;
-            this.y1 = Math[(this.iDistY<0) ? "ceil": "floor"](-oPos.top / this.settings.itemHeight)-1;
-            this.y2 = this.y1 + this.iRowTotal+2;
+            this.visibleX1 = Math.floor(-oPos.left / this.settings.itemWidth);
+            this.visibleX2 = this.visibleX1 + this.iColTotal-1;
+            this.visibleY1 = Math.floor(-oPos.top / this.settings.itemHeight);
+            this.visibleY2 = this.visibleY1 + this.iRowTotal-1;
+            this.x1 = Math[(this.iDistX<0) ? "ceil": "floor"](-oPos.left / this.settings.itemWidth) - 1;
+            this.x2 = this.x1 + this.iColTotal + 2;
+            this.y1 = Math[(this.iDistY<0) ? "ceil": "floor"](-oPos.top / this.settings.itemHeight) - 1;
+            this.y2 = this.y1 + this.iRowTotal + 2;
 
             for(var iCntX = this.x1; iCntX< this.x2; iCntX++)             
             {
@@ -240,13 +268,29 @@
         },
         snapOn: function()
         {
-            var oPos = this.$wrapper.position(),
-                iRemind = oPos.left % this.settings.itemWidth;
+            var oPos = this.$wrapper.position();                            
+            var iOffsetL=0, iOffsetT=0;
 
+            /*
             if (Math.abs(iRemind) > this.settings.itemWidth/2)
                 this.mMoveBy( (this.settings.itemWidth-Math.abs(iRemind)) * iRemind/Math.abs(iRemind), 0);
             else
                 this.mMoveBy( -iRemind, 0);
+            */
+            
+            if (this.iDistX < 0)
+                iOffsetL = this.settings.itemWidth + ((oPos.left - this.settings.itemWidth*this.iColTotal) % this.settings.itemWidth);
+            else            
+                iOffsetL = (oPos.left - this.settings.itemWidth*this.iColTotal - this.settings.containerWidth ) % this.settings.itemWidth;
+
+            /*
+            if (this.iDistY < 0)
+                iOffsetT = this.settings.itemHeight + ((oPos.top - this.settings.itemHeight*this.iRowTotal) % this.settings.itemHeight);
+            else                        
+                iOffsetT = (oPos.top - this.settings.itemHeight*this.iRowTotal - this.settings.containerHeight ) % this.settings.itemHeight;                
+            */
+
+            this.mMoveBy( -iOffsetL, -iOffsetT, {duration: 400});        
         },
         checkObjProp: function() {
             var sKey, iCnt=0;
