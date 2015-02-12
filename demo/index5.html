@@ -28,12 +28,31 @@
                 width: 800px;
                 height: 600px;
             }
-        </style>
+        </style>   
+        <link type="text/css" rel="stylesheet" href="../css/bootstrap.css">     
+        <link type="text/css" rel="stylesheet" href="../css/carousel.css">     
     </head>
     <body>        
         <div id="divContainer">
-            <div id="divWrapper">                                
-            </div>        
+            <div id="divWrapper" class="wrapper">                                
+            </div>   
+            
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                <li data-to="0" class="active"></li>
+                <li data-to="1"></li>
+                <li data-to="2"></li>
+            </ol>    
+
+            <!-- Controls -->
+            <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a> 
         </div>        
         
         <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
@@ -43,8 +62,8 @@
 		$(function()
         {               
             $("#divContainer").ecoScroll({
-                itemWidth: "100%",
-                itemHeight: "100%",
+                itemWidth: 800,
+                itemHeight: 600,
                 rangeX : [-5,10],
                 rangeY : [-5,10],
                 axis : "x",

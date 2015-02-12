@@ -34,7 +34,7 @@
 	{
 		this.element = element;
 		this.$element = $(element);
-		this.$wrapper = this.$element.children();				
+		this.$wrapper = this.$element.find(".wrapper");				
 		this.settings = $.extend( {}, defaults, options );
 		this._defaults = defaults;
 		this._name = pluginName;
@@ -58,11 +58,34 @@
 
 		},
 		initData: function()
-		{
+		{        
+            this.itemWidthUnit = this.itemHeightUnit = "px";
             this.settings.containerWidth = this.$element.width();
-            this.settings.containerHeight = this.$element.height();            
-			this.iColTotal = Math.round(this.settings.containerWidth / this.settings.itemWidth)+1;
-			this.iRowTotal = Math.round(this.settings.containerHeight / this.settings.itemHeight)+1;
+            this.settings.containerHeight = this.$element.height();           
+            if (String(this.settings.itemWidth).indexOf("%") == -1)
+                this.calWidth = parseInt(this.settings.itemWidth);                
+            else
+            {
+                this.calWidth = this.settings.containerWidth * parseInt(this.settings.itemWidth)/100;
+                this.itemWidthUnit = "%";
+            }
+            if (String(this.settings.itemHeight).indexOf("%") == -1)               
+                this.calHeight = parseInt(this.settings.itemHeight);
+            else
+            {
+                this.calHeight = this.settings.containerHeight * parseInt(this.settings.itemHeight)/100;
+                this.itemHeightUnit = "%";
+            }
+
+            // clean up the arr to draw all cells
+            if (this.itemWidthUnit == "%" || this.itemHeightUnit == "%")
+            {
+                this.arr = null;
+                this.arr = {};
+                this.$wrapper.empty();
+            }
+			this.iColTotal = Math.round(this.settings.containerWidth / this.calWidth)+1;
+			this.iRowTotal = Math.round(this.settings.containerHeight / this.calHeight)+1;
             this.x1 = 0;
             this.x2 = 0;
             this.y1 = 0;
@@ -73,10 +96,10 @@
             this.iTopE = 0;
             this.iDistX = 0;
             this.iDistY = 0;            
-            this.iRangeX1 = -( this.settings.rangeX[0] * this.settings.itemWidth );
-            this.iRangeX2 = -( (this.settings.rangeX[1] * this.settings.itemWidth) - (this.settings.containerWidth - this.settings.itemWidth) );
-            this.iRangeY1 = -( this.settings.rangeY[0] * this.settings.itemHeight );                
-            this.iRangeY2 = -( (this.settings.rangeY[1] * this.settings.itemHeight) - (this.settings.containerHeight - this.settings.itemHeight) );
+            this.iRangeX1 = -( this.settings.rangeX[0] * this.calWidth );
+            this.iRangeX2 = -( (this.settings.rangeX[1] * this.calWidth) - (this.settings.containerWidth - this.calWidth) );
+            this.iRangeY1 = -( this.settings.rangeY[0] * this.calHeight );                
+            this.iRangeY2 = -( (this.settings.rangeY[1] * this.calHeight) - (this.settings.containerHeight - this.calHeight) );
             this.$wrapper.css({position: "absolute"});
 
             this.updateCells();
@@ -178,18 +201,18 @@
         updateCells: function() 
         {        
             var oPos = this.$wrapper.position();
-            this.visibleX1 = Math.floor(-oPos.left / this.settings.itemWidth);
-            this.visibleX2 = Math.floor( (-oPos.left+this.settings.containerWidth) / this.settings.itemWidth );            
-            this.visibleY1 = Math.floor(-oPos.top / this.settings.itemHeight);
-            this.visibleY2 = Math.floor( (-oPos.top+this.settings.containerHeight) / this.settings.itemHeight );
+            this.visibleX1 = Math.floor(-oPos.left / this.calWidth);
+            this.visibleX2 = Math.floor( (-oPos.left+this.settings.containerWidth) / this.calWidth );            
+            this.visibleY1 = Math.floor(-oPos.top / this.calHeight);
+            this.visibleY2 = Math.floor( (-oPos.top+this.settings.containerHeight) / this.calHeight );
             this.x1 = this.visibleX1 - 1;
             this.x2 = this.visibleX2 + 2;
             this.y1 = this.visibleY1 - 1;
             this.y2 = this.visibleY2 + 2;
             /*
-            this.x1 = Math[(this.iDistX<0) ? "ceil": "floor"](-oPos.left / this.settings.itemWidth) - 1;
+            this.x1 = Math[(this.iDistX<0) ? "ceil": "floor"](-oPos.left / this.calWidth) - 1;
             this.x2 = this.x1 + this.iColTotal + 2;
-            this.y1 = Math[(this.iDistY<0) ? "ceil": "floor"](-oPos.top / this.settings.itemHeight) - 1;
+            this.y1 = Math[(this.iDistY<0) ? "ceil": "floor"](-oPos.top / this.calHeight) - 1;
             this.y2 = this.y1 + this.iRowTotal + 2;
             */
             for(var iCntX = this.x1; iCntX< this.x2; iCntX++)             
@@ -207,14 +230,16 @@
             {
                 bNew = true;
                 this.arr["c"+x+"_"+y] = {"x": x, "y": y};
-                var iX = x * this.settings.itemWidth;
-                var iY = y * this.settings.itemHeight;
+                var iX = x * this.calWidth;
+                var iY = y * this.calHeight;
                 var i = Math.abs(x * y) % 25;
                 $e = $("<div class='eCell' id='c" + x + "_" + y + "'></div>")
                     .appendTo(this.$wrapper)
                     .css({
                         left: iX,
-                        top: iY
+                        top: iY,
+                        width: this.calWidth,
+                        height: this.calHeight,
                     });
             }
             else
@@ -280,33 +305,33 @@
             {
                 var iRemind=0, iOffsetL=0, iOffsetR=0, iReturn=0;
                 
-                //console.log("L = " + oPos.left % that.settings.itemWidth );           
-                //console.log("R = " + (oPos.left - (that.settings.containerWidth-that.settings.itemWidth*(that.visibleX2 - that.visibleX1)) ) % that.settings.itemWidth ); 
+                //console.log("L = " + oPos.left % that.calWidth );           
+                //console.log("R = " + (oPos.left - (that.settings.containerWidth-that.calWidth*(that.visibleX2 - that.visibleX1)) ) % that.calWidth ); 
 
-                iRemind = oPos.left % that.settings.itemWidth;
+                iRemind = oPos.left % that.calWidth;
                 if (iRemind < 0)
-                    iOffsetL = that.settings.itemWidth + iRemind;
+                    iOffsetL = that.calWidth + iRemind;
                 else
                     iOffsetL = iRemind;
                 
-                iRemind = (oPos.left - (that.settings.containerWidth-that.settings.itemWidth*(that.visibleX2 - that.visibleX1)) ) % that.settings.itemWidth;
+                iRemind = (oPos.left - (that.settings.containerWidth-that.calWidth*(that.visibleX2 - that.visibleX1)) ) % that.calWidth;
                 if (iRemind < 0)
                     iOffsetR = -iRemind; 
                 else
-                    iOffsetR = that.settings.itemWidth - iRemind;
+                    iOffsetR = that.calWidth - iRemind;
                 //console.log(iOffsetL + ":" + iOffsetR);
                 
                 if (that.iDistX < 0)
                 {
-                    if (iOffsetL > that.settings.itemWidth*0.7 )
-                        iReturn = that.settings.itemWidth-iOffsetL;                        
+                    if (iOffsetL > that.calWidth*0.7 )
+                        iReturn = that.calWidth-iOffsetL;                        
                     else
                         iReturn = -iOffsetL;        
                 } 
                 else
                 {
-                    if (iOffsetR > that.settings.itemWidth*0.7 )
-                        iReturn = -(that.settings.itemWidth-iOffsetR);
+                    if (iOffsetR > that.calWidth*0.7 )
+                        iReturn = -(that.calWidth-iOffsetR);
                     else
                         iReturn = iOffsetR;                        
                 }    
@@ -318,33 +343,33 @@
             {
                 var iRemind=0, iOffsetT=0, iOffsetB=0, iReturn=0;
                 
-                console.log("T = " + oPos.top % that.settings.itemHeight );           
-                console.log("B = " + (oPos.top - (that.settings.containerHeight-that.settings.itemHeight*(that.visibleY2 - that.visibleY1)) ) % that.settings.itemHeight ); 
+                console.log("T = " + oPos.top % that.calHeight );           
+                console.log("B = " + (oPos.top - (that.settings.containerHeight-that.calHeight*(that.visibleY2 - that.visibleY1)) ) % that.calHeight ); 
 
-                iRemind = oPos.top % that.settings.itemHeight;
+                iRemind = oPos.top % that.calHeight;
                 if (iRemind < 0)
-                    iOffsetT = that.settings.itemHeight + iRemind;
+                    iOffsetT = that.calHeight + iRemind;
                 else
                     iOffsetT = iRemind;
                 
-                iRemind = (oPos.top - (that.settings.containerHeight-that.settings.itemHeight*(that.visibleY2 - that.visibleY1)) ) % that.settings.itemHeight;
+                iRemind = (oPos.top - (that.settings.containerHeight-that.calHeight*(that.visibleY2 - that.visibleY1)) ) % that.calHeight;
                 if (iRemind < 0)
                     iOffsetB = -iRemind; 
                 else
-                    iOffsetB = that.settings.itemHeight - iRemind;
+                    iOffsetB = that.calHeight - iRemind;
                 console.log(iOffsetT + ":" + iOffsetB);
                 
                 if (that.iDistX < 0)
                 {
-                    if (iOffsetT > that.settings.itemHeight*0.7 )
-                        iReturn = that.settings.itemHeight-iOffsetT;
+                    if (iOffsetT > that.calHeight*0.7 )
+                        iReturn = that.calHeight-iOffsetT;
                     else
                         iReturn = -iOffsetT;
                 } 
                 else
                 {
-                    if (iOffsetB > that.settings.itemHeight*0.7 )
-                        iReturn = -(that.settings.itemHeight-iOffsetB);  
+                    if (iOffsetB > that.calHeight*0.7 )
+                        iReturn = -(that.calHeight-iOffsetB);  
                     else
                         iReturn = iOffsetB;
                         
