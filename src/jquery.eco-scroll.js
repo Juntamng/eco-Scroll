@@ -100,6 +100,7 @@
             this.iRangeX2 = -( (this.settings.rangeX[1] * this.calWidth) - (this.settings.containerWidth - this.calWidth) );
             this.iRangeY1 = -( this.settings.rangeY[0] * this.calHeight );                
             this.iRangeY2 = -( (this.settings.rangeY[1] * this.calHeight) - (this.settings.containerHeight - this.calHeight) );
+            this.bAnimated = false;
             this.$wrapper.css({position: "absolute"});
 
             this.updateCells();
@@ -167,9 +168,17 @@
         mMoveTo: function(iX, iY, options)
         {            
             var oRange = this.checkRange(iX, iY);
-
-            if (typeof(options) === "object")
-                this.$wrapper.animate({"left": oRange.left, "top": oRange.top}, options);
+            var that = this;
+            if (typeof(options) === "object") 
+            {
+                options.start = function(){ that.bAnimated = true; };
+                options.complete = function()
+                { 
+                    that.bAnimated = false; 
+                    that.settings.onStop(that.FindVisibleRange());
+                };
+                !this.bAnimated && this.$wrapper.animate({"left": oRange.left, "top": oRange.top}, options);
+            }
             else    
                 this.$wrapper.css({"left": oRange.left, "top": oRange.top});                        
             this.updateCells();
@@ -179,18 +188,26 @@
             var oPos = this.$wrapper.position();
             var iLeft = oPos.left+iDistX, iTop = oPos.top+iDistY;
             this.mMoveTo(iLeft, iTop, options);            
-        },                                    
+        },
+        movePrev: function()
+        {       
+            this.mMoveBy(this.calWidth, 0, {duration: 400} );     
+        },
+        moveNext: function()
+        {       
+            this.mMoveBy(-this.calWidth, 0, {duration: 400} );
+        },
         mEnd: function (e) {                 	            
-            var that = this;
-            
             this.unbind(this.moveEvent, document);
             this.unbind(this.endEvent, document);                    
             e.preventDefault();
             e.stopPropagation();
 
             this.hideCells();
-            if (this.settings.snap)
+            if (this.settings.snap)                
                 this.snapOn();
+            else
+                this.settings.onStop(this.FindVisibleRange());
 
             $("#c" + this.visibleX1 + "_" + this.visibleY1).css({"background-color": "yellow"});
             $("#c" + this.visibleX2 + "_" + this.visibleY1).css({"background-color": "yellow"});
@@ -377,6 +394,24 @@
 
                 return iReturn;  
             }      
+        },
+        FindVisibleRange: function() {
+            var oReturn = {};
+            var oPos = this.$wrapper.position();
+                
+            oReturn.x1 = Math.ceil(-oPos.left / this.calWidth);
+            oReturn.x2 = Math.floor( (-oPos.left+this.settings.containerWidth) / this.calWidth )-1;            
+            oReturn.y1 = Math.ceil(-oPos.top / this.calHeight);
+            oReturn.y2 = Math.floor( (-oPos.top+this.settings.containerHeight) / this.calHeight )-1;
+
+            /*
+            $("#c" + oPos.x1 + "_" + oPos.y1).css({"border-color": "red"});
+            $("#c" + oPos.x2 + "_" + oPos.y1).css({"border-color": "red"});
+            $("#c" + oPos.x1 + "_" + oPos.y2).css({"border-color": "red"});
+            $("#c" + oPos.x2 + "_" + oPos.y2).css({"border-color": "red"});
+            */
+
+            return oReturn;
         },
         checkObjProp: function() {
             var sKey, iCnt=0;

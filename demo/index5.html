@@ -9,10 +9,10 @@
                 width: 100%;
             }
             #divContainer {
+                height: 100%;
+                width: 100%;
                 margin: 100px auto;
                 position: relative;
-                width: 800px; 
-                height: 600px;                
                 border: 2px #000 solid;
                 overflow: hidden;
             }
@@ -25,8 +25,8 @@
             }
             .eCell img 
             {   
-                width: 800px;
-                height: 600px;
+                width: 100%; 
+                height: 100%;                
             }
         </style>   
         <link type="text/css" rel="stylesheet" href="../css/bootstrap.css">     
@@ -38,18 +38,18 @@
             </div>   
             
             <!-- Indicators -->
-            <ol class="carousel-indicators">
+            <ol id="olIndicators" class="carousel-indicators">
                 <li data-to="0" class="active"></li>
                 <li data-to="1"></li>
                 <li data-to="2"></li>
             </ol>    
 
             <!-- Controls -->
-            <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+            <a id="aPrev" class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
                 <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                 <span class="sr-only">Previous</span>
             </a>
-            <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+            <a id="aNext" class="right carousel-control" href="#carousel-example-generic" data-slide="next">
                 <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
                 <span class="sr-only">Next</span>
             </a> 
@@ -60,18 +60,30 @@
         <script src="../src/jquery.eco-Scroll.js"></script>        
 		<script>            
 		$(function()
-        {               
+        {       
+            $("#olIndicators").data("active", 0);
+
+            $("#aPrev, #aNext").mousedown(function(e)
+            {
+                e.preventDefault();
+                e.stopPropagation();                
+            })        
+            .click(function(e)
+            {
+                e.preventDefault();
+                e.stopPropagation();                
+                $("#divContainer").data("plugin_ecoScroll")[(this.id == "aPrev") ? "movePrev": "moveNext"]();
+            });        
             $("#divContainer").ecoScroll({
-                itemWidth: 800,
-                itemHeight: 600,
-                rangeX : [-5,10],
-                rangeY : [-5,10],
+                itemWidth: "100%",
+                itemHeight: "100%",
+                rangeX : [undefined,undefined],
                 axis : "x",
                 snap: true,
                 onShow:function(oParam) 
                 {
                     if (oParam.bNew)
-                        oParam.$e.append("<img src='..//img//img" + Math.abs( (oParam.x + oParam.y*10)%25 ) + ".jpg' />");
+                        oParam.$e.append("<img src='..//img//img" + Math.abs( (oParam.x)%3 ) + ".jpg' />");
                 },
                 onHide:function(oParam) 
                 {
@@ -80,8 +92,16 @@
                 onRemove:function(oParam) 
                 {
                     return true;
+                },
+                onStop:function(oParam) 
+                {
+                    var $Indicator = $("#olIndicators");                    
+                    $Indicator.children().eq($Indicator.data("active")).removeClass("active");
+                    var iActive = oParam.x1 % 3;
+                    $("#olIndicators").children().eq(iActive).addClass("active");                                        
+                    $Indicator.data("active", iActive);
                 }
-            });
+            });            
         });
 		</script>
     </body>
