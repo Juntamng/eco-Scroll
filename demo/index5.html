@@ -9,9 +9,9 @@
                 width: 100%;
             }
             #divContainer {
-                height: 100%;
-                width: 100%;
-                margin: 100px auto;
+                height: 90%;
+                width: 80%;
+                margin: 20px auto;
                 position: relative;
                 border: 2px #000 solid;
                 overflow: hidden;
@@ -49,19 +49,21 @@
                 <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                 <span class="sr-only">Previous</span>
             </a>
+
             <a id="aNext" class="right carousel-control" href="#carousel-example-generic" data-slide="next">
                 <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
                 <span class="sr-only">Next</span>
             </a> 
         </div>        
-        
+
         <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
         <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
-        <script src="../src/jquery.eco-Scroll.js"></script>        
+        <script src="../src/jquery.eco-Scroll.js"></script>             
 		<script>            
 		$(function()
-        {       
-            $("#olIndicators").data("active", 0);
+        {               
+            var iCur = 0;
+            //$("#olIndicators").data("curX", 0);
 
             $("#aPrev, #aNext").mousedown(function(e)
             {
@@ -71,8 +73,17 @@
             .click(function(e)
             {
                 e.preventDefault();
-                e.stopPropagation();                
-                $("#divContainer").data("plugin_ecoScroll")[(this.id == "aPrev") ? "movePrev": "moveNext"]();
+                e.stopPropagation();             
+                   alert(iCur)
+                //var iCurX = $("#olIndicators").data("curX");
+                iCurX += (this.id == "aPrev") ? 1: -1;
+
+                $("#divContainer").data("plugin_ecoScroll").moveByCoord(iCurX, 0, {duration: 400});
+                
+                $Indicator.children().eq(iActive).removeClass("active");
+                var iActive = Math.abs(iCurX%3);
+                $("#olIndicators").children().eq(iActive).addClass("active")    
+                $Indicator.data("curX", iCurX);
             });        
             $("#divContainer").ecoScroll({
                 itemWidth: "100%",
@@ -94,12 +105,20 @@
                     return true;
                 },
                 onStop:function(oParam) 
-                {
+                {                                                        
                     var $Indicator = $("#olIndicators");                    
-                    $Indicator.children().eq($Indicator.data("active")).removeClass("active");
-                    var iActive = oParam.x1 % 3;
-                    $("#olIndicators").children().eq(iActive).addClass("active");                                        
-                    $Indicator.data("active", iActive);
+                    var iCurX = $Indicator.data("curX");
+
+                    var iActive = Math.abs(iCurX%3);                    
+                    $Indicator.children().eq(iActive).removeClass("active");
+                    iCurX = oParam.wrapperLeft/oParam.cellWidth;                    
+                    iActive = Math.abs(iCurX%3);
+                    $("#olIndicators").children().eq(iActive).addClass("active")    
+                    $Indicator.data("curX", iCurX);                    
+                },
+                onResize:function(oParam)
+                {                    
+                    $("#divContainer").data("plugin_ecoScroll").moveByCoord($("#olIndicators").data("curX"), 0);       
                 }
             });            
         });

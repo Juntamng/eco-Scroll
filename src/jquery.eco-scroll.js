@@ -27,6 +27,10 @@
         onStop: function(oParam) 
         {
             
+        },
+        onResize: function(oParam) 
+        {
+            
         }
 	};
 
@@ -132,8 +136,10 @@
         {
             el.removeEventListener(type, this);
         },         
-        wResize: function(e) {
+        wResize: function(e) 
+        {
             this.initData();
+            this.settings.onResize(this.getParam());
         },     
         mStart: function(e)
         {
@@ -157,7 +163,7 @@
             this.iDistX = this.iLeftE-this.iLeftS;
             this.iDistY = this.iTopE-this.iTopS;
 
-            this.mMoveBy(this.iDistX, this.iDistY);
+            this.moveByDist(this.iDistX, this.iDistY);
                                     
             this.iLeftS = point.pageX;
             this.iTopS = point.pageY;            
@@ -165,9 +171,9 @@
             e.stopPropagation();
             return false;
         },        
-        mMoveTo: function(iX, iY, options)
+        moveTo: function(iLeft, iTop, options)
         {            
-            var oRange = this.checkRange(iX, iY);
+            var oRange = this.checkRange(iLeft, iTop);
             var that = this;
             if (typeof(options) === "object") 
             {
@@ -175,7 +181,7 @@
                 options.complete = function()
                 { 
                     that.bAnimated = false; 
-                    that.settings.onStop(that.FindVisibleRange());
+                    that.settings.onStop(that.getParam());
                 };
                 !this.bAnimated && this.$wrapper.animate({"left": oRange.left, "top": oRange.top}, options);
             }
@@ -183,19 +189,23 @@
                 this.$wrapper.css({"left": oRange.left, "top": oRange.top});                        
             this.updateCells();
         },
-        mMoveBy: function(iDistX, iDistY, options)
+        moveByDist: function(iDistX, iDistY, options)
         {            
             var oPos = this.$wrapper.position();
             var iLeft = oPos.left+iDistX, iTop = oPos.top+iDistY;
-            this.mMoveTo(iLeft, iTop, options);            
+            this.moveTo(iLeft, iTop, options);            
+        },
+        moveByCoord: function(iX, iY, options)
+        {            
+            this.moveTo(iX*this.calWidth, iY*this.calHeight, options);            
         },
         movePrev: function()
         {       
-            this.mMoveBy(this.calWidth, 0, {duration: 400} );     
+            //this.moveByDist(this.calWidth, 0, {duration: 400} );     
         },
         moveNext: function()
         {       
-            this.mMoveBy(-this.calWidth, 0, {duration: 400} );
+            //this.moveByDist(-this.calWidth, 0, {duration: 400} );
         },
         mEnd: function (e) {                 	            
             this.unbind(this.moveEvent, document);
@@ -207,7 +217,7 @@
             if (this.settings.snap)                
                 this.snapOn();
             else
-                this.settings.onStop(this.FindVisibleRange());
+                this.settings.onStop(this.getParam());
 
             $("#c" + this.visibleX1 + "_" + this.visibleY1).css({"background-color": "yellow"});
             $("#c" + this.visibleX2 + "_" + this.visibleY1).css({"background-color": "yellow"});
@@ -316,7 +326,7 @@
         snapOn: function()
         {
             var oPos = this.$wrapper.position();                            
-            this.mMoveBy( snapH(this), snapV(this), {duration: 400} );        
+            this.moveByDist( snapH(this), snapV(this), {duration: 400} );        
 
             function snapH(that)
             {
@@ -360,8 +370,8 @@
             {
                 var iRemind=0, iOffsetT=0, iOffsetB=0, iReturn=0;
                 
-                console.log("T = " + oPos.top % that.calHeight );           
-                console.log("B = " + (oPos.top - (that.settings.containerHeight-that.calHeight*(that.visibleY2 - that.visibleY1)) ) % that.calHeight ); 
+                //console.log("T = " + oPos.top % that.calHeight );           
+                //console.log("B = " + (oPos.top - (that.settings.containerHeight-that.calHeight*(that.visibleY2 - that.visibleY1)) ) % that.calHeight ); 
 
                 iRemind = oPos.top % that.calHeight;
                 if (iRemind < 0)
@@ -374,7 +384,7 @@
                     iOffsetB = -iRemind; 
                 else
                     iOffsetB = that.calHeight - iRemind;
-                console.log(iOffsetT + ":" + iOffsetB);
+                //console.log(iOffsetT + ":" + iOffsetB);
                 
                 if (that.iDistX < 0)
                 {
@@ -395,22 +405,17 @@
                 return iReturn;  
             }      
         },
-        FindVisibleRange: function() {
-            var oReturn = {};
+        getParam: function() {
             var oPos = this.$wrapper.position();
-                
-            oReturn.x1 = Math.ceil(-oPos.left / this.calWidth);
-            oReturn.x2 = Math.floor( (-oPos.left+this.settings.containerWidth) / this.calWidth )-1;            
-            oReturn.y1 = Math.ceil(-oPos.top / this.calHeight);
-            oReturn.y2 = Math.floor( (-oPos.top+this.settings.containerHeight) / this.calHeight )-1;
-
-            /*
-            $("#c" + oPos.x1 + "_" + oPos.y1).css({"border-color": "red"});
-            $("#c" + oPos.x2 + "_" + oPos.y1).css({"border-color": "red"});
-            $("#c" + oPos.x1 + "_" + oPos.y2).css({"border-color": "red"});
-            $("#c" + oPos.x2 + "_" + oPos.y2).css({"border-color": "red"});
-            */
-
+            var oReturn = {
+                containerWidth: this.settings.containerWidth,
+                containerHeight: this.settings.containerHeight,
+                cellWidth: this.calWidth,
+                cellHeight: this.calHeight,
+                wrapperLeft: oPos.left,
+                wrapperTop: oPos.top
+            }
+            
             return oReturn;
         },
         checkObjProp: function() {
@@ -420,7 +425,7 @@
                 if (this.arr.hasOwnProperty(sKey))
                     iCnt++;
             }
-            console.log("prop count = " + iCnt);
+            //console.log("prop count = " + iCnt);
         }
 	});
 
