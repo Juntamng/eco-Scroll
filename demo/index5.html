@@ -42,6 +42,9 @@
                 <li data-to="0" class="active"></li>
                 <li data-to="1"></li>
                 <li data-to="2"></li>
+                <li data-to="3"></li>
+                <li data-to="4"></li>
+                <li data-to="5"></li>
             </ol>    
 
             <!-- Controls -->
@@ -62,10 +65,16 @@
 		<script>            
 		$(function()
         {               
-            var iCur = 0;
-            //$("#olIndicators").data("curX", 0);
+            var iCurX = 0;
+            
+            function updateIndicator() {
+                var $indicator = $("#olIndicators"),
+                    iActive = Math.abs(iCurX%6);     
+                $indicator.children().removeClass("active");                
+                $indicator.children().eq(iActive).addClass("active");
+            }
 
-            $("#aPrev, #aNext").mousedown(function(e)
+            $(".glyphicon-chevron-left, .glyphicon-chevron-right").mousedown(function(e)
             {
                 e.preventDefault();
                 e.stopPropagation();                
@@ -73,17 +82,12 @@
             .click(function(e)
             {
                 e.preventDefault();
-                e.stopPropagation();             
-                   alert(iCur)
-                //var iCurX = $("#olIndicators").data("curX");
-                iCurX += (this.id == "aPrev") ? 1: -1;
+                e.stopPropagation();                
 
+                iCurX += (this.id == "aPrev") ? 1: -1;
                 $("#divContainer").data("plugin_ecoScroll").moveByCoord(iCurX, 0, {duration: 400});
                 
-                $Indicator.children().eq(iActive).removeClass("active");
-                var iActive = Math.abs(iCurX%3);
-                $("#olIndicators").children().eq(iActive).addClass("active")    
-                $Indicator.data("curX", iCurX);
+                
             });        
             $("#divContainer").ecoScroll({
                 itemWidth: "100%",
@@ -94,7 +98,7 @@
                 onShow:function(oParam) 
                 {
                     if (oParam.bNew)
-                        oParam.$e.append("<img src='..//img//img" + Math.abs( (oParam.x)%3 ) + ".jpg' />");
+                        oParam.$e.append("<img src='..//img//img" + Math.abs( (oParam.x)%6 ) + ".jpg' />");
                 },
                 onHide:function(oParam) 
                 {
@@ -105,20 +109,13 @@
                     return true;
                 },
                 onStop:function(oParam) 
-                {                                                        
-                    var $Indicator = $("#olIndicators");                    
-                    var iCurX = $Indicator.data("curX");
-
-                    var iActive = Math.abs(iCurX%3);                    
-                    $Indicator.children().eq(iActive).removeClass("active");
+                {                                                                           
                     iCurX = oParam.wrapperLeft/oParam.cellWidth;                    
-                    iActive = Math.abs(iCurX%3);
-                    $("#olIndicators").children().eq(iActive).addClass("active")    
-                    $Indicator.data("curX", iCurX);                    
+                    updateIndicator();
                 },
                 onResize:function(oParam)
                 {                    
-                    $("#divContainer").data("plugin_ecoScroll").moveByCoord($("#olIndicators").data("curX"), 0);       
+                    $("#divContainer").data("plugin_ecoScroll").moveByCoord(iCurX, 0);       
                 }
             });            
         });
