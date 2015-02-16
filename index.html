@@ -1,0 +1,227 @@
+    <!DOCTYPE html>
+
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="">
+      <meta name="author" content="">
+	    <title></title>
+      <link rel="stylesheet" href="css/bootstrap.css">
+      <link rel="stylesheet" href="css/style.css">      
+      <link rel="stylesheet" href="css/carousel.css">     
+    </head>
+    <body>       
+      <header></header>
+      <div class="jumbotron headline">
+        <div class="container">
+          <h1>Eco-Scroll.js</h1>
+          <h2>Eco-friendly jQuery scroll plugin with inifinite possibilities</h2>
+          <p style="margin-top:50px"><a class="btn btn-primary btn-lg" target="_blank" href="https://github.com/Juntamng/eco-Scroll">Github</a></p>
+        </div>
+      </div>
+
+      <div class="container">
+            <!-- Example row of columns -->
+        <h2 style="border-left: 10px #EC602F solid; padding-left:5px;">What does it do?</h2>
+        <div class="row">
+          <div class="feature col-md-4">
+            <h1><span class="glyphicon glyphicon-globe"></span></h1>
+            <h3>Eco-Friendly</h3>
+            <p>Elements will get removed when they go out of sight.</p>
+          </div>
+          <div class="feature col-md-4">
+            <h1><span class="glyphicon glyphicon-move"></span></h1>
+            <h3>Infinite Scroll</h3>
+            <p>It can scroll with NO Boudary.</p>
+          </div>
+          <div class="feature col-md-4">
+            <h1><span class="glyphicon glyphicon-wrench"></span></h1>
+            <h3>Possibilities</h3>
+            <p>It can transform into many different tools</p>
+          </div>
+        </div>
+        <p style="margin-top:30px"> 
+        <h2 style="display:inline; border-left: 10px #EC602F solid; padding-left:5px;">Why?</h2>
+        <h4 style="display:inline; padding-left:15px;">I wanted to create a infinite scroll plugin for my own use.</h4>
+        </p> 
+        <h3 class="text-center" style="margin-top:30px">Demo</h3>
+        <div class="row">
+          <div class="col-md-12">
+            <div id="divDemo">
+              <div class="wrapper">                                
+              </div>        
+            </div>
+          </div>       
+        </div>  
+
+        <h3 class="text-center" style="margin-top:30px">Behind the scenes</h3>
+        <h4 class="text-center">As you drag divs are appended and when dragging is done, divs outside of the viewport will be removed.</h4>
+        <div class="row">
+          <div class="col-md-12">
+            <div id="divDemoTransparent">
+              <div class="wrapper">                                
+              </div>        
+            </div>
+          </div>       
+        </div>         
+
+        <h3 class="text-center" style="margin-top:60px">Transformation 1</h3>
+        <h4 class="text-center">A infinite Pic Wall</h4>
+        </p>
+        <div class="row">
+          <div class="col-md-12">
+            <div id="divImgWall">
+              <div class="wrapper">                                
+              </div>        
+            </div>
+          </div>       
+        </div>         
+
+        <h3 class="text-center" style="margin-top:100px">Transformation 2</h3>
+        <h4 class="text-center">Slider</h4>
+        </p>
+        <div class="row">
+          <div class="col-md-12">
+            <div id="divSlider">
+              <div class="wrapper">                                
+              </div>        
+            </div>
+          </div>       
+        </div>  
+
+        <h3 class="text-center" style="margin-top:100px">Transformation 3</h3>
+        <h4 class="text-center">Bootstrap Carousel with Touch and Drag Support</h4>
+        </p>
+        <div class="row">
+          <div class="col-md-12">
+            <div id="divCarousel">
+              <div class="wrapper">                                
+              </div>  
+
+              <!-- Indicators -->
+              <ol id="olIndicators" class="carousel-indicators">
+                  <li data-to="0" class="active"></li>
+                  <li data-to="1"></li>
+                  <li data-to="2"></li>
+                  <li data-to="3"></li>
+                  <li data-to="4"></li>
+                  <li data-to="5"></li>
+              </ol>    
+
+              <!-- Controls -->
+              <a class="left carousel-control" href="javascript:void(0)" data-slide="prev">
+                  <span id="aPrev" class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+              </a>
+
+              <a class="right carousel-control" href="javascript:void(0)" data-slide="next">
+                  <span id="aNext" class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+              </a>       
+            </div>
+          </div>       
+        </div>   
+          
+        <footer style="margin:50px auto;">
+          <p>Created By Juntamng</p>
+        </footer>
+      </div> <!-- /container -->   
+
+      <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+      <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+      <script src="js/bootstrap.min.js"></script>
+      <script src="js/jquery.eco-scroll.js"></script>        
+  		<script>            
+  		$(function()
+      {  
+        // Demo 
+        $("#divDemo").ecoScroll({
+        });   
+
+        // Behind the scenes
+        $("#divDemoTransparent").ecoScroll({
+        });    
+
+        // Img Wall
+        $("#divImgWall").ecoScroll({
+          itemWidth: 150,
+          itemHeight: 150,
+          onShow:function(oParam) 
+          {
+              if (oParam.bNew) 
+              {
+                  oParam.$e.append("<img src='img/img" + Math.abs( (oParam.x + oParam.y*10)%25 ) + ".jpg' />").css({opacity:0}).animate({opacity: 1}, 400);
+              }
+          }
+        }); 
+
+        // Slider
+        $("#divSlider").ecoScroll({
+          itemWidth: 300,
+          itemHeight: 300,
+          rangeX : [-10,10],
+          rangeY : [-10,10],
+          axis : "x",
+          snap : true
+        });   
+      });
+
+      // Bootstrap Carousel
+      var iCurX = 0;
+
+      function updateIndicator() {
+          var $indicator = $("#olIndicators"),
+              iActive = Math.abs(iCurX%6);     
+          $indicator.children().removeClass("active");                
+          $indicator.children().eq(iActive).addClass("active");
+      }
+
+      var clickEventType = (document.ontouchstart!==null) ? 'mousedown' : 'touchstart';
+      $(".glyphicon-chevron-left, .glyphicon-chevron-right").bind(clickEventType, function(e)
+      {                
+          e.preventDefault();
+          e.stopPropagation();                
+          $(this).trigger("click");
+      })        
+      .click(function(e)
+      {
+          e.preventDefault();
+          e.stopPropagation();                
+
+          iCurX += (this.id == "aPrev") ? 1: -1;
+          $("#divCarousel").data("plugin_ecoScroll").moveByCoord(iCurX, 0, {duration: 400});                            
+      });    
+
+      $("#divCarousel").ecoScroll({
+          itemWidth: "100%",
+          itemHeight: "100%",
+          rangeX : [undefined,undefined],
+          axis : "x",
+          snap: true,
+          onShow:function(oParam) 
+          {
+              if (oParam.bNew && oParam.y == 0)
+                  oParam.$e.append("<img src='img/img" + Math.abs( (oParam.x)%6 ) + ".jpg' />");
+          },
+          onHide:function(oParam) 
+          {
+              oParam.$e.hide();    
+          },
+          onRemove:function(oParam) 
+          {
+              return true;
+          },
+          onStop:function(oParam) 
+          {                                                                           
+              iCurX = oParam.wrapperLeft/oParam.cellWidth;                    
+              updateIndicator();
+          },
+          onResize:function(oParam)
+          {                    
+              $("#divCarousel").data("plugin_ecoScroll").moveByCoord(iCurX, 0);       
+          }
+      });  
+  		</script>
+    </body>
+    </html>

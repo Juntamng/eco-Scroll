@@ -121,9 +121,9 @@
   }
   .carousel-control .glyphicon-chevron-left,
   .carousel-control .icon-prev {
-    margin-left: -55px;    
+    margin-left: -25px;    
   }
   .carousel-control .glyphicon-chevron-right,
   .carousel-control .icon-next {
-    margin-right: -55px;
+    margin-right: -25px;
   }

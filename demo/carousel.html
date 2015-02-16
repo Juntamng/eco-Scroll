@@ -2,16 +2,17 @@
 
     <html>
     <head>
-		<title></title>
+		<title>Bootstrap Carousel with touch and drag support</title>
         <style>
             html, body {
                 height: 100%;
                 width: 100%;
+                margin-top:50px;
             }
             #divContainer {
-                height: 90%;
-                width: 80%;
-                margin: 20px auto;
+                height: 60%;
+                width: 60%;
+                margin: 50px auto;
                 position: relative;
                 border: 2px #000 solid;
                 overflow: hidden;
@@ -29,10 +30,12 @@
                 height: 100%;                
             }
         </style>   
-        <link type="text/css" rel="stylesheet" href="../css/bootstrap.css">     
+        <link type="text/css" rel="stylesheet" href="../css/bootstrap.css"> 
         <link type="text/css" rel="stylesheet" href="../css/carousel.css">     
     </head>
     <body>        
+        <h1><center>Bootstrap Carousel with touch and drag support</center></h1>
+
         <div id="divContainer">
             <div id="divWrapper" class="wrapper">                                
             </div>   
@@ -48,20 +51,20 @@
             </ol>    
 
             <!-- Controls -->
-            <a id="aPrev" class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
-                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <a class="left carousel-control" href="javascript:void(0)" data-slide="prev">
+                <span id="aPrev" class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                 <span class="sr-only">Previous</span>
             </a>
 
-            <a id="aNext" class="right carousel-control" href="#carousel-example-generic" data-slide="next">
-                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <a class="right carousel-control" href="javascript:void(0)" data-slide="next">
+                <span id="aNext" class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
                 <span class="sr-only">Next</span>
             </a> 
         </div>        
 
         <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
         <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
-        <script src="../src/jquery.eco-Scroll.js"></script>             
+        <script src="../js/jquery.eco-scroll.js"></script>             
 		<script>            
 		$(function()
         {               
@@ -74,10 +77,12 @@
                 $indicator.children().eq(iActive).addClass("active");
             }
 
-            $(".glyphicon-chevron-left, .glyphicon-chevron-right").mousedown(function(e)
-            {
+            var clickEventType = (document.ontouchstart!==null) ? 'mousedown' : 'touchstart';
+            $(".glyphicon-chevron-left, .glyphicon-chevron-right").bind(clickEventType, function(e)
+            {                
                 e.preventDefault();
                 e.stopPropagation();                
+                $(this).trigger("click");
             })        
             .click(function(e)
             {
@@ -85,9 +90,7 @@
                 e.stopPropagation();                
 
                 iCurX += (this.id == "aPrev") ? 1: -1;
-                $("#divContainer").data("plugin_ecoScroll").moveByCoord(iCurX, 0, {duration: 400});
-                
-                
+                $("#divContainer").data("plugin_ecoScroll").moveByCoord(iCurX, 0, {duration: 400});                            
             });        
             $("#divContainer").ecoScroll({
                 itemWidth: "100%",
@@ -97,7 +100,7 @@
                 snap: true,
                 onShow:function(oParam) 
                 {
-                    if (oParam.bNew)
+                    if (oParam.bNew && oParam.y == 0)
                         oParam.$e.append("<img src='..//img//img" + Math.abs( (oParam.x)%6 ) + ".jpg' />");
                 },
                 onHide:function(oParam) 

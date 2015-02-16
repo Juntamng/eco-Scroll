@@ -8,13 +8,13 @@
 		containerHeight: 500,
 		itemWidth: 100,
 		itemHeight: 100,
-        rangeX : [0,10],
-        rangeY : [0,10],
+        rangeX : [undefined, undefined],
+        rangeY : [undefined, undefined],
         axis : "xy",
         snap : false,
         onShow: function(oParam) 
         {
-            oParam.$e.text(oParam.x + "," + oParam.y);
+            oParam.$e.text(oParam.x + ":" + oParam.y);
         },
         onHide: function(oParam) 
         {
@@ -80,14 +80,7 @@
                 this.calHeight = this.settings.containerHeight * parseInt(this.settings.itemHeight)/100;
                 this.itemHeightUnit = "%";
             }
-
-            // clean up the arr to draw all cells
-            if (this.itemWidthUnit == "%" || this.itemHeightUnit == "%")
-            {
-                this.arr = null;
-                this.arr = {};
-                this.$wrapper.empty();
-            }
+        
 			this.iColTotal = Math.round(this.settings.containerWidth / this.calWidth)+1;
 			this.iRowTotal = Math.round(this.settings.containerHeight / this.calHeight)+1;
             this.x1 = 0;
@@ -199,14 +192,6 @@
         {            
             this.moveTo(iX*this.calWidth, iY*this.calHeight, options);            
         },
-        movePrev: function()
-        {       
-            //this.moveByDist(this.calWidth, 0, {duration: 400} );     
-        },
-        moveNext: function()
-        {       
-            //this.moveByDist(-this.calWidth, 0, {duration: 400} );
-        },
         mEnd: function (e) {                 	            
             this.unbind(this.moveEvent, document);
             this.unbind(this.endEvent, document);                    
@@ -219,10 +204,12 @@
             else
                 this.settings.onStop(this.getParam());
 
+            /*
             $("#c" + this.visibleX1 + "_" + this.visibleY1).css({"background-color": "yellow"});
             $("#c" + this.visibleX2 + "_" + this.visibleY1).css({"background-color": "yellow"});
             $("#c" + this.visibleX1 + "_" + this.visibleY2).css({"background-color": "yellow"});
             $("#c" + this.visibleX2 + "_" + this.visibleY2).css({"background-color": "yellow"});
+            */
             return false;                        
         },
         updateCells: function() 
@@ -236,12 +223,6 @@
             this.x2 = this.visibleX2 + 2;
             this.y1 = this.visibleY1 - 1;
             this.y2 = this.visibleY2 + 2;
-            /*
-            this.x1 = Math[(this.iDistX<0) ? "ceil": "floor"](-oPos.left / this.calWidth) - 1;
-            this.x2 = this.x1 + this.iColTotal + 2;
-            this.y1 = Math[(this.iDistY<0) ? "ceil": "floor"](-oPos.top / this.calHeight) - 1;
-            this.y2 = this.y1 + this.iRowTotal + 2;
-            */
             for(var iCntX = this.x1; iCntX< this.x2; iCntX++)             
             {
                 for(var iCntY = this.y1; iCntY < this.y2; iCntY++)
@@ -252,14 +233,14 @@
         },
         showCell: function(x, y) 
         {    
-            var bNew = false, $e;
-            if (this.arr["c"+x+"_"+y] === undefined)
+            var bNew = false, oEle, $e;
+
+            oEle = this.arr["c"+x+"_"+y];
+            if (oEle === undefined)
             {
-                bNew = true;
-                this.arr["c"+x+"_"+y] = {"x": x, "y": y};
+                bNew = true;                
                 var iX = x * this.calWidth;
                 var iY = y * this.calHeight;
-                var i = Math.abs(x * y) % 25;
                 $e = $("<div class='eCell' id='c" + x + "_" + y + "'></div>")
                     .appendTo(this.$wrapper)
                     .css({
@@ -268,15 +249,30 @@
                         width: this.calWidth,
                         height: this.calHeight,
                     });
+                oEle = {"$e":$e, "x": x, "y": y};
+                this.arr["c"+x+"_"+y] = oEle;
             }
             else
-                $e = $("#c"+x+"_"+y).css({"background-color": "#fff"}).show();
+            {
+                if (this.itemWidthUnit == "%" || this.itemHeightUnit == "%")
+                {
+                    var iX = x * this.calWidth;
+                    var iY = y * this.calHeight;
+                    oEle.$e.css({
+                        left: iX,
+                        top: iY,
+                        width: this.calWidth,
+                        height: this.calHeight
+                    });                  
+                }
 
-            this.settings.onShow({"bNew":bNew, "$e":$e, "x":x, "y":y});
+                oEle.$e.show();                
+            }            
+
+            this.settings.onShow({"bNew":bNew, "$e":oEle.$e, "x":x, "y":y});
         },  
         hideCells: function()
         {
-            //console.log(this.x1 + ":" + this.x2 + " " + this.y1 + ":" + this.y2);
             var sKey;
             for (sKey in this.arr)
             {
@@ -284,8 +280,8 @@
                 {
                     if (this.arr[sKey].x < this.x1 || this.arr[sKey].x >= this.x2 || this.arr[sKey].y < this.y1 || this.arr[sKey].y >= this.y2)
                     {
-                        this.settings.onHide({"$e": $("#" + sKey), "x": this.arr[sKey].x, "y": this.arr[sKey].y});
-                        this.removeCell({"$e": $("#" + sKey), "x": this.arr[sKey].x, "y": this.arr[sKey].y});
+                        this.settings.onHide({"$e": this.arr[sKey].$e, "x": this.arr[sKey].x, "y": this.arr[sKey].y});
+                        this.removeCell({"$e": this.arr[sKey].$e, "x": this.arr[sKey].x, "y": this.arr[sKey].y});
                     }
                 }
             }

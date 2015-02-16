@@ -2,24 +2,23 @@
 
     <html>
     <head>
-		<title></title>
+		<title>Image Slider</title>
         <style>
             html, body {
                 height: 100%;
                 width: 100%;
+                margin-top:50px;
             }
             #divContainer {
-                margin: 100px auto;
+                margin: 10px auto;
                 position: relative;
-                width: 90%; 
-                height: 400px;                
+                width: 800px; 
+                height: 600px;                
                 border: 2px #000 solid;
                 overflow: hidden;
             }
             .eCell {
                 position: absolute;
-                width: 400px;
-                height: 400px;
                 border: 1px blue solid;
                 -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
                 -moz-box-sizing: border-box;    /* Firefox, other Gecko */
@@ -27,12 +26,14 @@
             }
             .eCell img 
             {   
-                width: 400px;
-                height: 400px;
+                width: 800px;
+                height: 600px;
             }
         </style>
     </head>
-    <body>        
+    <body>       
+        <h1><center>Image Slider</center></h1>
+
         <div id="divContainer">
             <div class="wrapper">                                
             </div>        
@@ -40,29 +41,21 @@
         
         <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
         <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
-        <script src="../src/jquery.eco-Scroll.js"></script>        
+        <script src="../js/jquery.eco-scroll.js"></script>        
 		<script>            
 		$(function()
         {               
             $("#divContainer").ecoScroll({
-                itemWidth: 400,
-                itemHeight: 400,
-                rangeX : [-5,10],
-                rangeY : [-5,10],
+                itemWidth: "100%",
+                itemHeight: "100%",
+                rangeX : [-10,10],
+                rangeY : [-10,10],
                 axis : "x",
-                snap : true, 
+                snap: true,
                 onShow:function(oParam) 
                 {
                     if (oParam.bNew)
-                        oParam.$e.text( oParam.x + "," + oParam.y);
-                },
-                onHide:function(oParam) 
-                {
-                    oParam.$e.hide();    
-                },
-                onRemove:function(oParam) 
-                {
-                    return true;
+                        oParam.$e.append("<img src='..//img//img" + Math.abs( (oParam.x + oParam.y*10)%25 ) + ".jpg' />");
                 }
             });
         });
