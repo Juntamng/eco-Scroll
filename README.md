@@ -1,3 +1,2 @@
-# eco-Scroll
-Eco-friendly jQuery Scroll Plugin
-
+# Eco-Scroll.js
+Eco-friendly jQuery scroll plugin with inifinite possibilities
