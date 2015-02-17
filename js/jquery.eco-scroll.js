@@ -82,8 +82,13 @@ SOFTWARE.
             this.endEvent  = this.bTouch ? 'touchend' : 'mouseup';
             this.cancelEvent  = this.bTouch ? 'touchcancel' : 'mouseup';
             this.bind(this.startEvent, this.element);	
-            this.bind(this.resizeEvent, window);			
+            this.bind(this.resizeEvent, window);	
 
+            this.iTimeConstant = 325;
+            this.iTimestamp = 0;	
+            this.ticker = 0;
+            this.iDistX1 = this.iDistY1 = this.iDistX2 = this.iDistY2 = 0;
+            this.iVelocityX = this.iAmplitudeX = this.iVelocityY = this.iAmplitudeY = 0;
 		},
 		initData: function()
 		{        
@@ -162,21 +167,47 @@ SOFTWARE.
         {
             var point = this.bTouch ? e.touches[0] : e;
 
-			this.iLeftS = point.pageX;
-            this.iTopS = point.pageY;            
+			this.iLeftS = this.iDistX1 = point.pageX;
+            this.iTopS = this.iDistY1 = point.pageY;            
             this.bind(this.moveEvent, document);
             this.bind(this.endEvent, document);
             this.iDistX = 0;
             this.iDistY = 0;
+
+            this.iVelocityX = this.iAmplitudeX = 0;
+            this.iVelocityY = this.iAmplitudeY = 0;
+            this.iTimestamp = Date.now();
+            clearInterval(this.ticker);
+            this.ticker = setInterval($.proxy(this.track, this), 100);
+
             e.preventDefault();
             e.stopPropagation();
             return false;
         },
+        track: function() 
+        {
+            var iNow, iTimeDiff, iDeltaX, iDeltaY, iVx, iVy;
+
+            iNow = Date.now();
+            iTimeDiff = iNow - this.iTimestamp;
+            this.iTimestamp = iNow;
+            iDeltaX = this.iDistX2 - this.iDistX1;
+            iDeltaY = this.iDistY2 - this.iDistY1;
+console.log("iDeltaX=" + iDeltaX + "; iDeltaY=" + iDeltaY);
+            this.iDistX1 = this.iDistX2;
+            this.iDistY1 = this.iDistY2;
+
+            iVx = 1000 * iDeltaX / (1 + iTimeDiff);
+            iVy = 1000 * iDeltaY / (1 + iTimeDiff);
+            this.iVelocityX = 0.8 * iVx + 0.2 * this.iVelocityX;
+            this.iVelocityY = 0.8 * iVy + 0.2 * this.iVelocityY;
+console.log("this.iVelocityX=" + this.iVelocityX + "; iVelocityY=" + this.iVelocityY);            
+        },
         mMove: function(e)
         {
             var point = this.bTouch ? e.touches[0] : e;
-            this.iLeftE = point.pageX;
-            this.iTopE = point.pageY;                        
+            this.iLeftE = this.iDistX2 = point.pageX;
+            this.iTopE = this.iDistY2 = point.pageY;                        
             this.iDistX = this.iLeftE-this.iLeftS;
             this.iDistY = this.iTopE-this.iTopS;
 
@@ -221,6 +252,14 @@ SOFTWARE.
             this.unbind(this.endEvent, document);                    
             e.preventDefault();
             e.stopPropagation();
+            
+            clearInterval(this.ticker);
+            if (this.iVelocityX > 10 || this.iVelocityX < -10) {
+                this.iAmplitudeX = 0.8 * this.iVelocityX;
+                //target = Math.round(offset + amplitude);
+                this.iTimestamp = Date.now();
+                requestAnimationFrame($.proxy(this.autoScroll, this));
+            }
 
             this.hideCells();
             if (this.settings.snap)                
@@ -235,6 +274,22 @@ SOFTWARE.
             $("#c" + this.visibleX2 + "_" + this.visibleY2).css({"background-color": "yellow"});
             */
             return false;                        
+        },
+        autoScroll: function() 
+        {
+            var iTimeDiff, iDelta;
+
+            if (this.iAmplitudeX) {
+                iTimeDiff = Date.now() - this.iTimestamp;
+                iDelta = -this.iAmplitudeX * Math.exp(-iTimeDiff / this.iTimeConstant);
+                if (iDelta > 0.5 || iDelta < -0.5) {
+                    console.log(iDelta);
+                    //scroll(target + delta);
+                    requestAnimationFrame($.proxy(this.autoScroll, this));
+                } else {
+                    //scroll(target);
+                }
+            }
         },
         updateCells: function() 
         {        
