@@ -25,8 +25,8 @@ SOFTWARE.
 ;(function ( $, window, document, undefined ) 
 {
 	"use strict";
-
-	var pluginName = "ecoScroll",
+        	
+    var pluginName = "ecoScroll",
 		defaults = {
 		containerWidth: 500,
 		containerHeight: 500,
@@ -62,13 +62,25 @@ SOFTWARE.
 
 	function Plugin ( element, options ) 
 	{
+        var that = this;
 		this.element = element;
 		this.$element = $(element);
 		this.$wrapper = this.$element.find(".wrapper");				
 		this.settings = $.extend( {}, defaults, options );
 		this._defaults = defaults;
-		this._name = pluginName;
-		this.init();
+		this._name = pluginName;		
+        this.sTransform = 'transform';
+        
+        ['webkit', 'Moz', 'O', 'ms'].every(function (prefix) {
+            var sTmp = prefix + 'Transform';
+            if (typeof that.element.style[sTmp] !== 'undefined') {
+                that.sTransform = sTmp;
+                return false;
+            }
+            return true;
+        });
+
+        this.init();
 	}
 
 	$.extend(Plugin.prototype, 
@@ -228,6 +240,9 @@ SOFTWARE.
             
             this.iDistX2 = oRange.left;
             this.iDistY2 = oRange.top;
+            
+            var oCss = {};
+            oCss[this.sTransform] = "translate(" + oRange.left + "px," + oRange.top + "px) rotateZ(0deg)";
             if (typeof(options) === "object") 
             {
                 options.start = function(){ that.bAnimated = true; };
@@ -236,10 +251,11 @@ SOFTWARE.
                     that.bAnimated = false; 
                     that.settings.onStop(that.getParam());
                 };
-                !this.bAnimated && this.$wrapper.animate({"left": oRange.left, "top": oRange.top}, options);
+
+                this.bAnimated && this.$wrapper.animate(oCss, options);
             }
             else    
-                this.$wrapper.css({"left": oRange.left, "top": oRange.top});                        
+                this.$wrapper.css(oCss);                        
             
             this.updateCells();
         },
@@ -350,7 +366,7 @@ SOFTWARE.
         },
         showCell: function(x, y) 
         {    
-            var bNew = false, oEle, $e;
+            var bNew = false, oEle, $e, oCss;
 
             oEle = this.arr["c"+x+"_"+y];
             if (oEle === undefined)
@@ -358,14 +374,15 @@ SOFTWARE.
                 bNew = true;                
                 var iX = x * this.calWidth;
                 var iY = y * this.calHeight;
+                
+                oCss = {
+                    width: this.calWidth,
+                    height: this.calHeight,
+                };
+                oCss[this.sTransform] = "translate(" + iX + "px," + iY + "px) rotateZ(0deg)";
                 $e = $("<div class='eCell' id='c" + x + "_" + y + "'></div>")
                     .appendTo(this.$wrapper)
-                    .css({
-                        left: iX,
-                        top: iY,
-                        width: this.calWidth,
-                        height: this.calHeight,
-                    });
+                    .css(oCss);
                 oEle = {"$e":$e, "x": x, "y": y};
                 this.arr["c"+x+"_"+y] = oEle;
             }
@@ -375,12 +392,12 @@ SOFTWARE.
                 {
                     var iX = x * this.calWidth;
                     var iY = y * this.calHeight;
-                    oEle.$e.css({
-                        left: iX,
-                        top: iY,
+                    oCss = {
                         width: this.calWidth,
-                        height: this.calHeight
-                    });                  
+                        height: this.calHeight,
+                    };
+                    oCss[this.sTransform] = "translate(" + iX + "px," + iY + "px) rotateZ(0deg)";
+                    oEle.$e.css(oCss);                  
                 }
 
                 oEle.$e.show();                
