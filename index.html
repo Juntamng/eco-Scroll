@@ -122,7 +122,19 @@
             </div>
           </div>       
         </div>   
-          
+        
+        <h3 class="text-center" style="margin-top:60px">Transformation 4</h3>
+        <h4 class="text-center">A infinite Pic Wall with Mometum</h4>
+        </p>
+        <div class="row">
+          <div class="col-md-12">
+            <div id="divImgWallWithMometum">
+              <div class="wrapper">                                
+              </div>        
+            </div>
+          </div>       
+        </div>         
+
         <footer style="margin:50px auto;">
           <p>Created By Juntamng</p>
         </footer>
@@ -222,6 +234,21 @@
               $("#divCarousel").data("plugin_ecoScroll").moveByCoord(iCurX, 0);       
           }
       });  
+
+      // Img Wall With Mometum
+        $("#divImgWallWithMometum").ecoScroll({
+          itemWidth: 150,
+          itemHeight: 150,
+          momentum: true,
+          momentumSpeed: 8,
+          onShow:function(oParam) 
+          {
+              if (oParam.bNew) 
+              {
+                  oParam.$e.append("<img src='img/img" + Math.abs( (oParam.x + oParam.y*10)%25 ) + ".jpg' />").css({opacity:0}).animate({opacity: 1}, 400);
+              }
+          }
+        }); 
   		</script>
     </body>
     </html>

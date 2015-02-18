@@ -134,3 +134,25 @@ footer
     width: 100%; 
     height: 100%;                
 }
+
+#divImgWallWithMometum 
+{
+    margin: 10px auto;
+    position: relative;
+    width: 60%; 
+    height: 450px;       
+    min-width: 300px;
+    min-height: 300px;  
+    overflow: hidden;
+}
+
+#divImgWallWithMometum .eCell
+{
+    border: none;
+}
+
+#divImgWallWithMometum .eCell img 
+{   
+    width: 150px;
+    height: 150px;
+}

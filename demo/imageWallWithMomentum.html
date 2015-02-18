@@ -34,7 +34,7 @@
         </style>
     </head>
     <body>        
-        <h1><center>Infinite Image Wall</center></h1>
+        <h1><center>Infinite Image Wall with Momentum</center></h1>
         
         <div id="divContainer">
             <div class="wrapper">                                
@@ -50,11 +50,13 @@
             $("#divContainer").ecoScroll({
                 itemWidth: 150,
                 itemHeight: 150,
+                momentum: true,
+                momentumSpeed: 8,
                 onShow:function(oParam) 
                 {
                     if (oParam.bNew) 
                     {
-                        oParam.$e.append("<img src='..//img//img" + Math.abs( (oParam.x + oParam.y*10)%25 ) + ".jpg' />").css({opacity:0}).animate({opacity: 1}, 400);
+                        oParam.$e.append("<img src='../img/img" + Math.abs( (oParam.x + oParam.y*10)%25 ) + ".jpg' />").css({opacity:0}).animate({opacity: 1}, 400);
                     }
                 }
             });

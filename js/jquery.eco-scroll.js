@@ -36,6 +36,8 @@ SOFTWARE.
         rangeY : [undefined, undefined],
         axis : "xy",
         snap : false,
+        momentum : false,
+        momentumSpeed : 8,
         onShow: function(oParam) 
         {
             oParam.$e.text(oParam.x + ":" + oParam.y);
@@ -89,6 +91,7 @@ SOFTWARE.
             this.ticker = 0;
             this.iDistX1 = this.iDistY1 = this.iDistX2 = this.iDistY2 = 0;
             this.iVelocityX = this.iAmplitudeX = this.iVelocityY = this.iAmplitudeY = 0;
+            this.iTargetX = this.iCalX = this.iTargetY = this.iCalY = 0;
 		},
 		initData: function()
 		{        
@@ -166,9 +169,11 @@ SOFTWARE.
         mStart: function(e)
         {
             var point = this.bTouch ? e.touches[0] : e;
-
-			this.iLeftS = this.iDistX1 = point.pageX;
-            this.iTopS = this.iDistY1 = point.pageY;            
+            var oPos = this.$wrapper.position();   
+            this.iDistX1=oPos.left;
+            this.iDistY1=oPos.top;
+			this.iLeftS = point.pageX;
+            this.iTopS = point.pageY;            
             this.bind(this.moveEvent, document);
             this.bind(this.endEvent, document);
             this.iDistX = 0;
@@ -193,21 +198,18 @@ SOFTWARE.
             this.iTimestamp = iNow;
             iDeltaX = this.iDistX2 - this.iDistX1;
             iDeltaY = this.iDistY2 - this.iDistY1;
-console.log("iDeltaX=" + iDeltaX + "; iDeltaY=" + iDeltaY);
             this.iDistX1 = this.iDistX2;
             this.iDistY1 = this.iDistY2;
-
             iVx = 1000 * iDeltaX / (1 + iTimeDiff);
             iVy = 1000 * iDeltaY / (1 + iTimeDiff);
-            this.iVelocityX = 0.8 * iVx + 0.2 * this.iVelocityX;
-            this.iVelocityY = 0.8 * iVy + 0.2 * this.iVelocityY;
-console.log("this.iVelocityX=" + this.iVelocityX + "; iVelocityY=" + this.iVelocityY);            
+            this.iVelocityX = 0.5 * iVx + 0.2 * this.iVelocityX;
+            this.iVelocityY = 0.5 * iVy + 0.2 * this.iVelocityY;
         },
         mMove: function(e)
         {
             var point = this.bTouch ? e.touches[0] : e;
-            this.iLeftE = this.iDistX2 = point.pageX;
-            this.iTopE = this.iDistY2 = point.pageY;                        
+            this.iLeftE = point.pageX;
+            this.iTopE = point.pageY;                        
             this.iDistX = this.iLeftE-this.iLeftS;
             this.iDistY = this.iTopE-this.iTopS;
 
@@ -223,6 +225,9 @@ console.log("this.iVelocityX=" + this.iVelocityX + "; iVelocityY=" + this.iVeloc
         {            
             var oRange = this.checkRange(iLeft, iTop);
             var that = this;
+            
+            this.iDistX2 = oRange.left;
+            this.iDistY2 = oRange.top;
             if (typeof(options) === "object") 
             {
                 options.start = function(){ that.bAnimated = true; };
@@ -235,6 +240,7 @@ console.log("this.iVelocityX=" + this.iVelocityX + "; iVelocityY=" + this.iVeloc
             }
             else    
                 this.$wrapper.css({"left": oRange.left, "top": oRange.top});                        
+            
             this.updateCells();
         },
         moveByDist: function(iDistX, iDistY, options)
@@ -252,20 +258,28 @@ console.log("this.iVelocityX=" + this.iVelocityX + "; iVelocityY=" + this.iVeloc
             this.unbind(this.endEvent, document);                    
             e.preventDefault();
             e.stopPropagation();
-            
-            clearInterval(this.ticker);
-            if (this.iVelocityX > 10 || this.iVelocityX < -10) {
-                this.iAmplitudeX = 0.8 * this.iVelocityX;
-                //target = Math.round(offset + amplitude);
-                this.iTimestamp = Date.now();
-                requestAnimationFrame($.proxy(this.autoScroll, this));
-            }
 
-            this.hideCells();
-            if (this.settings.snap)                
-                this.snapOn();
+            clearInterval(this.ticker);
+   
+            if (this.settings.momentum) 
+            {                
+                this.iTimestamp = Date.now();
+                if (this.iVelocityX > 10 || this.iVelocityX < -10) {
+                    this.iAmplitudeX = this.settings.momentumSpeed/10 * this.iVelocityX;
+                    this.iTargetX = Math.round(this.iDistX2 + this.iAmplitudeX);                
+                    this.iCalX = this.iTargetX;
+                    requestAnimationFrame($.proxy(this.decelerateX, this));
+                }
+                
+                if (this.iVelocityY > 10 || this.iVelocityY < -10) {
+                    this.iAmplitudeY = this.settings.momentumSpeed/10 * this.iVelocityY;
+                    this.iTargetY = Math.round(this.iDistY2 + this.iAmplitudeY);
+                    this.iCalY = this.iTargetY;
+                    requestAnimationFrame($.proxy(this.decelerateY, this));
+                }
+            }
             else
-                this.settings.onStop(this.getParam());
+                this.mStop();            
 
             /*
             $("#c" + this.visibleX1 + "_" + this.visibleY1).css({"background-color": "yellow"});
@@ -275,7 +289,15 @@ console.log("this.iVelocityX=" + this.iVelocityX + "; iVelocityY=" + this.iVeloc
             */
             return false;                        
         },
-        autoScroll: function() 
+        mStop: function() 
+        {
+            this.hideCells();
+            if (this.settings.snap)                
+                this.snapOn();
+            else
+                this.settings.onStop(this.getParam());
+        },
+        decelerateX: function() 
         {
             var iTimeDiff, iDelta;
 
@@ -283,11 +305,27 @@ console.log("this.iVelocityX=" + this.iVelocityX + "; iVelocityY=" + this.iVeloc
                 iTimeDiff = Date.now() - this.iTimestamp;
                 iDelta = -this.iAmplitudeX * Math.exp(-iTimeDiff / this.iTimeConstant);
                 if (iDelta > 0.5 || iDelta < -0.5) {
-                    console.log(iDelta);
-                    //scroll(target + delta);
-                    requestAnimationFrame($.proxy(this.autoScroll, this));
+                    this.iCalX = this.iTargetX+iDelta;
+                    this.moveTo(this.iCalX, this.iCalY);
+                    requestAnimationFrame($.proxy(this.decelerateX, this));
                 } else {
-                    //scroll(target);
+                    this.mStop(); 
+                }
+            }
+        },
+        decelerateY: function() 
+        {
+            var iTimeDiff, iDelta;
+
+            if (this.iAmplitudeY) {
+                iTimeDiff = Date.now() - this.iTimestamp;
+                iDelta = -this.iAmplitudeY * Math.exp(-iTimeDiff / this.iTimeConstant);
+                if (iDelta > 0.5 || iDelta < -0.5) {
+                    this.iCalY = this.iTargetY+iDelta;
+                    this.moveTo(this.iCalX, this.iCalY);               
+                    requestAnimationFrame($.proxy(this.decelerateY, this));
+                } else {
+                    this.mStop(); 
                 }
             }
         },
