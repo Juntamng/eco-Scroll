@@ -135,6 +135,21 @@
           </div>       
         </div>         
 
+        <h3 class="text-center" style="margin-top:60px">Transformation 5</h3>
+        <h4 class="text-center">iPhone Flick Scroll</h4>
+        </p>
+        <div class="row">
+          <div class="col-md-12">
+            <div id="iPhoneContainer">
+            <img id="imgiPhone" src="img/iPhone_6_Plus.png"  />
+            <div id="diviPhone">
+                <div class="wrapper">                                
+                </div>        
+            </div>        
+        <div>
+          </div>       
+        </div>   
+
         <footer style="margin:50px auto;">
           <p>Created By Juntamng</p>
         </footer>
@@ -176,66 +191,65 @@
           rangeY : [-10,10],
           axis : "x",
           snap : true
-        });   
-      });
+        }); 
 
-      // Bootstrap Carousel
-      var iCurX = 0;
+        // Bootstrap Carousel
+        var iCurX = 0;
 
-      function updateIndicator() {
-          var $indicator = $("#olIndicators"),
-              iActive = Math.abs(iCurX%6);     
-          $indicator.children().removeClass("active");                
-          $indicator.children().eq(iActive).addClass("active");
-      }
+        function updateIndicator() {
+            var $indicator = $("#olIndicators"),
+                iActive = Math.abs(iCurX%6);     
+            $indicator.children().removeClass("active");                
+            $indicator.children().eq(iActive).addClass("active");
+        }
 
-      var clickEventType = (document.ontouchstart!==null) ? 'mousedown' : 'touchstart';
-      $(".glyphicon-chevron-left, .glyphicon-chevron-right").bind(clickEventType, function(e)
-      {                
-          e.preventDefault();
-          e.stopPropagation();                
-          $(this).trigger("click");
-      })        
-      .click(function(e)
-      {
-          e.preventDefault();
-          e.stopPropagation();                
+        var clickEventType = (document.ontouchstart!==null) ? 'mousedown' : 'touchstart';
+        $(".glyphicon-chevron-left, .glyphicon-chevron-right").bind(clickEventType, function(e)
+        {                
+            e.preventDefault();
+            e.stopPropagation();                
+            $(this).trigger("click");
+        })        
+        .click(function(e)
+        {
+            e.preventDefault();
+            e.stopPropagation();                
 
-          iCurX += (this.id == "aPrev") ? 1: -1;
-          $("#divCarousel").data("plugin_ecoScroll").moveByCoord(iCurX, 0, {duration: 400});                            
-      });    
+            iCurX += (this.id == "aPrev") ? 1: -1;
+            $("#divCarousel").data("plugin_ecoScroll").moveByCoord(iCurX, 0, {duration: 400});                            
+        });    
 
-      $("#divCarousel").ecoScroll({
-          itemWidth: "100%",
-          itemHeight: "100%",
-          rangeX : [undefined,undefined],
-          axis : "x",
-          snap: true,
-          onShow:function(oParam) 
-          {
-              if (oParam.bNew && oParam.y == 0)
-                  oParam.$e.append("<img src='img/img" + Math.abs( (oParam.x)%6 ) + ".jpg' />");
-          },
-          onHide:function(oParam) 
-          {
-              oParam.$e.hide();    
-          },
-          onRemove:function(oParam) 
-          {
-              return true;
-          },
-          onStop:function(oParam) 
-          {                                                                           
-              iCurX = oParam.wrapperLeft/oParam.cellWidth;                    
-              updateIndicator();
-          },
-          onResize:function(oParam)
-          {                    
-              $("#divCarousel").data("plugin_ecoScroll").moveByCoord(iCurX, 0);       
-          }
-      });  
+        $("#divCarousel").ecoScroll({
+            itemWidth: "100%",
+            itemHeight: "100%",
+            rangeX : [undefined,undefined],
+            axis : "x",
+            snap: true,
+            onShow:function(oParam) 
+            {
+                if (oParam.bNew && oParam.y == 0)
+                    oParam.$e.append("<img src='img/img" + Math.abs( (oParam.x)%6 ) + ".jpg' />");
+            },
+            onHide:function(oParam) 
+            {
+                oParam.$e.hide();    
+            },
+            onRemove:function(oParam) 
+            {
+                return true;
+            },
+            onStop:function(oParam) 
+            {                                                                           
+                iCurX = oParam.wrapperLeft/oParam.cellWidth;                    
+                updateIndicator();
+            },
+            onResize:function(oParam)
+            {                    
+                $("#divCarousel").data("plugin_ecoScroll").moveByCoord(iCurX, 0);       
+            }
+        });  
 
-      // Img Wall With Mometum
+        // Img Wall With Mometum
         $("#divImgWallWithMometum").ecoScroll({
           itemWidth: 150,
           itemHeight: 150,
@@ -249,6 +263,57 @@
               }
           }
         }); 
+
+        var arrName = [
+          "Clarence Czech", "Ignacia Ferber", "Amie Hamer", "Marina Brackin",
+          "Echo Clarke", "Randall Borrelli", "Nikita Feagin", "Kenyetta Haapala",
+          "Warren Barham", "Judith Howery", "Elwanda Eakins", "Stepanie Aguilera",
+          "Gloria Nick", "Shasta Thiem", "Lurline Newingham", "Malinda Wiren",
+          "Mora Mara", "Lexie Elling", "Kyong Schild", "Brigid Hopton", 
+          "Roseanne Caver", "Lavonna Troxell", "Maybelle Martinson", "Almeta Enos",
+          "Laree Lineberry", "Jeannine Sthilaire", "Clifton Boso", "Darby Mccullum",
+          "Laurine Hausman", "Jess Bouie", "Norman Word", "Chantelle Aguayo",
+          "Mallory Reaves", "Lai Koo", "Raymonde Woldt", "Augustina Parcell",
+          "Jackelyn Planck", "Jackie Propes", "Kandi Higgenbotham", 
+          "Blythe Perri", "Debroah Armagost", "Florida Briant",
+          "Nina Christofferse", "Kia Cortez", "Song Tilson", "Juli Messenger",
+          "Zonia Menjivar", "Neal Marone", "Ashlea Mcdill", "Sherron Dinger",
+          "Chia Covert",
+          "Clarence Czech", "Ignacia Ferber", "Amie Hamer", "Marina Brackin",
+          "Echo Clarke", "Randall Borrelli", "Nikita Feagin", "Kenyetta Haapala",
+          "Warren Barham", "Judith Howery", "Elwanda Eakins", "Stepanie Aguilera",
+          "Gloria Nick", "Shasta Thiem", "Lurline Newingham", "Malinda Wiren",
+          "Mora Mara", "Lexie Elling", "Kyong Schild", "Brigid Hopton", 
+          "Roseanne Caver", "Lavonna Troxell", "Maybelle Martinson", "Almeta Enos",
+          "Laree Lineberry", "Jeannine Sthilaire", "Clifton Boso", "Darby Mccullum",
+          "Laurine Hausman", "Jess Bouie", "Norman Word", "Chantelle Aguayo",
+          "Mallory Reaves", "Lai Koo", "Raymonde Woldt", "Augustina Parcell",
+          "Jackelyn Planck", "Jackie Propes", "Kandi Higgenbotham", 
+          "Blythe Perri", "Debroah Armagost", "Florida Briant",
+          "Nina Christofferse", "Kia Cortez", "Song Tilson", "Juli Messenger",
+          "Zonia Menjivar", "Neal Marone", "Ashlea Mcdill", "Sherron Dinger"
+        ];
+
+        $("#diviPhone").ecoScroll({
+            itemWidth: 200,
+            itemHeight: 30,
+            rangeX : [0,0],
+            rangeY : [0,100],
+            axis : "y",
+            momentum: true,
+            momentumSpeed: 8,
+            onShow:function(oParam) 
+            {
+                if (oParam.bNew && oParam.x==0) 
+                {
+                    oParam.$e.append("<div class='iPhoneName'>"+arrName[oParam.y]+"</div>");
+                }
+            }
+        });
+
+
+      });
+        
   		</script>
     </body>
     </html>

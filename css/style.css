@@ -156,3 +156,43 @@ footer
     width: 150px;
     height: 150px;
 }
+
+#iPhoneContainer
+{
+    position:relative; 
+    width:250px; 
+    margin:0px auto; 
+    padding-top:60px;
+}
+#imgiPhone
+{
+    position:absolute; 
+    left:0px; 
+    top:0px; 
+    width:250px;
+}
+#diviPhone {
+    margin: 10px auto;
+    position: relative;
+    width: 200px; 
+    height: 355px;       
+    border: 2px #000 solid;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+#diviPhone .eCell {
+    position: absolute;
+    border: none;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;     
+}
+
+.iPhoneName {
+    margin: 3px;
+    border-bottom: 1px #bebebe solid;
+    font-family: monospace;
+    font-size: 12px;
+    color: #000;
+}
