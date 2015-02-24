@@ -69,9 +69,12 @@
 
             function loadMore()
             {
+                /*
+                "http://gdata.youtube.com/feeds/api/videos?q=Ed+Sheeran&v=2&alt=json&max-results=50&start-index=" + iPage                                 
+                */
                 $.ajax({
                     dataType: "json",
-                    url: "http://gdata.youtube.com/feeds/api/standardfeeds/most_popular?v=2&alt=json&max-results=50&start-index=" + iPage,                    
+                    url: "http://gdata.youtube.com/feeds/api/standardfeeds/most_popular?v=2&alt=json&max-results=50&start-index=" + iPage,                   
                 })
                 .done(function(data)
                 {
@@ -96,7 +99,7 @@
             {
                 $.ajax({
                     dataType: "json",
-                    url: "http://gdata.youtube.com/feeds/api/standardfeeds/most_popular?v=2&alt=json&max-results=50&start-index=1",                    
+                    url: "http://gdata.youtube.com/feeds/api/standardfeeds/most_popular?v=2&alt=json&max-results=50&start-index=1", 
                 })
                 .done(function(data)
                 {
