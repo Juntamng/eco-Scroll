@@ -12,10 +12,10 @@
                 overflow: hidden;
             }
             #divContainer {
-                margin: 0px auto;
+                margin: 200px auto;
                 position: relative;
                 width: 100%; 
-                height: 100%;                
+                height: 540px;                
                 border: none;
                 overflow: hidden;
             }
@@ -34,10 +34,20 @@
                 height: 180px;
             }
 
-            .eCell iframe
+            .eCell .overlay
             {   
+                position: absolute;
+                top: 0px;
+                left: 0px;
                 width: 320px;
                 height: 180px;
+                background-color: #fff;     
+                opacity: 0;           
+            }
+
+            .eCell .overlay:hover+.play
+            {   
+               display: block;
             }
 
             .eCell .lbl
@@ -52,10 +62,63 @@
                 font-weight: bold;
                 opacity: 0.5;
             }
+
+            .eCell .play 
+            {
+                color: #fff;
+                width: 40px;
+                height: 40px;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                font-size: 30px;
+                padding: 3px;
+                margin-left: -20px;
+                margin-top: -20px;
+                display: none;
+                opacity: 1;
+            }
+
+            .eCell .play:hover
+            {
+                color: red;
+                display:block;
+            }
+
+            #ifrWrapper
+            {
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                width: 320px;
+                height: 180px;
+                z-index: 999;
+            }
+
+            #ifrWrapper .player 
+            {
+                width: 320px;
+                height: 180px;
+            }
+
+            #ifrWrapper .cover
+            {   
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                width: 320px;
+                height: 180px;
+                display: none;
+            }
+
         </style>
+        <link type="text/css" rel="stylesheet" href="../css/bootstrap.css"> 
     </head>
-    <body>        
-        <iframe style="display:none" id="videowrapper" width="560" height="315" src="" data-iframe-src="https://www.youtube.com/embed/SJTyY2csya8?autoplay=true" frameborder="0" allowfullscreen></iframe>
+    <body>
+        <div id="ifrWrapper">    
+            <iframe id="ifrPlayer" class="player" frameborder="0" allowfullscreen></iframe>
+            <div class="cover"></div>
+        </div>
 
         <div id="divContainer">
             <div class="wrapper">                                
@@ -90,7 +153,7 @@
                     {
                         var entry = entries[i];
                         var url = entry.media$group.media$thumbnail[1].url;                        
-                        arr[iCnt] = { "url": url, src: entry.media$group.media.yt$videoid.$t };
+                        arr[iCnt] = { "url": url, vid: entry.media$group.yt$videoid.$t };
                         iCnt++;
                     }                    
 
@@ -115,7 +178,7 @@
                     {
                         var entry = entries[i];
                         var url = entry.media$group.media$thumbnail[1].url;                        
-                        arr[iCnt] = { "url": url, src: entry.media$group.yt$videoid.$t };
+                        arr[iCnt] = { "url": url, vid: entry.media$group.yt$videoid.$t };
                         iCnt++;
                     }                    
 
@@ -130,18 +193,26 @@
                     itemHeight: 180,
                     momentum: true,
                     momentumSpeed: 8,
+                    axis : "x",
+                    rangeY : [0,2],
+                    rangeX : [0,undefined],
                     onShow:function(oParam) 
                     {
-                        if (oParam.bNew) 
+                        if (oParam.bNew && oParam.x >= 0 && oParam.y >= 0 && oParam.y <=2) 
                         {
                             var i = iCnt2 % iCnt;
-                            
-                            
-                            oParam.$e.append("<img src='" + arr[i].url + "' /><div class='lbl'>" + i + "</div>").css({opacity:0}).animate({opacity: 1}, 400);
-                            
-                            /*                        
-                            oParam.$e.append("<iframe id='ifr' src='http://www.youtube.com/embed/" + arr[i].src + "' frameborder='0'></iframe><div class='lbl'>" + i + "</div>").css({opacity:0}).animate({opacity: 1}, 400);
-                            */
+                                                        
+                            oParam.$e.append("<img src='" + arr[i].url + "' /><div class='lbl'>" + i + "</div><div class='overlay'></div>").css({opacity:0}).animate({opacity: 1}, 400);
+                            oParam.$e.attr({"data-vid": arr[i].vid});
+
+                            $("<span class='play glyphicon glyphicon-play-circle'></span>").appendTo(oParam.$e)
+                                .click(function(){
+                                    if ($("#ifrWrapper").parent("body").length == 1)
+                                        $("#ifrWrapper").appendTo(".wrapper");
+
+                                    $("#ifrWrapper").css({left: oParam.oEle.left, top: oParam.oEle.top});
+                                    $("#ifrPlayer").prop({src: "https://www.youtube.com/embed/" + oParam.$e.attr("data-vid") + "?autoplay=true"});
+                                })
 
                             iCnt2++;
                         }

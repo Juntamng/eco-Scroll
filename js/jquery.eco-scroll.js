@@ -383,7 +383,7 @@ SOFTWARE.
                 $e = $("<div class='eCell' id='c" + x + "_" + y + "'></div>")
                     .appendTo(this.$wrapper)
                     .css(oCss);
-                oEle = {"$e":$e, "x": x, "y": y};
+                oEle = {"$e":$e, "x": x, "y": y, left: iX, top: iY};
                 this.arr["c"+x+"_"+y] = oEle;
             }
             else
@@ -403,7 +403,7 @@ SOFTWARE.
                 oEle.$e.show();                
             }            
 
-            this.settings.onShow({"bNew":bNew, "$e":oEle.$e, "x":x, "y":y});
+            this.settings.onShow({"bNew":bNew, "oEle": oEle, "$e":oEle.$e, "x":x, "y":y});
         },  
         hideCells: function()
         {
