@@ -197,3 +197,99 @@ footer
     font-size: 12px;
     color: #000;
 }
+
+/* ============================
+Wall of Youtube
+===============================*/
+
+#divYoutube
+{
+    position: relative;
+    width: 100%; 
+    height: 540px;                
+    border: none;
+    overflow: hidden;
+}
+
+#divYoutube .eCell img 
+{   
+    width: 320px;
+    height: 180px;
+}
+
+#divYoutube .eCell .overlay
+{   
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 320px;
+    height: 180px;
+    background-color: #fff;     
+    opacity: 0;           
+}
+
+#divYoutube .eCell .overlay:hover+.play
+{   
+   display: block;
+}
+
+#divYoutube .eCell .lbl
+{
+    position: absolute;
+    top: 0px;
+    left: 0;
+    width: 25px;
+    height: 20px;
+    padding: 2px;
+    background-color: #fff;
+    font-weight: bold;
+    opacity: 0.5;
+}
+
+#divYoutube .eCell .play 
+{
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 30px;
+    padding: 3px;
+    margin-left: -20px;
+    margin-top: -20px;
+    display: none;
+    opacity: 1;
+}
+
+#divYoutube .eCell .play:hover
+{
+    color: red;
+    display:block;
+}
+
+#ifrWrapper
+{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 320px;
+    height: 180px;
+    z-index: 999;
+}
+
+#ifrWrapper .player 
+{
+    width: 320px;
+    height: 180px;
+}
+
+#ifrWrapper .cover
+{   
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 320px;
+    height: 180px;
+    display: none;
+}
