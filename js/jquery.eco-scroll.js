@@ -236,15 +236,14 @@ SOFTWARE.
         moveTo: function(iLeft, iTop, options)
         {            
             var oRange = this.checkRange(iLeft, iTop);
-            var that = this;
+            var that = this, oCss = {};
             
             this.iDistX2 = oRange.left;
             this.iDistY2 = oRange.top;
-            
-            var oCss = {};
-            oCss[this.sTransform] = "translate(" + oRange.left + "px," + oRange.top + "px) rotateZ(0deg)";
+                
+            oCss = {"left": oRange.left, "top": oRange.top};        
             if (typeof(options) === "object") 
-            {
+            {                                                        
                 options.start = function(){ that.bAnimated = true; };
                 options.complete = function()
                 { 
@@ -252,11 +251,13 @@ SOFTWARE.
                     that.settings.onStop(that.getParam());
                 };
 
-                this.bAnimated && this.$wrapper.animate(oCss, options);
+                !this.bAnimated && this.$wrapper.animate(oCss, options);
             }
             else    
-                this.$wrapper.css(oCss);                        
-            
+            {
+                this.$wrapper.css(oCss);
+            }
+                                                    
             this.updateCells();
         },
         moveByDist: function(iDistX, iDistY, options)
