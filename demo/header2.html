@@ -1,0 +1,227 @@
+    <!DOCTYPE html>
+
+    <html>
+    <head>
+		<title></title>
+        <style>
+            html, body {
+                height: 100%;
+                width: 100%;
+                margin: 0px;
+                padding: 0px;
+            }
+            #divHeader {
+                position: fixed;
+                width: 100%; 
+                height: 150px;                
+                border: 1px #000 solid;
+                overflow: hidden;                
+                z-index: 999;
+                top: 0px;
+                left: 0px;
+                background-color: #fff;
+            }
+
+            #divContainer {
+                position: relative;
+                width: 100%; 
+                height: 100%;                
+                border: 1px #000 solid;
+                overflow: hidden;
+            }
+            .eCell {
+                position: absolute;
+                border: 1px blue solid;
+                -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+                -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+                box-sizing: border-box; 
+            }
+        </style>
+
+        <link type="text/css" rel="stylesheet" href="../css/bootstrap.css"> 
+        <link type="text/css" rel="stylesheet" href="../css/carousel.css">   
+    </head>
+    <body>       
+        <div id="divHeader">
+            <div class="wrapper">                                
+            </div>  
+
+            <!-- Controls -->
+            <a class="left carousel-control" href="javascript:void(0)" data-slide="prev">
+                <span id="aPrev" class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+
+            <a class="right carousel-control" href="javascript:void(0)" data-slide="next">
+                <span id="aNext" class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>       
+        </div>        
+
+        <div id="divContainer">
+            <div class="wrapper">                                
+            </div>        
+        </div>        
+        
+        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+        <script src="../js/jquery.eco-scroll.js"></script>        
+		<script>            
+		$(function()
+        {               
+            var iCur = iPrev = 0;
+            var iCurSentence;
+            var iTotal = 3;
+            var arr = [
+                {title: "I am ...", sentence: "I am ___"}, 
+                {title: "I am grateful for ...", sentence: "I am grateful for ___"}, 
+                {title: "Before I die ...", sentence: "Before I die I wanted to ___"} 
+            ];
+
+            iCurSentence = arr[iCur].sentence;
+
+            $("#divHeader").ecoScroll({
+                itemWidth: "100%",
+                itemHeight: "100%",
+                axis: "x", 
+                snap: true,
+                onShow:function(oParam) 
+                {
+                    if (oParam.bNew)
+                    {   
+                        var i = (oParam.y + oParam.x) % iTotal;                        
+                        if (i < 0) 
+                            i = iTotal + i;
+
+                        oParam.$e.text( arr[i].title );                        
+                    }
+                },
+                onStop: function(oParam) 
+                {
+                    iCur = (oParam.wrapperLeft / oParam.cellWidth) % iTotal;
+                    if (iCur > 0) 
+                        iCur = iTotal - iCur;
+                    else
+                        iCur = Math.abs(iCur);
+
+                    if (iCur != iPrev)  
+                    {
+                        iCurSentence = arr[iCur].sentence;
+                        //alert(iCurSentence);                        
+                        $("#divContainer").data("plugin_ecoScroll").init();
+                    }
+                    iPrev = iCur;
+                },
+                onResize:function(oParam)
+                {                    
+                    $("#divHeader").data("plugin_ecoScroll").moveByCoord(iCur, 0);       
+                }
+            });
+        
+            var iCurX = 0;
+            var clickEventType = (document.ontouchstart!==null) ? 'mousedown' : 'touchstart';            
+            $(".glyphicon-chevron-left, .glyphicon-chevron-right").bind(clickEventType, function(e)
+            {                
+                e.preventDefault();
+                e.stopPropagation();                
+                //$(this).trigger("click");
+            })        
+            .click(function(e)
+            {
+                e.preventDefault();
+                e.stopPropagation();                
+
+                iCurX += (this.id == "aPrev") ? 1: -1;
+console.log(iCurX);                
+                $("#divHeader").data("plugin_ecoScroll").moveByCoord(iCurX, 0, {duration: 400});                         
+            });              
+
+            var iRowTotal = 40;
+            var iPageSize = 500;
+            var i, iCnt;
+            var arrP = [], arrT = [];
+
+            for (iCnt = 0; iCnt<iPageSize; iCnt++)
+                arrT[iCnt] = {$e: null, txt: "[T"+iCnt+"]"};
+            for (iCnt = 0; iCnt<iPageSize; iCnt++)
+                arrP[iCnt] = {$e: null, txt: "[P"+iCnt+"]"};
+
+            arrT[10] = {$e: null, txt: "testing testing 123 ..."};
+            arrP[10] = {$e: null, txt: "Past testing testing 123 ..."};
+
+            $("#divContainer").ecoScroll({
+                itemWidth: "300px",
+                itemHeight: "50px",
+                axis: "xy", 
+                snap: false,
+                onShow:function(oParam) 
+                {
+                    if (oParam.bNew)
+                    {                           
+                        i = oParam.y % iRowTotal;
+                        if ( i < 0 ) 
+                            i = iRowTotal + i;
+
+                        i += oParam.x * iRowTotal;
+
+                        //oParam.$e.text( i ); 
+                        if (i > -1)
+                        {
+                            if (arrT[i])
+                                oParam.$e.text( iCurSentence + arrT[i].txt );                        
+                            else
+                                oParam.$e.text( iCurSentence + i );              
+                        }
+                        else
+                        {
+                            i = Math.abs(i);
+                            if (arrP[i])
+                                oParam.$e.text( iCurSentence + arrP[i].txt );                        
+                            else
+                                oParam.$e.text( iCurSentence + i );    
+                        }
+
+                        if (arrT[i] == undefined)
+                        {       
+                            arrT[i] = {$e: oParam.$e, txt: ""};                     
+                            console.log("out - " + i + " = " + Math.floor(i/iPageSize) );
+                            loadNextT( Math.floor(i/iPageSize) );
+                        }
+                    }
+
+                    if (iPrev != iCur)
+                        oParam.$e.css({opacity:0}).animate({opacity: 1}, 1000);
+                }                
+            });
+
+            function loadNextT(iPage)
+            {
+
+                var iStart = (iPage * iPageSize), iCnt = 0;
+                
+                if (arrT[iStart] == undefined)
+                    arrT[iStart] = {$e: null, txt: ""};                     
+
+                if (arrT[iStart].loaded == undefined)
+                {
+console.log("next start at " + iStart);                                    
+                    for (iCnt = 0; iCnt<iPageSize; iCnt++)
+                    {            
+                        if (arrT[iStart+iCnt])
+                        {
+                            arrT[iStart+iCnt].txt = "[T"+(iStart+iCnt)+"]";
+                            if (arrT[iStart+iCnt].$e)
+                                arrT[iStart+iCnt].$e.text(iCurSentence + arrT[iStart+iCnt].txt);
+                        }
+                        else                            
+                            arrT[iStart+iCnt] =  { $e: null, txt: "[T"+(iStart+iCnt)+"]" };            
+                    }
+
+                    arrT[iStart].loaded = true;
+                }
+            }
+
+        });
+		</script>
+    </body>
+    </html>

@@ -87,8 +87,9 @@ SOFTWARE.
 	{
 		init: function() 
 		{
-			this.arr = {};            
-            this.initData();				
+			this.arr = {};    
+            this.$wrapper.empty();        
+            this.initData();		
             this.bTouch = 'ontouchstart' in window;
             this.resizeEvent = 'onorientationchange' in window ? 'orientationchange' : 'resize';
             this.startEvent  = this.bTouch ? 'touchstart' : 'mousedown';
@@ -176,7 +177,8 @@ SOFTWARE.
         wResize: function(e) 
         {
             this.initData();
-            this.settings.onResize(this.getParam());
+            this.hideCells();
+            this.settings.onResize(this.getParam());            
         },     
         mStart: function(e)
         {
@@ -398,7 +400,9 @@ SOFTWARE.
                         height: this.calHeight,
                     };
                     oCss[this.sTransform] = "translate(" + iX + "px," + iY + "px) rotateZ(0deg)";
-                    oEle.$e.css(oCss);                  
+                    oEle.$e.css(oCss);  
+                    oEle.left = iX;
+                    oEle.top = iY;                
                 }
 
                 oEle.$e.show();                
