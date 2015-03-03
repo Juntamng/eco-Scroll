@@ -1,0 +1,103 @@
+<html>
+<head>
+    <title></title>
+    <style>
+    .wrap 
+    {
+        display: inline-block;
+        position: absolute;
+        width: 400px;
+        padding: 20px;
+        top: 400px;
+        left: 600px;
+    }
+           
+    .s_wrap {
+        position: relative;
+    }
+
+    .s_s
+    {
+        float: left;
+    }
+    .b_wrap
+    {
+        float:left; 
+        position: relative;
+        margin-left:2px; 
+    }
+    .b_underline
+    {
+        position: absolute; left: 1px;
+    }
+    .b_b
+    {
+        float:left;                
+        margin-left: 5px;
+    }
+    .b_t 
+    {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        border: none;
+        resize: none;
+        background-color: transparent;
+        overflow: hidden;
+        outline: 0 none;
+        width: 100%;
+    }
+
+    .s 
+    {
+        position: absolute;
+    }
+
+    .b 
+    {
+        font-size: 25px;
+    }
+
+    .t 
+    {
+        position: absolute;
+        top: 5px;
+        left: 0px;
+        /*border: none;*/
+        resize: none;
+        background-color: transparent;
+        font-size: 25px;
+        overflow: hidden;
+        outline: 0 none;
+        line-height: 30px;
+        width: 100%;
+    }
+    </style>    
+</head>
+<body>
+
+<div id="div1" style="margin-top: 200px"><span class="s" style="font-size:20px">I am</span><span class="b" style="font-size:60px">good</span></div>
+
+<div class="wrap">
+    <div class="s"> 
+        <span style="float:left">I am </span> 
+        <span style="margin-left:2px; float:left; position: relative">        
+            <span style="position: absolute; left: 1px;"> _____________________.</span> 
+            <span class="b" style="float:left;margin-top: -10px; margin-left:5px"> good</span>
+        </span>
+    </div>
+    <TEXTAREA class="t" style="text-indent: 52px"></TEXTAREA>
+</div>
+
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+<script src="../js/sentence.js"></script>        
+<script>            
+    $(function()
+    {               
+        $("#div1").sentence({});
+    });
+</script>
+
+</body>
+</html>

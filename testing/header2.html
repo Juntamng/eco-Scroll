@@ -141,19 +141,33 @@ console.log(iCurX);
             var i, iCnt;
             var arrP = [], arrT = [];
 
+            /*
             for (iCnt = 0; iCnt<iPageSize; iCnt++)
                 arrT[iCnt] = {$e: null, txt: "[T"+iCnt+"]"};
             for (iCnt = 0; iCnt<iPageSize; iCnt++)
                 arrP[iCnt] = {$e: null, txt: "[P"+iCnt+"]"};
+            */
+            
+            arrP[10] = {$e: null, txt: "Past testing testing 10 ..."};
 
-            arrT[10] = {$e: null, txt: "testing testing 123 ..."};
-            arrP[10] = {$e: null, txt: "Past testing testing 123 ..."};
+            arrT[10] = {$e: null, txt: "testing testing 123 ..."};            
+            arrT[12] = {$e: null, txt: "testing testing 12 ..."};            
+            arrT[13] = {$e: null, txt: "testing testing 13 ..."};            
+            arrT[14] = {$e: null, txt: "testing testing 14 ..."};            
+            arrT[15] = {$e: null, txt: "testing testing 15 ..."};            
+            arrT[16] = {$e: null, txt: "testing testing 16 ..."};            
+            arrT[100] = {$e: null, txt: "testing testing 100 ..."};
+            arrT[1000] = {$e: null, txt: "testing testing 1000 ..."};
+            arrT[50] = {$e: null, txt: "testing testing 50 ..."};
+            arrT[500] = {$e: null, txt: "testing testing 500 ..."};
+            arrT[5000] = {$e: null, txt: "testing testing 5000 ..."};
 
             $("#divContainer").ecoScroll({
                 itemWidth: "300px",
                 itemHeight: "50px",
                 axis: "xy", 
                 snap: false,
+                momentum: true,
                 onShow:function(oParam) 
                 {
                     if (oParam.bNew)
@@ -164,13 +178,12 @@ console.log(iCurX);
 
                         i += oParam.x * iRowTotal;
 
-                        //oParam.$e.text( i ); 
                         if (i > -1)
                         {
                             if (arrT[i])
                                 oParam.$e.text( iCurSentence + arrT[i].txt );                        
                             else
-                                oParam.$e.text( iCurSentence + i );              
+                                oParam.$e.text( iCurSentence );              
                         }
                         else
                         {
@@ -181,11 +194,14 @@ console.log(iCurX);
                                 oParam.$e.text( iCurSentence + i );    
                         }
 
-                        if (arrT[i] == undefined)
-                        {       
-                            arrT[i] = {$e: oParam.$e, txt: ""};                     
-                            console.log("out - " + i + " = " + Math.floor(i/iPageSize) );
-                            loadNextT( Math.floor(i/iPageSize) );
+                        var iPStart = Math.floor(i/iPageSize) * iPageSize;                        
+                        if (arrT[iPStart] == undefined)
+                            arrT[iPStart] = {$e: oParam.$e, txt: ""};   
+
+                        if (arrT[iPStart].loaded == undefined)
+                        {                                                     
+                            //console.log("out - " + i + " = " + Math.floor(i/iPageSize) );
+                            //loadNextT( iPStart );
                         }
                     }
 
@@ -194,31 +210,24 @@ console.log(iCurX);
                 }                
             });
 
-            function loadNextT(iPage)
+            function loadNextT(iPStart)
             {
+                var iCnt = 0;
+                                
+console.log("next start at " + iPStart);                                    
 
-                var iStart = (iPage * iPageSize), iCnt = 0;
-                
-                if (arrT[iStart] == undefined)
-                    arrT[iStart] = {$e: null, txt: ""};                     
-
-                if (arrT[iStart].loaded == undefined)
-                {
-console.log("next start at " + iStart);                                    
-                    for (iCnt = 0; iCnt<iPageSize; iCnt++)
-                    {            
-                        if (arrT[iStart+iCnt])
-                        {
-                            arrT[iStart+iCnt].txt = "[T"+(iStart+iCnt)+"]";
-                            if (arrT[iStart+iCnt].$e)
-                                arrT[iStart+iCnt].$e.text(iCurSentence + arrT[iStart+iCnt].txt);
-                        }
-                        else                            
-                            arrT[iStart+iCnt] =  { $e: null, txt: "[T"+(iStart+iCnt)+"]" };            
+                for (iCnt = 0; iCnt<iPageSize; iCnt++)
+                {            
+                    if (arrT[iPStart+iCnt])
+                    {
+                        if (arrT[iPStart+iCnt].$e)
+                            arrT[iPStart+iCnt].$e.text(iCurSentence + arrT[iPStart+iCnt].txt);
                     }
-
-                    arrT[iStart].loaded = true;
+                    else                            
+                        arrT[iPStart+iCnt] =  { $e: null, txt: "[T"+(iPStart+iCnt)+"]" };            
                 }
+
+                arrT[iPStart].loaded = true;
             }
 
         });
