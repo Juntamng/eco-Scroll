@@ -1,17 +1,7 @@
 <html>
 <head>
     <title></title>
-    <style>
-    .wrap 
-    {
-        display: inline-block;
-        position: absolute;
-        width: 400px;
-        padding: 20px;
-        top: 400px;
-        left: 600px;
-    }
-           
+    <style>          
     .s_wrap {
         position: relative;
     }
@@ -32,8 +22,11 @@
     }
     .b_b
     {
-        float:left;                
-        margin-left: 5px;
+        position: absolute; 
+        left: 0px;
+        top: 0px;
+        /* margin-left: 5px; */
+        word-break: break-all;
     }
     .b_t 
     {
@@ -48,6 +41,16 @@
         width: 100%;
     }
 
+    .wrap 
+    {
+        display: inline-block;
+        position: absolute;
+        width: 400px;
+        padding: 20px;
+        top: 400px;
+        left: 600px;
+    }
+    
     .s 
     {
         position: absolute;
@@ -72,11 +75,34 @@
         line-height: 30px;
         width: 100%;
     }
+
+    .sen 
+    {
+        border: 1px solid green;
+        margin-top: 50px;
+        width: 300px;
+        height: 200px;
+    }
     </style>    
 </head>
 <body>
 
-<div id="div1" style="margin-top: 200px"><span class="s" style="font-size:20px">I am</span><span class="b" style="font-size:60px">good</span></div>
+<div id="div1" class="sen">
+    <span class="s" style="font-size:20px">I am</span><span class="b" style="font-size:60px"></span>
+</div>
+
+<div id="div2" class="sen">
+    <span class="s" style="font-size:20px">I am</span><span class="b" style="font-size:60px">Bad</span>
+</div>
+
+<div id="div3" class="sen">
+    <span class="s" style="font-size:20px">I am</span><span class="b" style="font-size:60px">so so</span>
+</div>
+
+<div id="div4" class="sen">
+    <span class="s" style="font-size:20px">I am</span><span class="b" style="font-size:60px">hot</span>
+</div>
+
 
 <div class="wrap">
     <div class="s"> 
@@ -89,14 +115,29 @@
     <TEXTAREA class="t" style="text-indent: 52px"></TEXTAREA>
 </div>
 
+<button onclick="kill()">destroy</button>
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
 <script src="../js/sentence.js"></script>        
 <script>            
     $(function()
     {               
-        $("#div1").sentence({});
+        $(".sen").sentence({
+            onEdit:function(oParam)
+            {
+                return true;
+            },
+            onHide:function(oParam)
+            {
+                //alert("hide");
+            }
+        });        
     });
+
+    function kill()
+    {
+        $(".sen").data("plugin_sentence").destroy();
+    }
 </script>
 
 </body>
