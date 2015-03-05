@@ -6,34 +6,42 @@
 .s_s
 {
     float: left;
+    line-height: 30px;
 }
 .b_wrap
 {
     float:left; 
     position: relative;
-    margin-left:2px; 
+    margin-left: 7px; 
 }
 .b_underline
 {
-    position: absolute; left: 1px;
+    position: absolute;     
+    line-height: 30px;
+    margin-top: 2px;
 }
 .b_b
 {
     position: absolute; 
     left: 0px;
     top: 0px;
-    /* margin-left: 5px; */
+    margin-top: 5px;
+    margin-left: 5px;
     word-break: break-all;
+    line-height: 30px;
+    font-size: 30px;
 }
 .b_t 
 {
     position: absolute;
-    top: 0px;
+    top: -3px;
     left: 0px;
-    border: none;
+    border: 1px transparent solid;
     resize: none;
     background-color: transparent;
     overflow: hidden;
     outline: 0 none;
     width: 100%;
-}
+    line-height: 30px;
+    font-size: 30px;
+}   

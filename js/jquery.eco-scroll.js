@@ -38,6 +38,10 @@ SOFTWARE.
         snap : false,
         momentum : false,
         momentumSpeed : 8,
+        onStart: function(oParam) 
+        {
+            return true;
+        },
         onShow: function(oParam) 
         {
             oParam.$e.text(oParam.x + ":" + oParam.y);
@@ -182,6 +186,9 @@ SOFTWARE.
         },     
         mStart: function(e)
         {
+            if ( !this.settings.onStart({"e": e}) )
+                return true;
+
             var point = this.bTouch ? e.touches[0] : e;
             var oPos = this.$wrapper.position();   
             this.iDistX1=oPos.left;

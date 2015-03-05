@@ -4,37 +4,66 @@
     <head>
 		<title></title>
         <style>
-            html, body {
+            html, body 
+            {
                 height: 100%;
                 width: 100%;
                 margin: 0px;
                 padding: 0px;
+                background-color: #000;
+                color: #fff;
             }
-            #divHeader {
+
+            #divHeader 
+            {
                 position: fixed;
                 width: 100%; 
-                height: 150px;                
+                height: 200px;                
                 border: 1px #000 solid;
                 overflow: hidden;                
                 z-index: 999;
                 top: 0px;
                 left: 0px;
-                background-color: #fff;
+                background-color: #000;                
+            }
+            
+            #divHeader .eCell 
+            {
+                position: absolute;
+                /* border: 1px green solid; */
+                -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+                -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+                box-sizing: border-box; 
+                color: #fff;
+                font-size: 30px;
+                font-weight: bold;
+                padding: 30px 50px;
             }
 
-            #divContainer {
+            #divContainer 
+            {
                 position: relative;
                 width: 100%; 
                 height: 100%;                
                 border: 1px #000 solid;
                 overflow: hidden;
+                background-color: #000;
             }
-            .eCell {
+                    
+            #divContainer .eCell 
+            {
                 position: absolute;
-                border: 1px blue solid;
+                /* border: 1px green solid; */
                 -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
                 -moz-box-sizing: border-box;    /* Firefox, other Gecko */
                 box-sizing: border-box; 
+                color: #fff;
+                padding: 5px;
+            }
+
+            .b 
+            {
+                font-size: 25px;
             }
         </style>
 
@@ -109,7 +138,6 @@
                     if (iCur != iPrev)  
                     {
                         iCurSentence = arr[iCur].sentence;
-                        //alert(iCurSentence);                        
                         $("#divContainer").data("plugin_ecoScroll").init();
                     }
                     iPrev = iCur;
@@ -165,12 +193,22 @@ console.log(iCurX);
             arrT[5000] = {$e: null, txt: "testing testing 5000 ..."};
 
             $("#divContainer").ecoScroll({
-                itemWidth: "300px",
+                itemWidth: "500px",
                 itemHeight: "50px",
                 axis: "xy", 
                 snap: false,
                 momentum: true,
-                onShow:function(oParam) 
+                onStart: function(oParam)
+                {
+                    if (oParam.e.target.tagName == "TEXTAREA")
+                        return false;
+                    else
+                    {
+                        $("#b_textarea").trigger("blur");
+                        return true;
+                    }
+                },
+                onShow: function(oParam) 
                 {
                     if (oParam.bNew)
                     {                           
@@ -196,9 +234,11 @@ console.log(iCurX);
                         {
                             i = Math.abs(i);
                             if (arrP[i])
-                                oParam.$e.text( iCurSentence + arrP[i].txt );                        
+                                oParam.$e.html( sHTML + arrP[i].txt + "</span></div>" );
                             else
-                                oParam.$e.text( iCurSentence + i );    
+                                oParam.$e.html( sHTML + "</span></div>" );    
+
+                            oParam.$e.find(".sen").sentence({});
                         }
 
                         var iPStart = Math.floor(i/iPageSize) * iPageSize;                        

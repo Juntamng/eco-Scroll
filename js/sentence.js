@@ -58,6 +58,8 @@ SOFTWARE.
         this.$wrap = undefined;
         this.$underline = undefined; 
         this.$textarea = undefined;
+        this.bTouch = 'ontouchstart' in window;
+        this.startEvent  = this.bTouch ? 'touchstart' : 'mousedown';
 
         this.init();
 	}
@@ -79,7 +81,7 @@ SOFTWARE.
             .append("<div class='s_wrap'>" +                    
                     "<span class='s_s'>" + this.sSentenceText + "</span> " +                    
                     "<span class='b_wrap'>" +
-                        "<span class='b_underline'>__________.</span>" +                        
+                        "<span class='b_underline'>______________________.</span>" +                        
                     "</span>" +             
                     "<span class='b_b'>" + this.sBlankText + "</span>" +                        
                 "</div><div style='clear:both'></div>"
@@ -127,9 +129,6 @@ SOFTWARE.
         {
             var that = this;
 
-            if ( !that.settings.onEdit({$element: that.$element}) )
-                return false;
-
             if (this.$textarea)
                 ;
             else
@@ -146,16 +145,19 @@ SOFTWARE.
                 }
             }
 
+            if ( !that.settings.onEdit({$element: that.$element}) )
+                return false;
+
             var iTop = -(this.iBlankHeight) / 2;
             iTop = 0;
             this.$blank.hide();
             this.$wrap.append(this.$textarea);
             this.$textarea.val(this.$blank.text())
-            .css({"font-size": this.iBlankSize + "px", "font-family": this.sBlankFontFamily, "margin-top": iTop+"px", "text-indent": this.$sentence.outerWidth()+3 })            
+            .css({"font-size": this.iBlankSize + "px", "font-family": this.sBlankFontFamily, "margin-top": iTop+"px", "text-indent": this.$sentence.outerWidth()+5 })            
             .one("blur", function() {
-                that.settings.onHide({$element: that.$element});                
-                that.$textarea.hide();                
+                that.settings.onHide({$element: that.$element});                                
                 that.$blank.text(that.$textarea.val()).show();
+                that.$textarea.hide();                
             })
             .show()
             .focus();            
