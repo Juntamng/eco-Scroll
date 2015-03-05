@@ -109,6 +109,7 @@ SOFTWARE.
             
             this.iBlankHeight = this.$blank.innerHeight();
             var iTop = -(this.iBlankHeight) / 2;
+            iTop = 0;
             this.$blank.css({                
                 "margin-top": iTop+"px"
             });                        
@@ -146,15 +147,14 @@ SOFTWARE.
             }
 
             var iTop = -(this.iBlankHeight) / 2;
-            
+            iTop = 0;
             this.$blank.hide();
+            this.$wrap.append(this.$textarea);
             this.$textarea.val(this.$blank.text())
-            .css({"font-size": this.iBlankSize + "px", "font-family": this.sBlankFontFamily, "margin-top": iTop+"px", "text-indent": this.$sentence.outerWidth()+3 })
-            .appendTo(this.$wrap)
+            .css({"font-size": this.iBlankSize + "px", "font-family": this.sBlankFontFamily, "margin-top": iTop+"px", "text-indent": this.$sentence.outerWidth()+3 })            
             .one("blur", function() {
-                that.settings.onHide({$element: that.$element});
-
-                that.$textarea.hide().appendTo(document.body);
+                that.settings.onHide({$element: that.$element});                
+                that.$textarea.hide();                
                 that.$blank.text(that.$textarea.val()).show();
             })
             .show()

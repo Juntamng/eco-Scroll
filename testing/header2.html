@@ -40,6 +40,7 @@
 
         <link type="text/css" rel="stylesheet" href="../css/bootstrap.css"> 
         <link type="text/css" rel="stylesheet" href="../css/carousel.css">   
+        <link type="text/css" rel="stylesheet" href="../css/sentence.css">
     </head>
     <body>       
         <div id="divHeader">
@@ -65,7 +66,8 @@
         
         <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
         <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
-        <script src="../js/jquery.eco-scroll.js"></script>        
+        <script src="../js/jquery.eco-scroll.js"></script>  
+        <script src="../js/sentence.js"></script>              
 		<script>            
 		$(function()
         {               
@@ -73,9 +75,9 @@
             var iCurSentence;
             var iTotal = 3;
             var arr = [
-                {title: "I am ...", sentence: "I am ___"}, 
-                {title: "I am grateful for ...", sentence: "I am grateful for ___"}, 
-                {title: "Before I die ...", sentence: "Before I die I wanted to ___"} 
+                {title: "I am ...", sentence: "I am "}, 
+                {title: "I am grateful for ...", sentence: "I am grateful for "}, 
+                {title: "Before I die ...", sentence: "Before I die I wanted to "} 
             ];
 
             iCurSentence = arr[iCur].sentence;
@@ -177,13 +179,18 @@ console.log(iCurX);
                             i = iRowTotal + i;
 
                         i += oParam.x * iRowTotal;
+                        
+                        var sHTML = "<div class='sen'>" +
+                        "<span class='s'>" + iCurSentence + "</span><span class='b'>";
 
                         if (i > -1)
                         {
                             if (arrT[i])
-                                oParam.$e.text( iCurSentence + arrT[i].txt );                        
+                                oParam.$e.html( sHTML + arrT[i].txt + "</span></div>" );
                             else
-                                oParam.$e.text( iCurSentence );              
+                                oParam.$e.html( sHTML + "</span></div>" );         
+                            
+                             oParam.$e.find(".sen").sentence({});
                         }
                         else
                         {
