@@ -61,7 +61,11 @@ SOFTWARE.
         onResize: function(oParam) 
         {
             
-        }
+        },
+        onClick: function(oParam) 
+        {
+
+        },
 	};
 
 	function Plugin ( element, options ) 
@@ -100,6 +104,7 @@ SOFTWARE.
             this.moveEvent  = this.bTouch ? 'touchmove' : 'mousemove';
             this.endEvent  = this.bTouch ? 'touchend' : 'mouseup';
             this.cancelEvent  = this.bTouch ? 'touchcancel' : 'mouseup';
+            this.oTarget = null;
             this.bind(this.startEvent, this.element);	
             this.bind(this.resizeEvent, window);	
 
@@ -182,15 +187,17 @@ SOFTWARE.
         {
             this.initData();
             this.hideCells();
-            this.settings.onResize(this.getParam());            
+            this.settings.onResize(this.getContainerParam());            
         },     
         mStart: function(e)
         {
-            if ( !this.settings.onStart({"e": e}) )
+            if ( !this.settings.onStart(this.getCellParam(e.target)) )
                 return true;
 
             var point = this.bTouch ? e.touches[0] : e;
             var oPos = this.$wrapper.position();   
+            this.bClick = true;
+            this.oTarget = e.target;
             this.iDistX1=oPos.left;
             this.iDistY1=oPos.top;
 			this.iLeftS = point.pageX;
@@ -234,10 +241,16 @@ SOFTWARE.
             this.iDistX = this.iLeftE-this.iLeftS;
             this.iDistY = this.iTopE-this.iTopS;
 
+            if (this.iDistX != 0 || this.iDistY != 0)
+            {
+                this.bClick = false;
+            }
+
             this.moveByDist(this.iDistX, this.iDistY);
                                     
             this.iLeftS = point.pageX;
-            this.iTopS = point.pageY;            
+            this.iTopS = point.pageY; 
+
             e.preventDefault();
             e.stopPropagation();
             return false;
@@ -257,7 +270,7 @@ SOFTWARE.
                 options.complete = function()
                 { 
                     that.bAnimated = false; 
-                    that.settings.onStop(that.getParam());
+                    that.settings.onStop(that.getContainerParam());
                 };
 
                 !this.bAnimated && this.$wrapper.animate(oCss, options);
@@ -281,12 +294,14 @@ SOFTWARE.
         },
         mEnd: function (e) {                 	            
             this.unbind(this.moveEvent, document);
-            this.unbind(this.endEvent, document);                    
-            e.preventDefault();
-            e.stopPropagation();
-
+            this.unbind(this.endEvent, document);                            
             clearInterval(this.ticker);
-   
+
+            if (this.bClick)
+            {                
+                this.settings.onClick( this.getCellParam(this.oTarget) );
+            }
+
             if (this.settings.momentum) 
             {                
                 this.iTimestamp = Date.now();
@@ -313,6 +328,8 @@ SOFTWARE.
             $("#c" + this.visibleX1 + "_" + this.visibleY2).css({"background-color": "yellow"});
             $("#c" + this.visibleX2 + "_" + this.visibleY2).css({"background-color": "yellow"});
             */
+            e.preventDefault();
+            e.stopPropagation();
             return false;                        
         },
         mStop: function() 
@@ -321,7 +338,7 @@ SOFTWARE.
             if (this.settings.snap)                
                 this.snapOn();
             else
-                this.settings.onStop(this.getParam());
+                this.settings.onStop(this.getContainerParam());
         },
         decelerateX: function() 
         {
@@ -547,7 +564,13 @@ SOFTWARE.
                 return iReturn;  
             }      
         },
-        getParam: function() {
+        getCellParam: function(oTarget) {
+            var arrEle = this.arr[$(oTarget).closest(".eCell").prop("id")];
+            arrEle["target"] = oTarget;
+
+            return arrEle;
+        },
+        getContainerParam: function() {
             var oPos = this.$wrapper.position();
             var oReturn = {
                 containerWidth: this.settings.containerWidth,

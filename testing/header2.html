@@ -4,6 +4,18 @@
     <head>
 		<title></title>
         <style>
+           @import url(http://fonts.googleapis.com/css?family=Roboto|Nunito|Changa+one|Rock+Salt|Indie+Flower|Reenie+Beanie|IM+Fell+Great+Primer|Fredericka+the+Great|Special+Elite|Kranky);
+
+            @font-face 
+            {
+                font-family: 'ColoredCrayons';
+                src: url('../fonts/chalk/coloredCrayons.eot');
+                src: url('../fonts/chalk/coloredCrayons.eot') format('embedded-opentype'),
+                     url('../fonts/chalk/coloredCrayons.woff') format('woff'),
+                     url('../fonts/chalk/coloredCrayons.ttf') format('truetype'),
+                     url('../fonts/chalk/coloredCrayons.svg#Colored Crayons') format('svg');
+            }
+
             html, body 
             {
                 height: 100%;
@@ -12,6 +24,10 @@
                 padding: 0px;
                 background-color: #000;
                 color: #fff;
+            }
+
+            a {
+                color: #fff !important;
             }
 
             #divHeader 
@@ -24,23 +40,20 @@
                 z-index: 999;
                 top: 0px;
                 left: 0px;
-                background-color: #000;                
+                background-color: #000;     
             }
             
             #divHeader .eCell 
             {
                 position: absolute;
-                /* border: 1px green solid; */
-                -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-                -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-                box-sizing: border-box; 
                 color: #fff;
-                font-size: 30px;
-                font-weight: bold;
-                padding: 30px 50px;
+                font-family: 'ColoredCrayons';
+                font-size: 55px;
+                padding: 50px 50px;   
+                cursor: move;
             }
 
-            #divContainer 
+            #divContent 
             {
                 position: relative;
                 width: 100%; 
@@ -50,21 +63,35 @@
                 background-color: #000;
             }
                     
-            #divContainer .eCell 
+            #divContent .eCell 
             {
                 position: absolute;
                 /* border: 1px green solid; */
-                -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-                -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-                box-sizing: border-box; 
                 color: #fff;
                 padding: 5px;
             }
-
-            .b 
+            
+            #aList
             {
-                font-size: 25px;
+                position: fixed;
+                top: 65px;
+                left: 20px;
+                z-index: 9999;
+                color: #FFF;
+                font-size: 20px;
+                cursor: pointer;
             }
+
+            #aRemove
+            {
+                position: fixed;
+                top: 8px;
+                left: 8px;
+                z-index: 9999;
+                color: #FFF;
+                font-size: 27px;
+                display: none;
+            }   
         </style>
 
         <link type="text/css" rel="stylesheet" href="../css/bootstrap.css"> 
@@ -72,23 +99,15 @@
         <link type="text/css" rel="stylesheet" href="../css/sentence.css">
     </head>
     <body>       
+        <span id="aRemove" class="glyphicon glyphicon-remove"></span>
+        <span id="aList" class="glyphicon glyphicon-chevron-down"></span>
+
         <div id="divHeader">
             <div class="wrapper">                                
-            </div>  
-
-            <!-- Controls -->
-            <a class="left carousel-control" href="javascript:void(0)" data-slide="prev">
-                <span id="aPrev" class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-
-            <a class="right carousel-control" href="javascript:void(0)" data-slide="next">
-                <span id="aNext" class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>       
+            </div>          
         </div>        
 
-        <div id="divContainer">
+        <div id="divContent">
             <div class="wrapper">                                
             </div>        
         </div>        
@@ -99,23 +118,89 @@
         <script src="../js/sentence.js"></script>              
 		<script>            
 		$(function()
-        {               
-            var iCur = iPrev = 0;
-            var iCurSentence;
+        {   
+            var bList = false;   
+            $("#aList").click(function() {
+                bList = true;
+                switchList(true, iCur);
+            });            
+
+            $("#aRemove").click(function() {
+                bList = false;                
+                switchList(false, iCur);
+            });    
+            
+            function switchList(bShowList, iCurSel)
+            {                
+                var plugin = $("#divHeader").data("plugin_ecoScroll");
+                if (bShowList)
+                {
+                    $("#aList").hide();
+                    $("#aRemove").show();
+                    $("#divHeader").css({height: "100%"});
+                    plugin.settings.itemHeight = 100;
+                    plugin.settings.axis = "y";
+                    plugin.settings.momentum = true;
+                    plugin.settings.snap = false;
+                    plugin.initData();                        
+                }
+                else
+                {
+                    $("#aList").show();
+                    $("#aRemove").hide();                    
+                    $("#divHeader").css({height: "200px"});
+                    plugin.settings.itemHeight = 200;
+                    plugin.settings.axis = "x";
+                    plugin.settings.momentum = false;
+                    plugin.settings.snap = true;
+                    plugin.initData();
+                    $("#divHeader").data("plugin_ecoScroll").moveByCoord(-iCurSel, 0);    
+                }
+            }
+
+            function save() {
+                var i = $("#b_textarea").closest(".eCell").attr("i");                                
+                if( i )
+                {
+                    if (arrT[iCur][i])                            
+                        arrT[iCur][i].txt = $("#b_textarea").val();
+                    else
+                        arrT[iCur][i] = {$e: null, txt: $("#b_textarea").val()}; 
+                }
+            }
+
+            var iCur = iPrev = 0;            
             var iTotal = 3;
             var arr = [
                 {title: "I am ...", sentence: "I am "}, 
                 {title: "I am grateful for ...", sentence: "I am grateful for "}, 
                 {title: "Before I die ...", sentence: "Before I die I wanted to "} 
             ];
-
-            iCurSentence = arr[iCur].sentence;
+            var iCurSentence = arr[iCur].sentence;
 
             $("#divHeader").ecoScroll({
                 itemWidth: "100%",
-                itemHeight: "100%",
+                itemHeight: "200",
                 axis: "x", 
                 snap: true,
+                momentum: false,
+                momentumSpeed: 1,
+                onStart: function(oParam) 
+                {
+                    save();
+                    return true;
+                },
+                onClick: function(oParam)
+                {                    
+                    if (bList && oParam.target.tagName == "A" )
+                    {   
+                        iCur = oParam.$e.attr("s");
+                        if (arrT[iCur] == undefined)
+                            arrT[iCur] = [];
+                        bList = false;                    
+                        switchList(false, iCur);
+                    }
+                },
                 onShow:function(oParam) 
                 {
                     if (oParam.bNew)
@@ -124,86 +209,73 @@
                         if (i < 0) 
                             i = iTotal + i;
 
-                        oParam.$e.text( arr[i].title );                        
+                        oParam.$e.attr({"s": i})
+                        .html("<a href='javascript:void(0)'>" + arr[i].title + "</a>");                        
                     }
                 },
                 onStop: function(oParam) 
                 {
+                    if (bList) return;                    
+                    
                     iCur = (oParam.wrapperLeft / oParam.cellWidth) % iTotal;
                     if (iCur > 0) 
                         iCur = iTotal - iCur;
                     else
                         iCur = Math.abs(iCur);
 
+                    if (arrT[iCur] == undefined)    
+                        arrT[iCur] = [];
+
                     if (iCur != iPrev)  
                     {
                         iCurSentence = arr[iCur].sentence;
-                        $("#divContainer").data("plugin_ecoScroll").init();
+                        var oContent = $("#divContent").data("plugin_ecoScroll");
+                        oContent.moveByCoord(0, 0);       
+                        oContent.init()
                     }
                     iPrev = iCur;
                 },
                 onResize:function(oParam)
                 {                    
-                    $("#divHeader").data("plugin_ecoScroll").moveByCoord(iCur, 0);       
+                    $("#divHeader").data("plugin_ecoScroll").moveByCoord(-iCur, 0);       
                 }
             });
-        
-            var iCurX = 0;
-            var clickEventType = (document.ontouchstart!==null) ? 'mousedown' : 'touchstart';            
-            $(".glyphicon-chevron-left, .glyphicon-chevron-right").bind(clickEventType, function(e)
-            {                
-                e.preventDefault();
-                e.stopPropagation();                
-                //$(this).trigger("click");
-            })        
-            .click(function(e)
-            {
-                e.preventDefault();
-                e.stopPropagation();                
-
-                iCurX += (this.id == "aPrev") ? 1: -1;
-console.log(iCurX);                
-                $("#divHeader").data("plugin_ecoScroll").moveByCoord(iCurX, 0, {duration: 400});                         
-            });              
-
+                
             var iRowTotal = 40;
             var iPageSize = 500;
             var i, iCnt;
             var arrP = [], arrT = [];
-
-            /*
-            for (iCnt = 0; iCnt<iPageSize; iCnt++)
-                arrT[iCnt] = {$e: null, txt: "[T"+iCnt+"]"};
-            for (iCnt = 0; iCnt<iPageSize; iCnt++)
-                arrP[iCnt] = {$e: null, txt: "[P"+iCnt+"]"};
-            */
-            
+          
             arrP[10] = {$e: null, txt: "Past testing testing 10 ..."};
 
-            arrT[10] = {$e: null, txt: "testing testing 123 ..."};            
-            arrT[12] = {$e: null, txt: "testing testing 12 ..."};            
-            arrT[13] = {$e: null, txt: "testing testing 13 ..."};            
-            arrT[14] = {$e: null, txt: "testing testing 14 ..."};            
-            arrT[15] = {$e: null, txt: "testing testing 15 ..."};            
-            arrT[16] = {$e: null, txt: "testing testing 16 ..."};            
-            arrT[100] = {$e: null, txt: "testing testing 100 ..."};
-            arrT[1000] = {$e: null, txt: "testing testing 1000 ..."};
-            arrT[50] = {$e: null, txt: "testing testing 50 ..."};
-            arrT[500] = {$e: null, txt: "testing testing 500 ..."};
-            arrT[5000] = {$e: null, txt: "testing testing 5000 ..."};
+            arrT[0] = [];
+            arrT[0][10] = {$e: null, txt: "testing testing 123 ..."};            
+            arrT[0][12] = {$e: null, txt: "testing testing 12 ..."};            
+            arrT[0][13] = {$e: null, txt: "testing testing 13 ..."};            
+            arrT[0][14] = {$e: null, txt: "testing testing 14 ..."};            
+            arrT[0][15] = {$e: null, txt: "testing testing 15 ..."};            
+            arrT[0][16] = {$e: null, txt: "testing testing 16 ..."};            
+            arrT[0][100] = {$e: null, txt: "testing testing 100 ..."};
+            arrT[0][1000] = {$e: null, txt: "testing testing 1000 ..."};
+            arrT[0][50] = {$e: null, txt: "testing testing 50 ..."};
+            arrT[0][500] = {$e: null, txt: "testing testing 500 ..."};
+            arrT[0][5000] = {$e: null, txt: "testing testing 5000 ..."};        
 
-            $("#divContainer").ecoScroll({
+            $("#divContent").ecoScroll({
                 itemWidth: "500px",
                 itemHeight: "50px",
+                rangeX : [0, undefined],
                 axis: "xy", 
                 snap: false,
                 momentum: true,
+                momentumSpeed: 1,                
                 onStart: function(oParam)
                 {
-                    if (oParam.e.target.tagName == "TEXTAREA")
+                    if (oParam.target.tagName == "TEXTAREA")
                         return false;
                     else
                     {
+                        save();
                         $("#b_textarea").trigger("blur");
                         return true;
                     }
@@ -221,10 +293,11 @@ console.log(iCurX);
                         var sHTML = "<div class='sen'>" +
                         "<span class='s'>" + iCurSentence + "</span><span class='b'>";
 
+                        oParam.$e.attr({"i": i});
                         if (i > -1)
                         {
-                            if (arrT[i])
-                                oParam.$e.html( sHTML + arrT[i].txt + "</span></div>" );
+                            if (arrT[iCur][i])
+                                oParam.$e.html( sHTML + arrT[iCur][i].txt + "</span></div>" );
                             else
                                 oParam.$e.html( sHTML + "</span></div>" );         
                             
@@ -242,10 +315,10 @@ console.log(iCurX);
                         }
 
                         var iPStart = Math.floor(i/iPageSize) * iPageSize;                        
-                        if (arrT[iPStart] == undefined)
-                            arrT[iPStart] = {$e: oParam.$e, txt: ""};   
+                        if (arrT[iCur][iPStart] == undefined)
+                            arrT[iCur][iPStart] = {$e: oParam.$e, txt: ""};   
 
-                        if (arrT[iPStart].loaded == undefined)
+                        if (arrT[iCur][iPStart].loaded == undefined)
                         {                                                     
                             //console.log("out - " + i + " = " + Math.floor(i/iPageSize) );
                             //loadNextT( iPStart );
@@ -253,7 +326,7 @@ console.log(iCurX);
                     }
 
                     if (iPrev != iCur)
-                        oParam.$e.css({opacity:0}).animate({opacity: 1}, 1000);
+                        oParam.$e.css({opacity:0}).animate({opacity: 1}, 500);
                 }                
             });
 
