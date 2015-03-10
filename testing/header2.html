@@ -245,17 +245,28 @@
             var iPageSize = 500;
             var i, iCnt;
             var arrP = [], arrT = [];
-          
+            var arrStyle = [];
+            arrStyle[0] = { "font-family": "Rock Salt", "font-size": "20px" };
+            arrStyle[1] = { "font-family": "Indie Flower", "font-size": "20px" };
+            arrStyle[2] = { "font-family": "Reenie Beanie", "font-size": "20px" };
+            arrStyle[3] = { "font-family": "IM Fell Great Primer", "font-size": "20px" };
+            arrStyle[4] = { "font-family": "Fredericka the Great", "font-size": "20px" };
+            arrStyle[5] = { "font-family": "Special Elite", "font-size": "20px" };
+            arrStyle[6] = { "font-family": "Kranky", "font-size": "20px" };
+            var arrColor = [ {color: "#d45368"} , {color: "#8269b9"}, {color: "#6982d2"}, {color: "#32b38a"}, 
+                            {color: "#5db20e"}, {color: "#c29a23"}, {color: "#b67c34"}, {color: "#d94949"}, 
+                            {color: "#3f95a5"}
+                            ];
             arrP[10] = {$e: null, txt: "Past testing testing 10 ..."};
 
             arrT[0] = [];
-            arrT[0][10] = {$e: null, txt: "testing testing 123 ..."};            
-            arrT[0][12] = {$e: null, txt: "testing testing 12 ..."};            
-            arrT[0][13] = {$e: null, txt: "testing testing 13 ..."};            
-            arrT[0][14] = {$e: null, txt: "testing testing 14 ..."};            
-            arrT[0][15] = {$e: null, txt: "testing testing 15 ..."};            
-            arrT[0][16] = {$e: null, txt: "testing testing 16 ..."};            
-            arrT[0][100] = {$e: null, txt: "testing testing 100 ..."};
+            arrT[0][10] = {$e: null, font: 0, color: 0, txt: "testing testing 123 ..."};
+            arrT[0][12] = {$e: null, font: 1, color: 1, txt: "testing testing 12 ..."};            
+            arrT[0][13] = {$e: null, font: 2, color: 2, txt: "testing testing 13 ..."};            
+            arrT[0][14] = {$e: null, font: 3, color: 3, txt: "testing testing 14 ..."};            
+            arrT[0][15] = {$e: null, font: 4, color: 4, txt: "testing testing 15 ..."};            
+            arrT[0][16] = {$e: null, font: 5, color: 5, txt: "testing testing 16 ..."};            
+            arrT[0][17] = {$e: null, font: 6, color: 6, txt: "testing testing 100 ..."};
             arrT[0][1000] = {$e: null, txt: "testing testing 1000 ..."};
             arrT[0][50] = {$e: null, txt: "testing testing 50 ..."};
             arrT[0][500] = {$e: null, txt: "testing testing 500 ..."};
@@ -296,12 +307,15 @@
                         oParam.$e.attr({"i": i});
                         if (i > -1)
                         {
-                            if (arrT[iCur][i])
-                                oParam.$e.html( sHTML + arrT[iCur][i].txt + "</span></div>" );
+                            if (arrT[iCur][i]) 
+                            {
+                                oParam.$e.html( sHTML + arrT[iCur][i].txt + "</span></div>" );                                
+                            }
                             else
                                 oParam.$e.html( sHTML + "</span></div>" );         
-                            
-                             oParam.$e.find(".sen").sentence({});
+
+                            setStyle(arrT[iCur][i], oParam.$e);                                                        
+                            oParam.$e.find(".sen").sentence({});
                         }
                         else
                         {
@@ -329,6 +343,18 @@
                         oParam.$e.css({opacity:0}).animate({opacity: 1}, 500);
                 }                
             });
+
+            function setStyle(arrEle, $ele)
+            {
+                var $b = $ele.find(".b");
+                if (arrEle && arrEle.font)
+                    $b.css( $.extend(arrStyle[arrEle.font], arrColor[arrEle.color]) );
+                else
+                {
+                    var iFont = Math.floor(Math.random()*10%7), iColor = Math.floor(Math.random()*10%7);
+                    $b.css( $.extend(arrStyle[iFont], arrColor[iColor]) );
+                }
+            }
 
             function loadNextT(iPStart)
             {

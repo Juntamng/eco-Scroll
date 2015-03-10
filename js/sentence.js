@@ -73,8 +73,9 @@ SOFTWARE.
             this.iSentenceSize = parseInt(this.$sentence.css("font-size"));
             this.sBlankText = this.$blank.text();
             this.iBlankSize = parseInt(this.$blank.css("font-size"));
-            this.sBlankFontFamily = parseInt(this.$blank.css("font-family"));
-            this.sBlankFontFamily = "monospace";
+            this.sBlankFontFamily = this.$blank.css("font-family");
+            this.sBlankColor = this.$blank.css("color");
+            //this.sBlankFontFamily = "monospace";
             
             this.$element
             .empty()
@@ -107,6 +108,7 @@ SOFTWARE.
                 "text-indent": this.$sentence.outerWidth()+3,
                 "font-size": this.iBlankSize + "px", 
                 "font-family": this.sBlankFontFamily, 
+                "color": this.sBlankColor, 
             });
             
             this.iBlankHeight = this.$blank.innerHeight();
@@ -153,7 +155,7 @@ SOFTWARE.
             this.$blank.hide();
             this.$wrap.append(this.$textarea);
             this.$textarea.val(this.$blank.text())
-            .css({"font-size": this.iBlankSize + "px", "font-family": this.sBlankFontFamily, "margin-top": iTop+"px", "text-indent": this.$sentence.outerWidth()+5 })            
+            .css({"font-size": this.iBlankSize + "px", "color": this.sBlankColor, "font-family": this.sBlankFontFamily, "margin-top": iTop+"px", "text-indent": this.$sentence.outerWidth()+5 })            
             .one("blur", function() {
                 that.settings.onHide({$element: that.$element});                                
                 that.$blank.text(that.$textarea.val()).show();
