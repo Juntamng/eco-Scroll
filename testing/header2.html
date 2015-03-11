@@ -4,7 +4,8 @@
     <head>
 		<title></title>
         <style>
-           @import url(http://fonts.googleapis.com/css?family=Roboto|Nunito|Changa+one|Rock+Salt|Indie+Flower|Reenie+Beanie|IM+Fell+Great+Primer|Fredericka+the+Great|Special+Elite|Kranky);
+           @import url(http://fonts.googleapis.com/css?family=Roboto|Nunito|Changa+one|Rock+Salt|Indie+Flower|Reenie+Beanie|IM+Fell+Great+Primer|Fredericka+the+Great|Special+Elite|Kranky|Pacifico|Gloria+Hallelujah|Architects+Daughter|Gloria+Hallelujah|Architects+Daughter|Coming+Soon|Courgette|Kausha+Script|Satisfy|Handlee|Cookie|Damion|Niconne|Gochi+Hand|Walter+Turncoat|Neucha|Schoolbell|Merienda+One|Leckerli+One|Patrick+Hand+SC|Kalam|Sofia|Redressed
+            );
 
             @font-face 
             {
@@ -28,6 +29,7 @@
 
             a {
                 color: #fff !important;
+                text-decoration: none !important;
             }
 
             #divHeader 
@@ -50,9 +52,15 @@
                 font-family: 'ColoredCrayons';
                 font-size: 55px;
                 padding: 50px 50px;   
-                cursor: move;
-            }
+                cursor: move;                
+            }            
 
+            .listMode .eCell
+            {
+               cursor: default !important;
+               padding: 15px 50px !important;  
+               border-bottom: 3px solid #222;
+            }
             #divContent 
             {
                 position: relative;
@@ -116,6 +124,7 @@
         <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
         <script src="../js/jquery.eco-scroll.js"></script>  
         <script src="../js/sentence.js"></script>              
+        <script src="../js/randomColor.js"></script>              
 		<script>            
 		$(function()
         {   
@@ -137,7 +146,7 @@
                 {
                     $("#aList").hide();
                     $("#aRemove").show();
-                    $("#divHeader").css({height: "100%"});
+                    $("#divHeader").css({height: "100%"}).addClass("listMode");
                     plugin.settings.itemHeight = 100;
                     plugin.settings.axis = "y";
                     plugin.settings.momentum = true;
@@ -148,7 +157,7 @@
                 {
                     $("#aList").show();
                     $("#aRemove").hide();                    
-                    $("#divHeader").css({height: "200px"});
+                    $("#divHeader").css({height: "200px"}).removeClass("listMode");
                     plugin.settings.itemHeight = 200;
                     plugin.settings.axis = "x";
                     plugin.settings.momentum = false;
@@ -246,13 +255,40 @@
             var i, iCnt;
             var arrP = [], arrT = [];
             var arrStyle = [];
-            arrStyle[0] = { "font-family": "Rock Salt", "font-size": "20px" };
-            arrStyle[1] = { "font-family": "Indie Flower", "font-size": "20px" };
-            arrStyle[2] = { "font-family": "Reenie Beanie", "font-size": "20px" };
-            arrStyle[3] = { "font-family": "IM Fell Great Primer", "font-size": "20px" };
-            arrStyle[4] = { "font-family": "Fredericka the Great", "font-size": "20px" };
-            arrStyle[5] = { "font-family": "Special Elite", "font-size": "20px" };
-            arrStyle[6] = { "font-family": "Kranky", "font-size": "20px" };
+
+            arrStyle[0] = { "font-family": "Rock Salt", "font-size": "25px" };
+            arrStyle[1] = { "font-family": "Indie Flower", "font-size": "25px" };
+            arrStyle[2] = { "font-family": "Reenie Beanie", "font-size": "25px" };
+            arrStyle[3] = { "font-family": "IM Fell Great Primer", "font-size": "25px" };
+            arrStyle[4] = { "font-family": "Fredericka the Great", "font-size": "25px" };
+            arrStyle[5] = { "font-family": "Special Elite", "font-size": "25px" };
+            arrStyle[6] = { "font-family": "Kranky", "font-size": "25px" };
+            arrStyle[7] = { "font-family": "Roboto", "font-size": "25px" };
+            arrStyle[8] = { "font-family": "Nunito", "font-size": "25px" };
+            arrStyle[9] = { "font-family": "Changa one", "font-size": "25px" };
+            arrStyle[10] = { "font-family": "Kranky", "font-size": "25px" };
+            arrStyle[11] = { "font-family": "Pacifico", "font-size": "25px" };
+            arrStyle[12] = { "font-family": "Gloria Hallelujah", "font-size": "25px" };
+            arrStyle[13] = { "font-family": "Architects Daughter", "font-size": "25px" };
+            arrStyle[14] = { "font-family": "Coming Soon", "font-size": "25px" };
+            arrStyle[15] = { "font-family": "Courgette", "font-size": "25px" };
+            arrStyle[16] = { "font-family": "Kaushan Script", "font-size": "25px" };
+            arrStyle[17] = { "font-family": "Satisfy", "font-size": "25px" };
+            arrStyle[18] = { "font-family": "Handlee", "font-size": "25px" };
+            arrStyle[19] = { "font-family": "Cookie", "font-size": "25px" };
+            arrStyle[20] = { "font-family": "Damion", "font-size": "25px" };
+            arrStyle[21] = { "font-family": "Niconne", "font-size": "25px" };
+            arrStyle[22] = { "font-family": "Gochi Hand", "font-size": "25px" };
+            arrStyle[23] = { "font-family": "Walter Turncoat", "font-size": "25px" };
+            arrStyle[24] = { "font-family": "Neucha", "font-size": "25px" };
+            arrStyle[25] = { "font-family": "Schoolbell", "font-size": "25px" };
+            arrStyle[26] = { "font-family": "Merienda One", "font-size": "25px" };
+            arrStyle[27] = { "font-family": "Leckerli One", "font-size": "25px" };
+            arrStyle[28] = { "font-family": "Patrick Hand SC", "font-size": "25px" };
+            arrStyle[29] = { "font-family": "Kalam", "font-size": "25px" };
+            arrStyle[30] = { "font-family": "Sofia", "font-size": "25px" };
+            arrStyle[31] = { "font-family": "Redressed", "font-size": "25px" };
+
             var arrColor = [ {color: "#d45368"} , {color: "#8269b9"}, {color: "#6982d2"}, {color: "#32b38a"}, 
                             {color: "#5db20e"}, {color: "#c29a23"}, {color: "#b67c34"}, {color: "#d94949"}, 
                             {color: "#3f95a5"}
@@ -260,13 +296,18 @@
             arrP[10] = {$e: null, txt: "Past testing testing 10 ..."};
 
             arrT[0] = [];
-            arrT[0][10] = {$e: null, font: 0, color: 0, txt: "testing testing 123 ..."};
-            arrT[0][12] = {$e: null, font: 1, color: 1, txt: "testing testing 12 ..."};            
-            arrT[0][13] = {$e: null, font: 2, color: 2, txt: "testing testing 13 ..."};            
-            arrT[0][14] = {$e: null, font: 3, color: 3, txt: "testing testing 14 ..."};            
-            arrT[0][15] = {$e: null, font: 4, color: 4, txt: "testing testing 15 ..."};            
-            arrT[0][16] = {$e: null, font: 5, color: 5, txt: "testing testing 16 ..."};            
-            arrT[0][17] = {$e: null, font: 6, color: 6, txt: "testing testing 100 ..."};
+            arrT[0][10] = {$e: null, font: 24, color: 0, txt: "testing testing 0 ..."};
+            arrT[0][12] = {$e: null, font: 25, color: 1, txt: "testing testing 1 ..."};            
+            arrT[0][13] = {$e: null, font: 26, color: 2, txt: "testing testing 2 ..."};            
+            arrT[0][14] = {$e: null, font: 27, color: 3, txt: "testing testing 3 ..."};            
+            arrT[0][15] = {$e: null, font: 28, color: 4, txt: "testing testing 4 ..."};            
+            arrT[0][16] = {$e: null, font: 29, color: 5, txt: "testing testing 5 ..."};            
+            arrT[0][17] = {$e: null, font: 30, color: 6, txt: "testing testing 6 ..."};
+            arrT[0][18] = {$e: null, font: 31, color: 6, txt: "testing testing 7 ..."};
+            arrT[0][19] = {$e: null, font: 20, color: 6, txt: "testing testing 8 ..."};
+            arrT[0][20] = {$e: null, font: 21, color: 6, txt: "testing testing 9 ..."};
+            arrT[0][21] = {$e: null, font: 22, color: 6, txt: "testing testing 10 ..."};
+            arrT[0][22] = {$e: null, font: 23, color: 6, txt: "testing testing 11 ..."};
             arrT[0][1000] = {$e: null, txt: "testing testing 1000 ..."};
             arrT[0][50] = {$e: null, txt: "testing testing 50 ..."};
             arrT[0][500] = {$e: null, txt: "testing testing 500 ..."};
@@ -279,7 +320,7 @@
                 axis: "xy", 
                 snap: false,
                 momentum: true,
-                momentumSpeed: 1,                
+                momentumSpeed: 5,                
                 onStart: function(oParam)
                 {
                     if (oParam.target.tagName == "TEXTAREA")
@@ -351,7 +392,8 @@
                     $b.css( $.extend(arrStyle[arrEle.font], arrColor[arrEle.color]) );
                 else
                 {
-                    var iFont = Math.floor(Math.random()*10%7), iColor = Math.floor(Math.random()*10%7);
+                    var iFontMax = arrStyle.length-1, iColorMax = arrColor.length-1;
+                    var iFont = Math.floor(Math.random()*10%iFontMax), iColor = Math.floor(Math.random()*10%iColorMax);
                     $b.css( $.extend(arrStyle[iFont], arrColor[iColor]) );
                 }
             }
