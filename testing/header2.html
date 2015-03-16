@@ -100,6 +100,21 @@
                 font-size: 27px;
                 display: none;
             }   
+
+            #aBack
+            {
+                display: none;
+                position: fixed;
+                top: 200px;
+                left: 0px;
+                z-index: 9999;
+                color: #FFF;
+                font-size: 20px;
+                cursor: pointer;
+                padding: 5px 10px 5px 4px;
+                border: 1px solid #fff;
+                background-color: rgba(0, 0, 0, 0.5);                
+            }
         </style>
 
         <link type="text/css" rel="stylesheet" href="../css/bootstrap.css"> 
@@ -114,7 +129,7 @@
             <div class="wrapper">                                
             </div>          
         </div>        
-
+        <span id="aBack" class="glyphicon glyphicon-backward"></span>
         <div id="divContent">
             <div class="wrapper">                                
             </div>        
@@ -129,6 +144,8 @@
 		$(function()
         {   
             var bList = false;   
+            var $back = $("#aBack");
+
             $("#aList").click(function() {
                 bList = true;
                 switchList(true, iCur);
@@ -137,6 +154,11 @@
             $("#aRemove").click(function() {
                 bList = false;                
                 switchList(false, iCur);
+            });  
+
+            $back.click(function() {                
+                $("#divContent").data("plugin_ecoScroll").moveByCoord(0, 0);    
+                $back.animate({opacity:0}, 500, function(){ $back.hide(); });
             });    
             
             function switchList(bShowList, iCurSel)
@@ -197,7 +219,7 @@
                 onStart: function(oParam) 
                 {
                     save();
-                    return true;
+                    return true;                    
                 },
                 onClick: function(oParam)
                 {                    
@@ -289,25 +311,33 @@
             arrStyle[30] = { "font-family": "Sofia", "font-size": "25px" };
             arrStyle[31] = { "font-family": "Redressed", "font-size": "25px" };
 
-            var arrColor = [ {color: "#d45368"} , {color: "#8269b9"}, {color: "#6982d2"}, {color: "#32b38a"}, 
-                            {color: "#5db20e"}, {color: "#c29a23"}, {color: "#b67c34"}, {color: "#d94949"}, 
-                            {color: "#3f95a5"}
-                            ];
+            var arrColor = [ {color: "rgb(218, 101, 120)"} , {color: "rgb(231, 48, 78)"}, {color: "rgb(247, 33, 236)"}, 
+            {color: "rgb(131, 196, 236)"}, {color: "rgb(90, 194, 190)"}, {color: "rgb(90, 194, 130)"}, {color: "rgb(116, 194, 90)"},
+            {color: "rgb(211, 121, 207)"}, {color: "rgb(197, 131, 236)"}, {color: "rgb(180, 62, 249)"}, {color: "rgb(171, 139, 234)"}, 
+            {color: "rgb(148, 122, 200)"}, {color: "rgb(151, 149, 232)"}, {color: "rgb(131, 167, 234)"}, {color: "rgb(96, 148, 244)"},
+            {color: "rgb(96, 188, 244)"}, {color: "rgb(96, 244, 244)"}, {color: "rgb(96, 244, 182)"}, {color: "rgb(100, 244, 96)"},
+            {color: "rgb(56, 182, 36)"}, {color: "rgb(36, 182, 121)"}, {color: "rgb(36, 138, 182)"}, {color: "rgb(36, 182, 99)"},
+            {color: "rgb(167, 244, 96)"}, {color: "rgb(229, 244, 96)"}, {color: "rgb(244, 186, 96)"}, {color: "rgb(244, 141, 96)"},
+            {color: "rgb(167, 244, 96)"}, {color: "rgb(244, 96, 96)"}, {color: "rgb(186, 215, 127)"}, {color: "rgb(127, 205, 215)"},
+            {color: "rgb(240, 229, 17)"}, {color: "rgb(192, 240, 17)"}, {color: "rgb(133, 240, 17)"}, {color: "rgb(17, 240, 37)"},
+            {color: "rgb(17, 122, 240)"}, {color: "rgb(17, 215, 240)"}, {color: "rgb(17, 164, 240)"}, {color: "rgb(162, 182, 36)"},            
+            ];
+
             arrP[10] = {$e: null, txt: "Past testing testing 10 ..."};
 
             arrT[0] = [];
             arrT[0][10] = {$e: null, font: 24, color: 0, txt: "testing testing 0 ..."};
             arrT[0][12] = {$e: null, font: 25, color: 1, txt: "testing testing 1 ..."};            
             arrT[0][13] = {$e: null, font: 26, color: 2, txt: "testing testing 2 ..."};            
-            arrT[0][14] = {$e: null, font: 27, color: 3, txt: "testing testing 3 ..."};            
-            arrT[0][15] = {$e: null, font: 28, color: 4, txt: "testing testing 4 ..."};            
-            arrT[0][16] = {$e: null, font: 29, color: 5, txt: "testing testing 5 ..."};            
-            arrT[0][17] = {$e: null, font: 30, color: 6, txt: "testing testing 6 ..."};
-            arrT[0][18] = {$e: null, font: 31, color: 6, txt: "testing testing 7 ..."};
-            arrT[0][19] = {$e: null, font: 20, color: 6, txt: "testing testing 8 ..."};
-            arrT[0][20] = {$e: null, font: 21, color: 6, txt: "testing testing 9 ..."};
-            arrT[0][21] = {$e: null, font: 22, color: 6, txt: "testing testing 10 ..."};
-            arrT[0][22] = {$e: null, font: 23, color: 6, txt: "testing testing 11 ..."};
+            arrT[0][14] = {$e: null, font: 27, color: 4, txt: "testing testing 3 ..."};            
+            arrT[0][15] = {$e: null, font: 28, color: 6, txt: "testing testing 4 ..."};            
+            arrT[0][16] = {$e: null, font: 29, color: 8, txt: "testing testing 5 ..."};            
+            arrT[0][17] = {$e: null, font: 30, color: 10, txt: "testing testing 6 ..."};
+            arrT[0][18] = {$e: null, font: 31, color: 12, txt: "testing testing 7 ..."};
+            arrT[0][19] = {$e: null, font: 20, color: 14, txt: "testing testing 8 ..."};
+            arrT[0][20] = {$e: null, font: 21, color: 16, txt: "testing testing 9 ..."};
+            arrT[0][21] = {$e: null, font: 22, color: 18, txt: "testing testing 10 ..."};
+            arrT[0][22] = {$e: null, font: 23, color: 20, txt: "testing testing 11 ..."};
             arrT[0][1000] = {$e: null, txt: "testing testing 1000 ..."};
             arrT[0][50] = {$e: null, txt: "testing testing 50 ..."};
             arrT[0][500] = {$e: null, txt: "testing testing 500 ..."};
@@ -323,6 +353,10 @@
                 momentumSpeed: 5,                
                 onStart: function(oParam)
                 {
+                    $back.animate({opacity:0}, 500, function(){
+                        $back.hide();
+                    });
+
                     if (oParam.target.tagName == "TEXTAREA")
                         return false;
                     else
@@ -382,7 +416,14 @@
 
                     if (iPrev != iCur)
                         oParam.$e.css({opacity:0}).animate({opacity: 1}, 500);
-                }                
+                }, 
+                onStop: function(oParam) 
+                {
+                    if (oParam.wrapperLeft < -500)
+                    {
+                        $back.css({opacity: 0}).show().animate({opacity:1}, 500);
+                    }                    
+                }            
             });
 
             function setStyle(arrEle, $ele)

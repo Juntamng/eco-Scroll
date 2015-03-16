@@ -114,6 +114,7 @@ SOFTWARE.
             this.iDistX1 = this.iDistY1 = this.iDistX2 = this.iDistY2 = 0;
             this.iVelocityX = this.iAmplitudeX = this.iVelocityY = this.iAmplitudeY = 0;
             this.iTargetX = this.iCalX = this.iTargetY = this.iCalY = 0;
+            this.bAnimatedX = this.bAnimatedY = false;  // used to prevent mStop fire twice
 		},
 		initData: function()
 		{        
@@ -305,19 +306,25 @@ SOFTWARE.
             if (this.settings.momentum) 
             {                
                 this.iTimestamp = Date.now();
-                if (this.iVelocityX > 10 || this.iVelocityX < -10) {
+                if (this.iVelocityX > 10 || this.iVelocityX < -10) 
+                {
                     this.iAmplitudeX = this.settings.momentumSpeed/10 * this.iVelocityX;
                     this.iTargetX = Math.round(this.iDistX2 + this.iAmplitudeX);                
                     this.iCalX = this.iTargetX;
                     requestAnimationFrame($.proxy(this.decelerateX, this));
                 }
-                
-                if (this.iVelocityY > 10 || this.iVelocityY < -10) {
+                else
+                    this.mStop();  
+
+                if (this.iVelocityY > 10 || this.iVelocityY < -10) 
+                {
                     this.iAmplitudeY = this.settings.momentumSpeed/10 * this.iVelocityY;
                     this.iTargetY = Math.round(this.iDistY2 + this.iAmplitudeY);
                     this.iCalY = this.iTargetY;
                     requestAnimationFrame($.proxy(this.decelerateY, this));
                 }
+                else
+                    this.mStop();  
             }
             else
                 this.mStop();            
@@ -338,11 +345,12 @@ SOFTWARE.
             if (this.settings.snap)                
                 this.snapOn();
             else
-                this.settings.onStop(this.getContainerParam());
+                this.settings.onStop(this.getContainerParam());            
         },
         decelerateX: function() 
         {
             var iTimeDiff, iDelta;
+            this.bAnimatedX = true;
 
             if (this.iAmplitudeX) {
                 iTimeDiff = Date.now() - this.iTimestamp;
@@ -352,13 +360,17 @@ SOFTWARE.
                     this.moveTo(this.iCalX, this.iCalY);
                     requestAnimationFrame($.proxy(this.decelerateX, this));
                 } else {
-                    this.mStop(); 
+                    if (!this.bAnimatedY)
+                        this.mStop(); 
+                    this.bAnimatedX = false;
+                    
                 }
             }
         },
         decelerateY: function() 
         {
-            var iTimeDiff, iDelta;
+            var iTimeDiff, iDelta;            
+            this.bAnimatedY = false;
 
             if (this.iAmplitudeY) {
                 iTimeDiff = Date.now() - this.iTimestamp;
@@ -368,6 +380,9 @@ SOFTWARE.
                     this.moveTo(this.iCalX, this.iCalY);               
                     requestAnimationFrame($.proxy(this.decelerateY, this));
                 } else {
+                    if (!this.bAnimatedX)
+                        this.mStop(); 
+                    this.bAnimatedY = false;
                     this.mStop(); 
                 }
             }

@@ -28,6 +28,7 @@ SOFTWARE.
        
     var pluginName = "sentence",
 	defaults = {
+        maxlength: 30,        
 		onEdit: function(oParam) 
         {
             return true;
@@ -35,7 +36,7 @@ SOFTWARE.
         onHide: function(oParam) 
         {
 
-        }
+        }        
 	};
 
 	function Plugin ( element, options ) 
@@ -138,7 +139,7 @@ SOFTWARE.
                 this.$textarea = $("#b_textarea");
                 if (this.$textarea.length == 0)
                 {
-                    this.$textarea = $("<textarea id='b_textarea' class='b_t'></textarea>")
+                    this.$textarea = $("<textarea id='b_textarea' class='b_t' maxlength='" + this.settings.maxlength + "'></textarea>")
                     .click(function(e)
                     {
                         e.preventDefault();
