@@ -1,64 +1,64 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 
-    <html>
-    <head>
-		<title>Infinite Image Wall</title>
-        <style>
-            html, body {
-                height: 100%;
-                width: 100%;
-                margin-top:50px;
-            }
-            #divContainer {
-                margin: 10px auto;
-                position: relative;
-                width: 60%; 
-                height: 60%;       
-                min-width: 300px;
-                min-height: 300px;  
-                border: 2px #000 solid;
-                overflow: hidden;
-            }
-            .eCell {
-                position: absolute;
-                border: 1px blue solid;
-                -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-                -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-                box-sizing: border-box;     
-            }
-            .eCell img 
-            {   
-                width: 150px;
-                height: 150px;
-            }
-        </style>
-    </head>
-    <body>        
-        <h1><center>Infinite Image Wall</center></h1>
-        
-        <div id="divContainer">
-            <div class="wrapper">                                
-            </div>        
+<html>
+<head>
+	<title>Infinite Image Wall</title>
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin-top:50px;
+        }
+        #divContainer {
+            margin: 10px auto;
+            position: relative;
+            width: 60%; 
+            height: 60%;       
+            min-width: 300px;
+            min-height: 300px;  
+            border: 2px #000 solid;
+            overflow: hidden;
+        }
+        .eCell {
+            position: absolute;
+            border: 1px blue solid;
+            -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+            -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+            box-sizing: border-box;     
+        }
+        .eCell img 
+        {   
+            width: 150px;
+            height: 150px;
+        }
+    </style>
+</head>
+<body>        
+    <h1><center>Infinite Image Wall</center></h1>
+    
+    <div id="divContainer">
+        <div class="wrapper">                                
         </div>        
-        
-        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-        <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
-        <script src="../js/jquery.eco-scroll.js"></script>        
-		<script>            
-		$(function()
-        {               
-            $("#divContainer").ecoScroll({
-                itemWidth: 150,
-                itemHeight: 150,
-                onShow:function(oParam) 
+    </div>        
+    
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+    <script src="../js/jquery.eco-scroll.js"></script>        
+	<script>            
+	$(function()
+    {               
+        $("#divContainer").ecoScroll({
+            itemWidth: 150,
+            itemHeight: 150,
+            onShow:function(oParam) 
+            {
+                if (oParam.bNew) 
                 {
-                    if (oParam.bNew) 
-                    {
-                        oParam.$e.append("<img src='../img/img" + Math.abs( (oParam.x + oParam.y*10)%25 ) + ".jpg' />").css({opacity:0}).animate({opacity: 1}, 400);
-                    }
+                    oParam.$e.append("<img src='../img/img" + Math.abs( (oParam.x + oParam.y*10)%25 ) + ".jpg' />").css({opacity:0}).animate({opacity: 1}, 400);
                 }
-            });
+            }
         });
-		</script>
-    </body>
-    </html>
+    });
+	</script>
+</body>
+</html>

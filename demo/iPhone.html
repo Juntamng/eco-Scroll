@@ -1,118 +1,118 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 
-    <html>
-    <head>
-		<title>Infinite Image Wall</title>
-        <style>
-            html, body {
-                height: 100%;
-                width: 100%;
-                margin-top:50px;
-            }
-            #iPhoneContainer
-            {
-                position:relative; 
-                width:250px; 
-                height:500px;
-                margin:0px auto; 
-                padding-top:60px;
-            }
-            #imgiPhone
-            {
-                position:absolute; 
-                left:0px; 
-                top:0px; 
-                width:250px;
-            }
-            #diviPhone {
-                margin: 10px auto;
-                position: relative;
-                width: 200px; 
-                height: 355px;       
-                border: 2px #000 solid;
-                overflow: hidden;
-                background-color: #fff;
-            }
-            .eCell {
-                position: absolute;
-                border: none;
-                -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-                -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-                box-sizing: border-box;     
-            }
+<html>
+<head>
+	<title>Infinite Image Wall</title>
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin-top:50px;
+        }
+        #iPhoneContainer
+        {
+            position:relative; 
+            width:250px; 
+            height:500px;
+            margin:0px auto; 
+            padding-top:60px;
+        }
+        #imgiPhone
+        {
+            position:absolute; 
+            left:0px; 
+            top:0px; 
+            width:250px;
+        }
+        #diviPhone {
+            margin: 10px auto;
+            position: relative;
+            width: 200px; 
+            height: 355px;       
+            border: 2px #000 solid;
+            overflow: hidden;
+            background-color: #fff;
+        }
+        .eCell {
+            position: absolute;
+            border: none;
+            -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+            -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+            box-sizing: border-box;     
+        }
 
-            .iPhoneName {
-                margin: 3px;
-                border-bottom: 1px #bebebe solid;
-                font-family: monospace;
-                font-size: 12px;
-                color: #000;
-            }
-        </style>
-    </head>
-    <body>        
-        <h1><center>iPhone Flick Scroll</center></h1>
-        
-        <div id="iPhoneContainer">
-            <img id="imgiPhone" src="../img/iPhone_6_Plus.png"  />
-            <div id="diviPhone">
-                <div class="wrapper">                                
-                </div>        
+        .iPhoneName {
+            margin: 3px;
+            border-bottom: 1px #bebebe solid;
+            font-family: monospace;
+            font-size: 12px;
+            color: #000;
+        }
+    </style>
+</head>
+<body>        
+    <h1><center>iPhone Flick Scroll</center></h1>
+    
+    <div id="iPhoneContainer">
+        <img id="imgiPhone" src="../img/iPhone_6_Plus.png"  />
+        <div id="diviPhone">
+            <div class="wrapper">                                
             </div>        
-        <div>
-        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-        <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
-        <script src="../js/jquery.eco-scroll.js"></script>        
-		<script>            
-		$(function()
-        {           
-            var arrName = [
-                "Clarence Czech", "Ignacia Ferber", "Amie Hamer", "Marina Brackin",
-                "Echo Clarke", "Randall Borrelli", "Nikita Feagin", "Kenyetta Haapala",
-                "Warren Barham", "Judith Howery", "Elwanda Eakins", "Stepanie Aguilera",
-                "Gloria Nick", "Shasta Thiem", "Lurline Newingham", "Malinda Wiren",
-                "Mora Mara", "Lexie Elling", "Kyong Schild", "Brigid Hopton", 
-                "Roseanne Caver", "Lavonna Troxell", "Maybelle Martinson", "Almeta Enos",
-                "Laree Lineberry", "Jeannine Sthilaire", "Clifton Boso", "Darby Mccullum",
-                "Laurine Hausman", "Jess Bouie", "Norman Word", "Chantelle Aguayo",
-                "Mallory Reaves", "Lai Koo", "Raymonde Woldt", "Augustina Parcell",
-                "Jackelyn Planck", "Jackie Propes", "Kandi Higgenbotham", 
-                "Blythe Perri", "Debroah Armagost", "Florida Briant",
-                "Nina Christofferse", "Kia Cortez", "Song Tilson", "Juli Messenger",
-                "Zonia Menjivar", "Neal Marone", "Ashlea Mcdill", "Sherron Dinger",
-                "Chia Covert",
-                "Clarence Czech", "Ignacia Ferber", "Amie Hamer", "Marina Brackin",
-                "Echo Clarke", "Randall Borrelli", "Nikita Feagin", "Kenyetta Haapala",
-                "Warren Barham", "Judith Howery", "Elwanda Eakins", "Stepanie Aguilera",
-                "Gloria Nick", "Shasta Thiem", "Lurline Newingham", "Malinda Wiren",
-                "Mora Mara", "Lexie Elling", "Kyong Schild", "Brigid Hopton", 
-                "Roseanne Caver", "Lavonna Troxell", "Maybelle Martinson", "Almeta Enos",
-                "Laree Lineberry", "Jeannine Sthilaire", "Clifton Boso", "Darby Mccullum",
-                "Laurine Hausman", "Jess Bouie", "Norman Word", "Chantelle Aguayo",
-                "Mallory Reaves", "Lai Koo", "Raymonde Woldt", "Augustina Parcell",
-                "Jackelyn Planck", "Jackie Propes", "Kandi Higgenbotham", 
-                "Blythe Perri", "Debroah Armagost", "Florida Briant",
-                "Nina Christofferse", "Kia Cortez", "Song Tilson", "Juli Messenger",
-                "Zonia Menjivar", "Neal Marone", "Ashlea Mcdill", "Sherron Dinger"
-            ];
+        </div>        
+    <div>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+    <script src="../js/jquery.eco-scroll.js"></script>        
+	<script>            
+	$(function()
+    {           
+        var arrName = [
+            "Clarence Czech", "Ignacia Ferber", "Amie Hamer", "Marina Brackin",
+            "Echo Clarke", "Randall Borrelli", "Nikita Feagin", "Kenyetta Haapala",
+            "Warren Barham", "Judith Howery", "Elwanda Eakins", "Stepanie Aguilera",
+            "Gloria Nick", "Shasta Thiem", "Lurline Newingham", "Malinda Wiren",
+            "Mora Mara", "Lexie Elling", "Kyong Schild", "Brigid Hopton", 
+            "Roseanne Caver", "Lavonna Troxell", "Maybelle Martinson", "Almeta Enos",
+            "Laree Lineberry", "Jeannine Sthilaire", "Clifton Boso", "Darby Mccullum",
+            "Laurine Hausman", "Jess Bouie", "Norman Word", "Chantelle Aguayo",
+            "Mallory Reaves", "Lai Koo", "Raymonde Woldt", "Augustina Parcell",
+            "Jackelyn Planck", "Jackie Propes", "Kandi Higgenbotham", 
+            "Blythe Perri", "Debroah Armagost", "Florida Briant",
+            "Nina Christofferse", "Kia Cortez", "Song Tilson", "Juli Messenger",
+            "Zonia Menjivar", "Neal Marone", "Ashlea Mcdill", "Sherron Dinger",
+            "Chia Covert",
+            "Clarence Czech", "Ignacia Ferber", "Amie Hamer", "Marina Brackin",
+            "Echo Clarke", "Randall Borrelli", "Nikita Feagin", "Kenyetta Haapala",
+            "Warren Barham", "Judith Howery", "Elwanda Eakins", "Stepanie Aguilera",
+            "Gloria Nick", "Shasta Thiem", "Lurline Newingham", "Malinda Wiren",
+            "Mora Mara", "Lexie Elling", "Kyong Schild", "Brigid Hopton", 
+            "Roseanne Caver", "Lavonna Troxell", "Maybelle Martinson", "Almeta Enos",
+            "Laree Lineberry", "Jeannine Sthilaire", "Clifton Boso", "Darby Mccullum",
+            "Laurine Hausman", "Jess Bouie", "Norman Word", "Chantelle Aguayo",
+            "Mallory Reaves", "Lai Koo", "Raymonde Woldt", "Augustina Parcell",
+            "Jackelyn Planck", "Jackie Propes", "Kandi Higgenbotham", 
+            "Blythe Perri", "Debroah Armagost", "Florida Briant",
+            "Nina Christofferse", "Kia Cortez", "Song Tilson", "Juli Messenger",
+            "Zonia Menjivar", "Neal Marone", "Ashlea Mcdill", "Sherron Dinger"
+        ];
 
-            $("#diviPhone").ecoScroll({
-                itemWidth: 200,
-                itemHeight: 30,
-                rangeX : [0,0],
-                rangeY : [0,100],
-                axis : "y",
-                momentum: true,
-                momentumSpeed: 8,
-                onShow:function(oParam) 
+        $("#diviPhone").ecoScroll({
+            itemWidth: 200,
+            itemHeight: 30,
+            rangeX : [0,0],
+            rangeY : [0,100],
+            axis : "y",
+            momentum: true,
+            momentumSpeed: 8,
+            onShow:function(oParam) 
+            {
+                if (oParam.bNew && oParam.x==0) 
                 {
-                    if (oParam.bNew && oParam.x==0) 
-                    {
-                        oParam.$e.append("<div class='iPhoneName'>"+arrName[oParam.y]+"</div>");
-                    }
+                    oParam.$e.append("<div class='iPhoneName'>"+arrName[oParam.y]+"</div>");
                 }
-            });
+            }
         });
-		</script>
-    </body>
-    </html>
+    });
+	</script>
+</body>
+</html>

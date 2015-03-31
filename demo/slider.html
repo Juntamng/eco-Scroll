@@ -1,54 +1,58 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 
-    <html>
-    <head>
-		<title>Slider with Snap=true</title>
-        <style>
-            html, body {
-                height: 100%;
-                width: 100%;
-                margin-top:50px;
-            }
-            #divContainer {
-                margin: 10px auto;
-                position: relative;
-                width: 90%; 
-                height: 400px;                
-                border: 2px #000 solid;
-                overflow: hidden;
-            }
-            .eCell {
-                position: absolute;
-                border: 1px blue solid;
-                -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-                -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-                box-sizing: border-box; 
-            }
-        </style>
-    </head>
-    <body>        
-        <h1><center>Slider with Snap=true</center></h1>
+<html>
+<head>
+	<title>Slider with Snap=true</title>
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin-top:50px;
+        }
+        #divContainer {
+            margin: 10px auto;
+            position: relative;
+            width: 90%; 
+            height: 400px;                
+            border: 2px #000 solid;
+            overflow: hidden;
+        }
+        .eCell {
+            position: absolute;
+            border: 1px blue solid;
+            padding: 30px;
+            font-size: 40px;
+            color: #fff;
+            background-color: #EC602F;
+            -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+            -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+            box-sizing: border-box; 
+        }
+    </style>
+</head>
+<body>        
+    <h1><center>Slider with Snap=true</center></h1>
 
-        <div id="divContainer">
-            <div class="wrapper">                                
-            </div>        
+    <div id="divContainer">
+        <div class="wrapper">                                
         </div>        
-        
-        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-        <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
-        <script src="../js/jquery.eco-scroll.js"></script>        
-		<script>            
-		$(function()
-        {               
-            $("#divContainer").ecoScroll({
-                itemWidth: 400,
-                itemHeight: 400,
-                rangeX : [-10,10],
-                rangeY : [-10,10],
-                axis : "x",
-                snap : true
-            });
+    </div>        
+    
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+    <script src="../js/jquery.eco-scroll.js"></script>        
+	<script>            
+	$(function()
+    {               
+        $("#divContainer").ecoScroll({
+            itemWidth: 400,
+            itemHeight: 400,
+            rangeX : [-10,10],
+            rangeY : [-10,10],
+            axis : "x",
+            snap : true
         });
-		</script>
-    </body>
-    </html>
+    });
+	</script>
+</body>
+</html>

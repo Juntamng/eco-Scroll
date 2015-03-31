@@ -1,128 +1,119 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 
-    <html>
-    <head>
-		<title>Bootstrap Carousel with touch and drag support</title>
-        <style>
-            html, body {
-                height: 100%;
-                width: 100%;
-                margin-top:50px;
-            }
-            #divContainer {
-                height: 60%;
-                width: 60%;
-                margin: 50px auto;
-                position: relative;
-                border: 2px #000 solid;
-                overflow: hidden;
-            }
-            .eCell {
-                position: absolute;
-                border: 1px blue solid;
-                -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-                -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-                box-sizing: border-box; 
-            }
-            .eCell img 
-            {   
-                width: 100%; 
-                height: 100%;                
-            }
-        </style>   
-        <link type="text/css" rel="stylesheet" href="../css/bootstrap.css"> 
-        <link type="text/css" rel="stylesheet" href="../css/carousel.css">     
-    </head>
-    <body>        
-        <h1><center>Bootstrap Carousel with touch and drag support</center></h1>
+<html>
+<head>
+	<title>Bootstrap Carousel with touch and drag support</title>
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin-top:50px;
+        }
+        #divContainer {
+            height: 60%;
+            width: 60%;
+            margin: 50px auto;
+            position: relative;
+            border: 2px #000 solid;
+            overflow: hidden;
+        }
+        .eCell {
+            position: absolute;
+            border: 1px blue solid;
+            -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+            -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+            box-sizing: border-box; 
+        }
+        .eCell img 
+        {   
+            width: 100%; 
+            height: 100%;                
+        }
+    </style>   
+    <link type="text/css" rel="stylesheet" href="../css/bootstrap.css"> 
+    <link type="text/css" rel="stylesheet" href="../css/carousel.css">     
+</head>
+<body>        
+    <h1><center>Bootstrap Carousel with touch and drag support</center></h1>
 
-        <div id="divContainer">
-            <div id="divWrapper" class="wrapper">                                
-            </div>   
-            
-            <!-- Indicators -->
-            <ol id="olIndicators" class="carousel-indicators">
-                <li data-to="0" class="active"></li>
-                <li data-to="1"></li>
-                <li data-to="2"></li>
-                <li data-to="3"></li>
-                <li data-to="4"></li>
-                <li data-to="5"></li>
-            </ol>    
+    <div id="divContainer">        
+        <!-- Indicators -->
+        <ol id="olIndicators" class="carousel-indicators">
+            <li data-to="0" class="active"></li>
+            <li data-to="1"></li>
+            <li data-to="2"></li>
+            <li data-to="3"></li>
+            <li data-to="4"></li>
+            <li data-to="5"></li>
+        </ol>    
 
-            <!-- Controls -->
-            <a class="left carousel-control" href="javascript:void(0)" data-slide="prev">
-                <span id="aPrev" class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
+        <!-- Controls -->
+        <a class="left carousel-control" href="javascript:void(0)" data-slide="prev">
+            <span id="aPrev" class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
 
-            <a class="right carousel-control" href="javascript:void(0)" data-slide="next">
-                <span id="aNext" class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a> 
-        </div>        
+        <a class="right carousel-control" href="javascript:void(0)" data-slide="next">
+            <span id="aNext" class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a> 
 
-        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-        <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
-        <script src="../js/jquery.eco-scroll.js"></script>             
-		<script>            
-		$(function()
-        {               
-            var iCurX = 0;
-            
-            function updateIndicator() {
-                var $indicator = $("#olIndicators"),
-                    iActive = Math.abs(iCurX%6);     
-                $indicator.children().removeClass("active");                
-                $indicator.children().eq(iActive).addClass("active");
-            }
+        <div id="divWrapper" class="wrapper">                                
+        </div> 
+    </div>        
 
-            var clickEventType = (document.ontouchstart!==null) ? 'mousedown' : 'touchstart';
-            $(".glyphicon-chevron-left, .glyphicon-chevron-right").bind(clickEventType, function(e)
-            {                
-                e.preventDefault();
-                e.stopPropagation();                
-                $(this).trigger("click");
-            })        
-            .click(function(e)
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+    <script src="../js/jquery.eco-scroll.js"></script>             
+	<script>            
+	$(function()
+    {               
+        var iCurX = 0;
+        
+        function updateIndicator() {
+            var $indicator = $("#olIndicators"),
+                iActive = Math.abs(Math.ceil(iCurX) % 6);     
+            $indicator.children().removeClass("active");                
+            $indicator.children().eq(iActive).addClass("active");
+        }
+
+        var clickEventType = (document.ontouchstart!==null) ? 'mousedown' : 'touchstart';
+        $(".glyphicon-chevron-left, .glyphicon-chevron-right").bind(clickEventType, function(e)
+        {                
+            e.preventDefault();
+            e.stopPropagation();                
+        })        
+        .click(function(e)
+        {
+            e.preventDefault();
+            e.stopPropagation();                
+
+            iCurX += (this.id == "aPrev") ? 1: -1;
+            $("#divContainer").data("plugin_ecoScroll").moveByCoord(iCurX, 0, {duration: 400});                            
+        });        
+        
+        $("#divContainer").ecoScroll({
+            itemWidth: "100%",
+            itemHeight: "100%",
+            rangeX : [undefined,undefined],
+            axis : "x",
+            snap: true,
+            onShow:function(oParam) 
             {
-                e.preventDefault();
-                e.stopPropagation();                
-
-                iCurX += (this.id == "aPrev") ? 1: -1;
-                $("#divContainer").data("plugin_ecoScroll").moveByCoord(iCurX, 0, {duration: 400});                            
-            });        
-            
-            $("#divContainer").ecoScroll({
-                itemWidth: "100%",
-                itemHeight: "100%",
-                rangeX : [undefined,undefined],
-                axis : "x",
-                snap: true,
-                onShow:function(oParam) 
-                {
-                    if (oParam.bNew && oParam.y == 0)
-                        oParam.$e.append("<img src='..//img//img" + Math.abs( (oParam.x)%6 ) + ".jpg' />");
-                },
-                onHide:function(oParam) 
-                {
-                    oParam.$e.hide();    
-                },
-                onRemove:function(oParam) 
-                {
-                    return true;
-                },
-                onStop:function(oParam) 
-                {                                                                           
-                    iCurX = oParam.wrapperLeft/oParam.cellWidth;                    
-                    updateIndicator();
-                },
-                onResize:function(oParam)
-                {                    
-                    $("#divContainer").data("plugin_ecoScroll").moveByCoord(iCurX, 0);       
-                }
-            });            
-        });
-		</script>
-    </body>
-    </html>
+                if (oParam.bNew && oParam.y == 0)
+                    oParam.$e.append("<img src='..//img//img" + Math.abs( (oParam.x)%6 ) + ".jpg' />");
+            },
+            onStop:function(oParam) 
+            {                                                                           
+                iCurX = oParam.wrapperLeft/oParam.cellWidth;                    
+                updateIndicator();
+            },
+            onResize:function(oParam)
+            {                    
+                $("#divContainer").data("plugin_ecoScroll").moveByCoord(iCurX, 0);       
+            }
+        });            
+    });
+	</script>
+</body>
+</html>

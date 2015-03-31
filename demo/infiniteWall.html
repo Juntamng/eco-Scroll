@@ -1,62 +1,54 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 
-    <html>
-    <head>
-		<title>Infinite Wall</title>
-        <style>
-            html, body {
-                height: 100%;
-                width: 100%;
-                margin-top:50px;
-            }
-            #divContainer {
-                margin: 10px auto;
-                position: relative;
-                width: 500px; 
-                height: 500px;                
-                border: 1px #000 solid;
-                overflow: hidden;
-            }
-            .eCell {
-                position: absolute;
-                border: 1px blue solid;
-                -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-                -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-                box-sizing: border-box;
-                /* opacity: 0.8; */
-            }
-        </style>
-    </head>
-    <body>        
-        <h1><center>Infinite Wall</center></h1>
-        
-        <div id="divContainer">
-            <div class="wrapper">                                
-            </div>        
+<html>
+<head>
+	<title>Infinite Wall</title>
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin-top:50px;
+        }
+        #divContainer {
+            margin: 10px auto;
+            position: relative;
+            width: 500px; 
+            height: 500px;                
+            border: 1px #000 solid;
+            overflow: hidden;
+        }
+        .eCell {
+            position: absolute;
+            border: 1px blue solid;
+            -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+            -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+            box-sizing: border-box;
+            /* opacity: 0.8; */
+        }
+    </style>
+</head>
+<body>        
+    <h1><center>Infinite Wall</center></h1>
+    
+    <div id="divContainer">
+        <div class="wrapper">                                
         </div>        
-        
-        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-        <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
-        <script src="../js/jquery.eco-scroll.js"></script>        
-		<script>            
-		$(function()
-        {   
-            $("#divContainer").ecoScroll({
-                onShow:function(oParam) 
-                {
-                    if (oParam.bNew)
-                        oParam.$e.text( oParam.x + "," + oParam.y);
-                },
-                onHide:function(oParam) 
-                {
-                    oParam.$e.hide();    
-                },
-                onRemove:function(oParam) 
-                {
-                    return true;
-                }     
-            });
+    </div>        
+    
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+    <script src="../js/jquery.eco-scroll.js"></script>        
+	<script>            
+	$(function()
+    {   
+        $("#divContainer").ecoScroll({
+            onShow:function(oParam) 
+            {
+                if (oParam.bNew)
+                    oParam.$e.text( oParam.x + "," + oParam.y);
+            }
         });
-		</script>
-    </body>
-    </html>
+    });
+	</script>
+</body>
+</html>

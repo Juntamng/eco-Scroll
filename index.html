@@ -100,9 +100,6 @@
     <div class="row">
       <div class="col-md-12">
         <div id="divCarousel">
-          <div class="wrapper">                                
-          </div>  
-
           <!-- Indicators -->
           <ol id="olIndicators" class="carousel-indicators">
               <li data-to="0" class="active"></li>
@@ -123,6 +120,10 @@
               <span id="aNext" class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
               <span class="sr-only">Next</span>
           </a>       
+
+          <div class="wrapper">                                
+          </div>  
+
         </div>
       </div>       
     </div>   
@@ -222,7 +223,7 @@
 
     function updateIndicator() {
         var $indicator = $("#olIndicators"),
-            iActive = Math.abs(iCurX%6);     
+            iActive = Math.abs(Math.ceil(iCurX) % 6);
         $indicator.children().removeClass("active");                
         $indicator.children().eq(iActive).addClass("active");
     }
@@ -232,7 +233,6 @@
     {                
         e.preventDefault();
         e.stopPropagation();                
-        $(this).trigger("click");
     })        
     .click(function(e)
     {
@@ -414,15 +414,7 @@
 
                     iCnt2++;
                 }
-            },
-            onHide:function(oParam) 
-            {
-                oParam.$e.hide();    
-            },
-            onRemove:function(oParam) 
-            {
-                return true;
-            }     
+            }
         });
     }
   });        

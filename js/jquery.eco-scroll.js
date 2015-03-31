@@ -579,13 +579,15 @@ SOFTWARE.
 
             return {left: iLeft, top: iTop};
         },
-        getCellParam: function(oTarget) {
+        getCellParam: function(oTarget) 
+        {
             var arrEle = this.arr[$(oTarget).closest(".eCell").prop("id")];
             arrEle["target"] = oTarget;
 
             return arrEle;
         },
-        getContainerParam: function() {
+        getContainerParam: function() 
+        {
             var oPos = this.$wrapper.position();
             var oReturn = {
                 containerWidth: this.settings.containerWidth,
@@ -598,7 +600,8 @@ SOFTWARE.
             
             return oReturn;
         },
-        checkObjProp: function() {
+        checkObjProp: function()
+        {
             var sKey, iCnt=0;
             for (sKey in this.arr)
             {
