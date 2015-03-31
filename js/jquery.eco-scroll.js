@@ -27,46 +27,47 @@ SOFTWARE.
 	"use strict";
         	
     var pluginName = "ecoScroll",
-		defaults = {
-		containerWidth: 500,
-		containerHeight: 500,
-		itemWidth: 100,
-		itemHeight: 100,
-        rangeX : [undefined, undefined],
-        rangeY : [undefined, undefined],
-        axis : "xy",
-        snap : false,
-        momentum : false,
-        momentumSpeed : 8,
-        onStart: function(oParam) 
+    	defaults = 
         {
-            return true;
-        },
-        onShow: function(oParam) 
-        {
-            oParam.$e.text(oParam.x + ":" + oParam.y);
-        },
-        onHide: function(oParam) 
-        {
-            oParam.$e.hide();    
-        },
-        onRemove: function(oParam) 
-        {
-            return true;    
-        },
-        onStop: function(oParam) 
-        {
-            
-        },
-        onResize: function(oParam) 
-        {
-            
-        },
-        onClick: function(oParam) 
-        {
+    		containerWidth: 500,              // width of Container
+    		containerHeight: 500,             // height of Container
+    		itemWidth: 100,                   // item width
+    		itemHeight: 100,                  // item height
+            rangeX : [undefined, undefined],  // x range from [-x, +x]
+            rangeY : [undefined, undefined],  // y range from [-y, +y]
+            axis : "xy",                      // x, y or xy
+            snap : false,                     
+            momentum : false,                 // enable momentum
+            momentumSpeed : 8,                // momentum speed
+            onStart: function(oParam)         // trigger when dragging starts 
+            {
+                return true;
+            },
+            onShow: function(oParam)          // trigger when cell is rendered  
+            {
+                oParam.$e.text(oParam.x + ":" + oParam.y);
+            },
+            onHide: function(oParam)          // trigger when cell is hidden
+            {
+                oParam.$e.hide();    
+            },
+            onRemove: function(oParam)        // trigger when cell is removed
+            {
+                return true;    
+            },
+            onStop: function(oParam)          // trigger when drag move is ended
+            {
+                
+            },
+            onResize: function(oParam)        // trigger when window resizes
+            {
+                
+            },
+            onClick: function(oParam)         // trigger when cell is clicked and dragging on a cell won't trigger click event
+            {
 
-        },
-	};
+            },
+    	};
 
 	function Plugin ( element, options ) 
 	{
@@ -218,22 +219,6 @@ SOFTWARE.
             e.stopPropagation();
             return false;
         },
-        track: function() 
-        {
-            var iNow, iTimeDiff, iDeltaX, iDeltaY, iVx, iVy;
-
-            iNow = Date.now();
-            iTimeDiff = iNow - this.iTimestamp;
-            this.iTimestamp = iNow;
-            iDeltaX = this.iDistX2 - this.iDistX1;
-            iDeltaY = this.iDistY2 - this.iDistY1;
-            this.iDistX1 = this.iDistX2;
-            this.iDistY1 = this.iDistY2;
-            iVx = 1000 * iDeltaX / (1 + iTimeDiff);
-            iVy = 1000 * iDeltaY / (1 + iTimeDiff);
-            this.iVelocityX = 0.5 * iVx + 0.2 * this.iVelocityX;
-            this.iVelocityY = 0.5 * iVy + 0.2 * this.iVelocityY;
-        },
         mMove: function(e)
         {
             var point = this.bTouch ? e.touches[0] : e;
@@ -256,43 +241,6 @@ SOFTWARE.
             e.stopPropagation();
             return false;
         },        
-        moveTo: function(iLeft, iTop, options)
-        {            
-            var oRange = this.checkRange(iLeft, iTop);
-            var that = this, oCss = {};
-            
-            this.iDistX2 = oRange.left;
-            this.iDistY2 = oRange.top;
-                
-            oCss = {"left": oRange.left, "top": oRange.top};        
-            if (typeof(options) === "object") 
-            {                                                        
-                options.start = function(){ that.bAnimated = true; };
-                options.complete = function()
-                { 
-                    that.bAnimated = false; 
-                    that.settings.onStop(that.getContainerParam());
-                };
-
-                !this.bAnimated && this.$wrapper.animate(oCss, options);
-            }
-            else    
-            {
-                this.$wrapper.css(oCss);
-            }
-                                                    
-            this.updateCells();
-        },
-        moveByDist: function(iDistX, iDistY, options)
-        {            
-            var oPos = this.$wrapper.position();
-            var iLeft = oPos.left+iDistX, iTop = oPos.top+iDistY;
-            this.moveTo(iLeft, iTop, options);            
-        },
-        moveByCoord: function(iX, iY, options)
-        {            
-            this.moveTo(iX*this.calWidth, iY*this.calHeight, options);            
-        },
         mEnd: function (e) {                 	            
             this.unbind(this.moveEvent, document);
             this.unbind(this.endEvent, document);                            
@@ -346,6 +294,58 @@ SOFTWARE.
                 this.snapOn();
             else
                 this.settings.onStop(this.getContainerParam());            
+        },moveTo: function(iLeft, iTop, options)
+        {            
+            var oRange = this.checkRange(iLeft, iTop);
+            var that = this, oCss = {};
+            
+            this.iDistX2 = oRange.left;
+            this.iDistY2 = oRange.top;
+                
+            oCss = {"left": oRange.left, "top": oRange.top};        
+            if (typeof(options) === "object") 
+            {                                                        
+                options.start = function(){ that.bAnimated = true; };
+                options.complete = function()
+                { 
+                    that.bAnimated = false; 
+                    that.settings.onStop(that.getContainerParam());
+                };
+
+                !this.bAnimated && this.$wrapper.animate(oCss, options);
+            }
+            else    
+            {
+                this.$wrapper.css(oCss);
+            }
+                                                    
+            this.updateCells();
+        },
+        moveByDist: function(iDistX, iDistY, options)
+        {            
+            var oPos = this.$wrapper.position();
+            var iLeft = oPos.left+iDistX, iTop = oPos.top+iDistY;
+            this.moveTo(iLeft, iTop, options);            
+        },
+        moveByCoord: function(iX, iY, options)
+        {            
+            this.moveTo(iX*this.calWidth, iY*this.calHeight, options);            
+        },
+        track: function() 
+        {
+            var iNow, iTimeDiff, iDeltaX, iDeltaY, iVx, iVy;
+
+            iNow = Date.now();
+            iTimeDiff = iNow - this.iTimestamp;
+            this.iTimestamp = iNow;
+            iDeltaX = this.iDistX2 - this.iDistX1;
+            iDeltaY = this.iDistY2 - this.iDistY1;
+            this.iDistX1 = this.iDistX2;
+            this.iDistY1 = this.iDistY2;
+            iVx = 1000 * iDeltaX / (1 + iTimeDiff);
+            iVy = 1000 * iDeltaY / (1 + iTimeDiff);
+            this.iVelocityX = 0.5 * iVx + 0.2 * this.iVelocityX;
+            this.iVelocityY = 0.5 * iVy + 0.2 * this.iVelocityY;
         },
         decelerateX: function() 
         {
@@ -463,7 +463,7 @@ SOFTWARE.
                     }
                 }
             }
-            this.checkObjProp();
+            //this.checkObjProp();
         },
         removeCell: function(oParam)
         {
@@ -472,31 +472,7 @@ SOFTWARE.
                 oParam.$e.remove();
                 delete this.arr["c"+oParam.x+"_"+oParam.y];
             }    
-        },
-        checkRange: function(iLeft, iTop)
-        {
-            if (this.settings.axis.indexOf("x") > -1)
-            {
-                if (iLeft > this.iRangeX1)
-                    iLeft = this.iRangeX1;
-                else if (iLeft < this.iRangeX2)
-                    iLeft = this.iRangeX2;
-            }
-            else
-                iLeft = 0;
-
-            if (this.settings.axis.indexOf("y") > -1)
-            {
-                if (iTop > this.iRangeY1)
-                    iTop = this.iRangeY1;
-                else if (iTop < this.iRangeY2)
-                    iTop = this.iRangeY2;
-            }
-            else
-                iTop = 0;
-
-            return {left: iLeft, top: iTop};
-        },
+        },        
         snapOn: function()
         {
             var oPos = this.$wrapper.position();                            
@@ -578,6 +554,30 @@ SOFTWARE.
 
                 return iReturn;  
             }      
+        },
+        checkRange: function(iLeft, iTop)
+        {
+            if (this.settings.axis.indexOf("x") > -1)
+            {
+                if (iLeft > this.iRangeX1)
+                    iLeft = this.iRangeX1;
+                else if (iLeft < this.iRangeX2)
+                    iLeft = this.iRangeX2;
+            }
+            else
+                iLeft = 0;
+
+            if (this.settings.axis.indexOf("y") > -1)
+            {
+                if (iTop > this.iRangeY1)
+                    iTop = this.iRangeY1;
+                else if (iTop < this.iRangeY2)
+                    iTop = this.iRangeY2;
+            }
+            else
+                iTop = 0;
+
+            return {left: iLeft, top: iTop};
         },
         getCellParam: function(oTarget) {
             var arrEle = this.arr[$(oTarget).closest(".eCell").prop("id")];
