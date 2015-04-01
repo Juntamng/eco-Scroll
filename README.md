@@ -41,6 +41,7 @@ Go to [www.juntamng.com/eco-Scroll](http://www.juntamng.com/eco-Scroll) to see s
 }
 </style>
 ```
+
 ``` html
 <body>       
   <h1><center>Infinite Wall</center></h1>
@@ -70,6 +71,9 @@ $(function()
 </script>
 ```
 
+##### Output
+
+![alt text](https://github.com/Juntamng/eco-Scroll/blob/master/img/screenshot4.png "Output")
 
 
 
