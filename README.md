@@ -1,17 +1,17 @@
 # Eco-Scroll.js
 Eco-friendly jQuery scroll plugin with infinite possibilities
 
-## What does it do?
+### What does it do?
 Eco-Friendly - Elements will get removed when they go out of sight
 
 Infinite Scroll - It can scroll will NO boundary
 
 Possibilities - It can transform into many different tools, Possibilities are endless
 
-## Why?
+### Why?
 I wanted to created a infinite scroll plugin for my own use.
 
-### Transformations
+#### Transformations
 - Infinite Image Wall
 - Slider
 - Carousel
@@ -22,7 +22,7 @@ I wanted to created a infinite scroll plugin for my own use.
 
 Go to [www.juntamng.com/eco-Scroll](www.juntamng.com/eco-Scroll) to see some of the transformations
 
-# How to use
+## How to use
 
 ``` css
 <style>
