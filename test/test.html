@@ -47,7 +47,7 @@
         </div>        
     </div>        
     
-    <div id="qunit" style="margin-top: 150px;"></div>
+    <div id="qunit" style="margin-top: 200px;"></div>
     <div id="qunit-fixture"></div>
 
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
@@ -58,14 +58,14 @@
     <script src="js/tests.js"></script>    
 	<script>            
 	$(function()
-    {   
+    {           
         $("#divContainer").ecoScroll(
         {
             itemWidth: 50,
             itemHeight: 50,
             rangeX : [undefined, undefined],
             rangeY : [-10, 10],
-            axis : "yx",
+            axis : "xy",
             snap : false,                     
             momentum : true,
             momentumSpeed : 5,
@@ -101,8 +101,8 @@
             {
                 console.log("click");
             },           
-        });
-        
+        });        
+
         startTest();
     });
 

@@ -106,7 +106,7 @@ SOFTWARE.
             this.moveEvent  = this.bTouch ? 'touchmove' : 'mousemove';
             this.endEvent  = this.bTouch ? 'touchend' : 'mouseup';
             this.cancelEvent  = this.bTouch ? 'touchcancel' : 'mouseup';
-            this.oTarget = null;
+            this.oTarget = null;    // to track what element user click on
             this.bind(this.startEvent, this.element);	
             this.bind(this.resizeEvent, window);	
 
@@ -119,18 +119,9 @@ SOFTWARE.
             this.bAnimatedX = this.bAnimatedY = false;  // used to prevent mStop fire twice
 		},
         validationData: function()
-        {
-            /*
-            itemWidth: 100,                   // item width
-            itemHeight: 100,                  // item height
-            rangeX : [undefined, undefined],  // x range from [-x, +x]
-            rangeY : [undefined, undefined],  // y range from [-y, +y]
-            axis : "xy",                      // x, y or xy
-            snap : false,                     
-            momentum : false,                 // enable momentum
-            momentumSpeed : 8,                // momentum speed
-            */
-            try {
+        {            
+            try 
+            {
                 if (this.settings.itemWidth < 10) throw "itemWidth cannot be less than 10.";
                 if (this.settings.itemHeight < 10) throw "itemHeight cannot be less than 10.";
                 if (this.settings.rangeX[0] > this.settings.rangeX[1]) throw "rangeX is set incorrect.";
@@ -165,18 +156,18 @@ SOFTWARE.
                 this.itemHeightUnit = "%";
             }
         
-			this.iColTotal = Math.round(this.containerWidth / this.calWidth)+1;
-			this.iRowTotal = Math.round(this.containerHeight / this.calHeight)+1;
-            this.x1 = 0;
+			//this.iColTotal = Math.round(this.containerWidth / this.calWidth)+1;
+			//this.iRowTotal = Math.round(this.containerHeight / this.calHeight)+1;
+            this.x1 = 0;   
             this.x2 = 0;
             this.y1 = 0;
             this.y2 = 0;			
-			this.iLeftS = 0;
-            this.iLeftE = 0;
-            this.iTopS = 0;
-            this.iTopE = 0;
-            this.iDistX = 0;
-            this.iDistY = 0;            
+			this.iPageXStart = 0;
+            this.iPageXEnd = 0;
+            this.iPageYStart = 0;
+            this.iPageYEnd = 0;
+            this.iPageXDist = 0;
+            this.iPageYDist = 0;            
             this.iRangeX1 = -( this.settings.rangeX[0] * this.calWidth );
             this.iRangeX2 = -( (this.settings.rangeX[1] * this.calWidth) - (this.containerWidth - this.calWidth) );
             this.iRangeY1 = -( this.settings.rangeY[0] * this.calHeight );                
@@ -230,12 +221,12 @@ SOFTWARE.
             this.oTarget = e.target;
             this.iDistX1=oPos.left;
             this.iDistY1=oPos.top;
-			this.iLeftS = point.pageX;
-            this.iTopS = point.pageY;            
+			this.iPageXStart = point.pageX;
+            this.iPageYStart = point.pageY;            
             this.bind(this.moveEvent, document);
             this.bind(this.endEvent, document);
-            this.iDistX = 0;
-            this.iDistY = 0;
+            this.iPageXDist = 0;
+            this.iPageYDist = 0;
 
             this.iVelocityX = this.iAmplitudeX = 0;
             this.iVelocityY = this.iAmplitudeY = 0;
@@ -250,20 +241,18 @@ SOFTWARE.
         mMove: function(e)
         {
             var point = this.bTouch ? e.touches[0] : e;
-            this.iLeftE = point.pageX;
-            this.iTopE = point.pageY;                        
-            this.iDistX = this.iLeftE-this.iLeftS;
-            this.iDistY = this.iTopE-this.iTopS;
+            this.iPageXEnd = point.pageX;
+            this.iPageYEnd = point.pageY;                        
+            this.iPageXDist = this.iPageXEnd-this.iPageXStart;
+            this.iPageYDist = this.iPageYEnd-this.iPageYStart;
 
-            if (this.iDistX != 0 || this.iDistY != 0)
-            {
+            if (this.iPageXDist != 0 || this.iPageYDist != 0)
                 this.bClick = false;
-            }
 
-            this.moveByDist(this.iDistX, this.iDistY);
+            this.moveByDist(this.iPageXDist, this.iPageYDist);
                                     
-            this.iLeftS = point.pageX;
-            this.iTopS = point.pageY; 
+            this.iPageXStart = point.pageX;
+            this.iPageYStart = point.pageY; 
 
             e.preventDefault();
             e.stopPropagation();
@@ -275,9 +264,7 @@ SOFTWARE.
             clearInterval(this.ticker);
 
             if (this.bClick)
-            {                
                 this.settings.onClick( this.getCellParam(this.oTarget) );
-            }
 
             if (this.settings.momentum) 
             {                
@@ -322,7 +309,8 @@ SOFTWARE.
                 this.snapOn();
             else
                 this.settings.onStop(this.getContainerParam());            
-        },moveTo: function(iLeft, iTop, options)
+        },
+        moveTo: function(iLeft, iTop, options)
         {            
             var oRange = this.checkRange(iLeft, iTop);
             var that = this, oCss = {};
@@ -526,7 +514,7 @@ SOFTWARE.
                     iOffsetR = that.calWidth - iRemind;
                 //console.log(iOffsetL + ":" + iOffsetR);
                 
-                if (that.iDistX < 0)
+                if (that.iPageXDist < 0)
                 {
                     if (iOffsetL > that.calWidth*0.7 )
                         iReturn = that.calWidth-iOffsetL;                        
@@ -564,7 +552,7 @@ SOFTWARE.
                     iOffsetB = that.calHeight - iRemind;
                 //console.log(iOffsetT + ":" + iOffsetB);
                 
-                if (that.iDistX < 0)
+                if (that.iPageXDist < 0)
                 {
                     if (iOffsetT > that.calHeight*0.7 )
                         iReturn = that.calHeight-iOffsetT;
