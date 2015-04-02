@@ -2,7 +2,7 @@
 
 <html>
 <head>
-	<title>Demo</title>
+	<title>Test</title>    
     <style>
         html, body
         {
@@ -37,31 +37,38 @@
             box-sizing: border-box;
         }
     </style>
+    <link rel="stylesheet" href="css/qunit-1.17.1.css">
 </head>
 <body>        
-    <h1><center>Demo</center></h1>
+    <h1><center>Test</center></h1>
     
     <div id="divContainer">
         <div class="wrapper">                                
         </div>        
     </div>        
     
+    <div id="qunit" style="margin-top: 150px;"></div>
+    <div id="qunit-fixture"></div>
+
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
     <script src="../js/jquery.eco-scroll.js"></script>        
+    <script src="js/qunit-1.17.1.js"></script>
+    <script src="js/start.js"></script>
+    <script src="js/tests.js"></script>    
 	<script>            
 	$(function()
     {   
         $("#divContainer").ecoScroll(
         {
-            itemWidth: 150,
-            itemHeight: 150,
-            rangeX : [-10, 10],
+            itemWidth: 50,
+            itemHeight: 50,
+            rangeX : [undefined, undefined],
             rangeY : [-10, 10],
             axis : "yx",
             snap : false,                     
             momentum : true,
-            momentumSpeed : 10,
+            momentumSpeed : 5,
             onStart: function(oParam)
             {
                 return true;
@@ -79,7 +86,8 @@
             },
             onRemove: function(oParam)
             {
-                return true;    
+                //return true;    
+                return false;
             },
             onStop: function(oParam)
             {
@@ -94,7 +102,11 @@
                 console.log("click");
             },           
         });
+        
+        startTest();
     });
+
+
 	</script>
 </body>
 </html>

@@ -25,12 +25,10 @@ SOFTWARE.
 ;(function ( $, window, document, undefined ) 
 {
 	"use strict";
-        	
+
     var pluginName = "ecoScroll",
     	defaults = 
         {
-    		containerWidth: 500,              // width of Container
-    		containerHeight: 500,             // height of Container
     		itemWidth: 100,                   // item width
     		itemHeight: 100,                  // item height
             rangeX : [undefined, undefined],  // x range from [-x, +x]
@@ -45,7 +43,8 @@ SOFTWARE.
             },
             onShow: function(oParam)          // trigger when cell is rendered  
             {
-                oParam.$e.text(oParam.x + ":" + oParam.y);
+                if (oParam.bNew) 
+                    oParam.$e.text(oParam.x + ":" + oParam.y);
             },
             onHide: function(oParam)          // trigger when cell is hidden
             {
@@ -96,6 +95,8 @@ SOFTWARE.
 	{
 		init: function() 
 		{
+            if (!this.validationData()) return;
+
 			this.arr = {};    
             this.$wrapper.empty();        
             this.initData();		
@@ -117,28 +118,55 @@ SOFTWARE.
             this.iTargetX = this.iCalX = this.iTargetY = this.iCalY = 0;
             this.bAnimatedX = this.bAnimatedY = false;  // used to prevent mStop fire twice
 		},
+        validationData: function()
+        {
+            /*
+            itemWidth: 100,                   // item width
+            itemHeight: 100,                  // item height
+            rangeX : [undefined, undefined],  // x range from [-x, +x]
+            rangeY : [undefined, undefined],  // y range from [-y, +y]
+            axis : "xy",                      // x, y or xy
+            snap : false,                     
+            momentum : false,                 // enable momentum
+            momentumSpeed : 8,                // momentum speed
+            */
+            try {
+                if (this.settings.itemWidth < 10) throw "itemWidth cannot be less than 10.";
+                if (this.settings.itemHeight < 10) throw "itemHeight cannot be less than 10.";
+                if (this.settings.rangeX[0] > this.settings.rangeX[1]) throw "rangeX is set incorrect.";
+                if (this.settings.rangeY[0] > this.settings.rangeY[1]) throw "rangeY is set incorrect.";
+                if (this.settings.momentumSpeed <= 0 || this.settings.momentumSpeed > 10) throw "momentumSpeed should be between 0 to 10.";
+            }
+            catch(e)
+            {
+                console.log(e);
+                return false;
+            }
+
+            return true;
+        },
 		initData: function()
-		{        
+		{                    
             this.itemWidthUnit = this.itemHeightUnit = "px";
-            this.settings.containerWidth = this.$element.width();
-            this.settings.containerHeight = this.$element.height();           
+            this.containerWidth = this.$element.width();
+            this.containerHeight = this.$element.height();           
             if (String(this.settings.itemWidth).indexOf("%") == -1)
                 this.calWidth = parseInt(this.settings.itemWidth);                
             else
             {
-                this.calWidth = this.settings.containerWidth * parseInt(this.settings.itemWidth)/100;
+                this.calWidth = this.containerWidth * parseInt(this.settings.itemWidth)/100;
                 this.itemWidthUnit = "%";
             }
             if (String(this.settings.itemHeight).indexOf("%") == -1)               
                 this.calHeight = parseInt(this.settings.itemHeight);
             else
             {
-                this.calHeight = this.settings.containerHeight * parseInt(this.settings.itemHeight)/100;
+                this.calHeight = this.containerHeight * parseInt(this.settings.itemHeight)/100;
                 this.itemHeightUnit = "%";
             }
         
-			this.iColTotal = Math.round(this.settings.containerWidth / this.calWidth)+1;
-			this.iRowTotal = Math.round(this.settings.containerHeight / this.calHeight)+1;
+			this.iColTotal = Math.round(this.containerWidth / this.calWidth)+1;
+			this.iRowTotal = Math.round(this.containerHeight / this.calHeight)+1;
             this.x1 = 0;
             this.x2 = 0;
             this.y1 = 0;
@@ -150,9 +178,9 @@ SOFTWARE.
             this.iDistX = 0;
             this.iDistY = 0;            
             this.iRangeX1 = -( this.settings.rangeX[0] * this.calWidth );
-            this.iRangeX2 = -( (this.settings.rangeX[1] * this.calWidth) - (this.settings.containerWidth - this.calWidth) );
+            this.iRangeX2 = -( (this.settings.rangeX[1] * this.calWidth) - (this.containerWidth - this.calWidth) );
             this.iRangeY1 = -( this.settings.rangeY[0] * this.calHeight );                
-            this.iRangeY2 = -( (this.settings.rangeY[1] * this.calHeight) - (this.settings.containerHeight - this.calHeight) );
+            this.iRangeY2 = -( (this.settings.rangeY[1] * this.calHeight) - (this.containerHeight - this.calHeight) );
             this.bAnimated = false;
             this.$wrapper.css({position: "absolute"});
 
@@ -391,9 +419,9 @@ SOFTWARE.
         {        
             var oPos = this.$wrapper.position();
             this.visibleX1 = Math.floor(-oPos.left / this.calWidth);
-            this.visibleX2 = Math.floor( (-oPos.left+this.settings.containerWidth) / this.calWidth );            
+            this.visibleX2 = Math.floor( (-oPos.left+this.containerWidth) / this.calWidth );            
             this.visibleY1 = Math.floor(-oPos.top / this.calHeight);
-            this.visibleY2 = Math.floor( (-oPos.top+this.settings.containerHeight) / this.calHeight );
+            this.visibleY2 = Math.floor( (-oPos.top+this.containerHeight) / this.calHeight );
             this.x1 = this.visibleX1 - 1;
             this.x2 = this.visibleX2 + 2;
             this.y1 = this.visibleY1 - 1;
@@ -483,7 +511,7 @@ SOFTWARE.
                 var iRemind=0, iOffsetL=0, iOffsetR=0, iReturn=0;
                 
                 //console.log("L = " + oPos.left % that.calWidth );           
-                //console.log("R = " + (oPos.left - (that.settings.containerWidth-that.calWidth*(that.visibleX2 - that.visibleX1)) ) % that.calWidth ); 
+                //console.log("R = " + (oPos.left - (that.containerWidth-that.calWidth*(that.visibleX2 - that.visibleX1)) ) % that.calWidth ); 
 
                 iRemind = oPos.left % that.calWidth;
                 if (iRemind < 0)
@@ -491,7 +519,7 @@ SOFTWARE.
                 else
                     iOffsetL = iRemind;
                 
-                iRemind = (oPos.left - (that.settings.containerWidth-that.calWidth*(that.visibleX2 - that.visibleX1)) ) % that.calWidth;
+                iRemind = (oPos.left - (that.containerWidth-that.calWidth*(that.visibleX2 - that.visibleX1)) ) % that.calWidth;
                 if (iRemind < 0)
                     iOffsetR = -iRemind; 
                 else
@@ -521,7 +549,7 @@ SOFTWARE.
                 var iRemind=0, iOffsetT=0, iOffsetB=0, iReturn=0;
                 
                 //console.log("T = " + oPos.top % that.calHeight );           
-                //console.log("B = " + (oPos.top - (that.settings.containerHeight-that.calHeight*(that.visibleY2 - that.visibleY1)) ) % that.calHeight ); 
+                //console.log("B = " + (oPos.top - (that.containerHeight-that.calHeight*(that.visibleY2 - that.visibleY1)) ) % that.calHeight ); 
 
                 iRemind = oPos.top % that.calHeight;
                 if (iRemind < 0)
@@ -529,7 +557,7 @@ SOFTWARE.
                 else
                     iOffsetT = iRemind;
                 
-                iRemind = (oPos.top - (that.settings.containerHeight-that.calHeight*(that.visibleY2 - that.visibleY1)) ) % that.calHeight;
+                iRemind = (oPos.top - (that.containerHeight-that.calHeight*(that.visibleY2 - that.visibleY1)) ) % that.calHeight;
                 if (iRemind < 0)
                     iOffsetB = -iRemind; 
                 else
@@ -590,8 +618,8 @@ SOFTWARE.
         {
             var oPos = this.$wrapper.position();
             var oReturn = {
-                containerWidth: this.settings.containerWidth,
-                containerHeight: this.settings.containerHeight,
+                containerWidth: this.containerWidth,
+                containerHeight: this.containerHeight,
                 cellWidth: this.calWidth,
                 cellHeight: this.calHeight,
                 wrapperLeft: oPos.left,
