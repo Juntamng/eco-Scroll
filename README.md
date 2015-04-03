@@ -20,7 +20,7 @@ I wanted to created a infinite scroll plugin for my own use.
 - Time-line
 - and more .. 
 
-Go to [www.juntamng.com/eco-Scroll](http://www.juntamng.com/ecoscroll) to see some of the transformations
+Go to [www.juntamng.com/ecoscroll](http://www.juntamng.com/ecoscroll) to see some of the transformations
 
 ## How to use
 
