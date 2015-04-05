@@ -29,8 +29,8 @@ SOFTWARE.
     var pluginName = "ecoScroll",
     	defaults = 
         {
-    		itemWidth: 100,                   // item width
-    		itemHeight: 100,                  // item height
+    		itemWidth: "100",                   // item width
+    		itemHeight: "100",                  // item height
             rangeX : [undefined, undefined],  // x range from [-x, +x]
             rangeY : [undefined, undefined],  // y range from [-y, +y]
             axis : "xy",                      // x, y or xy
@@ -122,8 +122,6 @@ SOFTWARE.
         {            
             try 
             {
-                if (this.settings.itemWidth < 10) throw "itemWidth cannot be less than 10.";
-                if (this.settings.itemHeight < 10) throw "itemHeight cannot be less than 10.";
                 if (this.settings.rangeX[0] > this.settings.rangeX[1]) throw "rangeX is set incorrect.";
                 if (this.settings.rangeY[0] > this.settings.rangeY[1]) throw "rangeY is set incorrect.";
                 if (this.settings.momentumSpeed <= 0 || this.settings.momentumSpeed > 10) throw "momentumSpeed should be between 0 to 10.";
@@ -463,7 +461,7 @@ SOFTWARE.
                 oEle.$e.show();                
             }            
 
-            this.settings.onShow({"bNew":bNew, "oEle": oEle, "$e":oEle.$e, "x":x, "y":y});
+            this.settings.onShow({"bNew":bNew, "$e":oEle.$e, "x":x, "y":y, "left": oEle.left, "top": oEle.top});
         },  
         hideCells: function()
         {

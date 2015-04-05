@@ -205,7 +205,7 @@
                                 if ($("#ifrWrapper").parent("body").length == 1)
                                     $("#ifrWrapper").appendTo(".wrapper");
 
-                                $("#ifrWrapper").css({left: oParam.oEle.left, top: oParam.oEle.top});
+                                $("#ifrWrapper").css({left: oParam.left, top: oParam.top});
                                 $("#ifrPlayer").prop({src: "https://www.youtube.com/embed/" + oParam.$e.attr("data-vid") + "?autoplay=true"});
                             })
 

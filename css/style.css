@@ -5,10 +5,10 @@ body
 	color: #666;
 }
 
-header 
+.logo
 {
-	background-color: #232121; 
-	height: 50px;
+    width: 25px;
+    height: 25px;
 }
 
 .headline 
