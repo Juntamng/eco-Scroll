@@ -1,0 +1,32 @@
+{
+	"name": "eco-scroll",
+	"version": "1.0",
+	"title": "Infinite Scroll Plugin",
+	"description": "Eco-friendly jQuery scroll plugin with infinite possibilities",
+	"keywords": [
+		"scroll",
+		"infinite",
+		"wall",
+		"eco-friendly",
+		"image"
+	],
+	"author": {
+		"name": "Mike Ng",
+		"email": "junta.m.ng@gmail.com",
+		"url": "http://www.juntamng.com/ecoscroll"
+	},
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "http://www.opensource.org/licenses/MIT"
+		}
+	],
+	"bugs": "https://github.com/juntamng/eco-Scroll/issues",
+	"homepage": "https://github.com/Juntamng/eco-Scroll",
+	"docs": "http://www.juntamng.com/ecoscroll/doc",
+	"demo": "http://www.juntamng.com/ecoscroll",
+	"dependencies": {
+		"jquery": ">=1.9.1",
+		"jquery ui": ">=1.10.1"
+	}
+}
