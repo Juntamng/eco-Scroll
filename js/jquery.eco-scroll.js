@@ -22,51 +22,42 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-;(function ( $, window, document, undefined ) 
-{
-	"use strict";
+(function ( $, window, document ) {
+"use strict";
 
     var pluginName = "ecoScroll",
-    	defaults = 
-        {
-    		itemWidth: "100",                   // item width
-    		itemHeight: "100",                  // item height
-            rangeX : [undefined, undefined],  // x range from [-x, +x]
-            rangeY : [undefined, undefined],  // y range from [-y, +y]
-            axis : "xy",                      // x, y or xy
-            snap : false,                     
-            momentum : false,                 // enable momentum
-            momentumSpeed : 8,                // momentum speed
-            onStart: function(oParam)         // trigger when dragging starts 
-            {
-                return true;
-            },
-            onShow: function(oParam)          // trigger when cell is rendered  
-            {
-                if (oParam.bNew) 
-                    oParam.$e.text(oParam.x + ":" + oParam.y);
-            },
-            onHide: function(oParam)          // trigger when cell is hidden
-            {
-                oParam.$e.hide();    
-            },
-            onRemove: function(oParam)        // trigger when cell is removed
-            {
-                return true;    
-            },
-            onStop: function(oParam)          // trigger when drag move is ended
-            {
-                
-            },
-            onResize: function(oParam)        // trigger when window resizes
-            {
-                
-            },
-            onClick: function(oParam)         // trigger when cell is clicked and dragging on a cell won't trigger click event
-            {
+    defaults = {
+        itemWidth: "100",                   // item width
+		itemHeight: "100",                  // item height
+        rangeX : [undefined, undefined],    // x range from [-x, +x]
+        rangeY : [undefined, undefined],    // y range from [-y, +y]
+        axis : "xy",                        // x, y or xy
+        snap : false,                     
+        momentum : false,                   // enable momentum
+        momentumSpeed : 8,                  // momentum speed
+        onStart: function(oParam) {         // trigger when dragging starts             
+            return true;
+        },
+        onShow: function(oParam) {          // trigger when cell is rendered  
+            if (oParam.bNew) 
+                oParam.$e.text(oParam.x + ":" + oParam.y);
+        },
+        onHide: function(oParam) {          // trigger when cell is hidden
+            oParam.$e.hide();    
+        },
+        onRemove: function(oParam) {        // trigger when cell is removed
+            return true;    
+        },
+        onStop: function(oParam) {          // trigger when drag move is ended
+            
+        },
+        onResize: function(oParam) {        // trigger when window resizes
+            
+        },
+        onClick: function(oParam) {         // trigger when cell is clicked and dragging on a cell won't trigger click event
 
-            },
-    	};
+        },
+	};
 
 	function Plugin ( element, options ) 
 	{

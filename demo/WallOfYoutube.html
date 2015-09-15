@@ -132,17 +132,17 @@
 
     $(function()
     {
-        initLoad(true, true);
+        initLoad(true);
 
         function loadMore(nextPageToken)
         {
             /*
-            "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=PLB03EA9545DD188C3&key=AIzaSyD7fut-pcutR0ydh6Jur7aK8hpicpzQJRw + nextPageToken
+            https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&maxResults=2&playlistId=PLrEnWoR732-BHrPp_Pm8_VleD68f9s14-&key=AIzaSyDRt20BaoPC7Srml7OMJM9zBOcYHRXeX8c
             */
             //
             $.ajax({
                 dataType: "json",
-                url: "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet, contentDetails&maxResults=10&playlistId=PLB03EA9545DD188C3&key=AIzaSyD7fut-pcutR0ydh6Jur7aK8hpicpzQJRw&pageToken=" + nextPageToken,
+                url: "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&maxResults=2&playlistId=PLrEnWoR732-BHrPp_Pm8_VleD68f9s14-&key=AIzaSyDRt20BaoPC7Srml7OMJM9zBOcYHRXeX8c&pageToken=" + nextPageToken,
             })
             .done(function(data)
             {
@@ -150,8 +150,8 @@
                 for (var i = 0; i < entries.length; i++)
                 {
                     var entry = entries[i];
-                    var url = entry.snippet.thumbnails.standard.url;
-                    arr[iCnt] = { "url": url, vid: entry.id };
+                    var url = entry.snippet.thumbnails.default.url;
+                    arr[iCnt] = { "url": url, vid: entry.contentDetails.videoId };
                     iCnt++;
                 }
 
@@ -164,7 +164,7 @@
         {
             $.ajax({
                 dataType: "json",
-                url: "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet, contentDetails&maxResults=10&playlistId=PLB03EA9545DD188C3&key=AIzaSyD7fut-pcutR0ydh6Jur7aK8hpicpzQJRw",
+                url: "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&maxResults=50&playlistId=PLrEnWoR732-BHrPp_Pm8_VleD68f9s14-&key=AIzaSyDRt20BaoPC7Srml7OMJM9zBOcYHRXeX8c"
             })
             .done(function(data)
             {
@@ -172,8 +172,8 @@
                 for (var i = 0; i < entries.length; i++)
                 {
                     var entry = entries[i];
-                    var url = entry.snippet.thumbnails.standard.url;
-                    arr[iCnt] = { "url": url, vid: entry.id };
+                    var url = entry.snippet.thumbnails.default.url;
+                    arr[iCnt] = { "url": url, vid: entry.contentDetails.videoId };
                     iCnt++;
                 }
                 loadMore(data.nextPageToken);
