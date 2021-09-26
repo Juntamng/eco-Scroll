@@ -1,26 +1,16 @@
 # Eco-Scroll.js
-Eco-friendly jQuery scroll plugin with infinite possibilities
+Eco-scroll is a simple draggable wall in a grid layout. 
 
-### What does it do?
-Eco-Friendly - Elements will get removed when they go out of sight
-
-Infinite Scroll - It can scroll will NO boundary
-
-Possibilities - It can transform into many different tools, Possibilities are endless
+Click here for demo
 
 ### Why?
-I wanted to created a infinite scroll plugin for my own use.
+I wanted to created an infinite wall plugin for my own use so pictures will fill up the wall and as you drag in any direction, pictures will keep filling up the wall and it will never hit the end 
 
-#### Transformations
-- Infinite Image Wall
-- Slider
-- Carousel
-- Image Gallery
-- Calendar
-- Time-line
-- and more .. 
+### What does it do?
+It is like excel table with columns and rows. When you drag, it will keep adding cells to any new empty space and for performance cells that go out the viewpoint will get destroyed so it won't eat up the memory. Another good example is Google map. As you drag, it will show empty space and quickly it will fill out the tile and continue showing map
 
-Go to [www.juntamng.com/ecoscroll](http://www.juntamng.com/ecoscroll) to see some of the transformations
+### Now What?
+When I was trying to come up with examples to demontrate and share on github, I realize this very simple plugin has endless of possibilities. It turn into image slider, Carousel, image Gallery, Calendar, editable table and more ..
 
 ## How to use
 
