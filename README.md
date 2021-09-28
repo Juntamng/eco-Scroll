@@ -1,7 +1,7 @@
 # Eco-Scroll.js
 Eco-scroll is a simple draggable wall in a grid layout. 
 
-Click here for demo
+Click [here] for demo
 
 ### Why?
 I wanted to create an infinite wall plugin for my own use so pictures will fill up the wall and as you drag in any direction, pictures will keep filling up the wall and it will never hit the end 
@@ -65,6 +65,7 @@ $(function()
 
 ![alt text](https://github.com/Juntamng/eco-Scroll/blob/master/img/screenshot4.png "Output")
 
+[demo]: https://juntamng.github.io/eco-Scroll/
 
 
 
