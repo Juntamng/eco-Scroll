@@ -65,7 +65,7 @@ $(function()
 
 ![alt text](https://github.com/Juntamng/eco-Scroll/blob/master/img/screenshot4.png "Output")
 
-[demo]: https://juntamng.github.io/eco-Scroll/
+[here]: https://juntamng.github.io/eco-Scroll/
 
 
 
