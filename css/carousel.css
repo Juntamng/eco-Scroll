@@ -2,7 +2,6 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 0;
   width: 15%;
   font-size: 20px;
   color: #fff;
@@ -112,11 +111,11 @@
   .carousel-control .glyphicon-chevron-right,
   .carousel-control .icon-prev,
   .carousel-control .icon-next {
-    width: 60px;
-    height: 60px;
-    margin-top: -15px;
+    /* width: 60px;
+    height: 60px; */
+    margin-top: -30px;
     font-size: 30px;
-    padding: 13px;
+    /* padding: 13px; */
     border: 1px solid #fff;
   }
   .carousel-control .glyphicon-chevron-left,

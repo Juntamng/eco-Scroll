@@ -1,1 +1,495 @@
-<h1>Hello World!</h1>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HTML 5 Boilerplate</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="./css/carousel.css">   
+    <link type="text/css" rel="stylesheet" href="./css/eco-scroll.css">
+    <style>
+      /* demo - start */
+      #demo.eContainer 
+      {
+          margin: 10px auto;
+          width: 300px; 
+          height: 300px;                
+          border: 10px #f1592a solid;
+      }
+      
+      #demo .eCell
+      {
+          border: 1px #f1592a solid;
+          color: #f1592a;
+          font-size: 30px;
+      }
+      /* demo - end */
+
+      /* demo2 - start */
+      #demo2.eContainer 
+      {
+          margin: 150px auto;
+          width: 300px; 
+          height: 300px;                        
+          border: 10px #f1582a solid;
+          overflow: visible;
+      }
+      
+      #demo2 .eCell
+      {
+        border: 1px #f1592a solid;
+        color: #f1592a;
+        font-size: 30px;
+      }
+      /* demo2 - end */
+
+      /* image wall - start */
+      #img-wall.eContainer 
+      {
+        width: 100%; 
+        height: 500px;              
+      }
+      
+      #img-wall .eCell img 
+      {   
+        width: 150px;
+        height: 150px;
+      }
+      /* image wall - end */
+
+      /* Iphone list - start */
+      #iPhoneContainer
+      {
+          position:relative; 
+          width:250px; 
+          height:500px;
+          margin:0px auto; 
+          padding-top:60px;
+      }
+      #imgiPhone
+      {
+          position:absolute; 
+          left:0px; 
+          top:0px; 
+          width:250px;
+      }
+      #diviPhone {
+          margin: 10px auto;
+          position: relative;
+          width: 200px; 
+          height: 355px;       
+          border: 2px #000 solid;
+          overflow: hidden;
+          background-color: #fff;
+      }
+
+      #diviPhone .eCell {
+          position: absolute;
+          border: none;
+          -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+          -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+          box-sizing: border-box;     
+      }
+
+      .iPhoneName {
+          margin: 3px;
+          border-bottom: 1px #bebebe solid;
+          font-family: monospace;
+          font-size: 12px;
+          color: #000;
+      }
+      /* Iphone list - end */
+
+      /* Image Slider - start */
+      #image-slider {
+        height: 300px;
+        width: 400px;
+        margin: 50px auto;
+        position: relative;
+        border: 2px #000 solid;
+        overflow: hidden;
+      }
+      
+      #image-slider .eCell {
+          position: absolute;
+          border: 1px blue solid;
+          -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+          -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+          box-sizing: border-box; 
+      }
+
+      #image-slider .eCell img 
+      {   
+          width: 100%; 
+          height: 100%;                
+      }
+      /* Image Slider - start */
+
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-4" style="padding-top: 30px;">
+          <h1 style='font-weight: bolder;font-size: 5em;'>Eco-Scroll</h1>
+          <h3 >Simple Draggable Wall with Infinite Possibilities</h3>
+        </div>
+        <div class="col-4" style="padding: 30px">
+          <img src="eco-scroll-logo.png" style="width:300px" />
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col" style="padding: 80px 0">
+          <h5 class="text-center" style="padding-bottom: 20px;">Try to drag inside the red square</h5>
+
+          <div id='demo' class='eContainer'>
+            <div class='wrapper'>                                
+            </div>        
+          </div>   
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-6">
+          <h5 style="padding: 0">Now try dragging again, you will see the wall will filled up with tiles and 
+            once you let go those tiles outside of the red square will be gone.
+          </h5>
+
+          <div id='demo2' class='eContainer'>
+            <div class='wrapper'>                                
+            </div>        
+          </div>   
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-8">
+          <h3 style="margin-top: 50px">Why? What is it? How is it useful?</h3>
+          <h6>
+            <p style="margin-top: 20px">Why? - I wanted to show images on the wall where you can keep dragging without boundary and I cannot a good one
+              so I decided to build my own.
+            </p>
+            <p style="margin-top: 20px">What is it? - It is simple and generic plugin wherever you drag, it will fill the space with tiles and you can place everything in it.</p>
+            <p style="margin-top: 20px">How is it useful? -  At first I only used it for my own used (The Inifinite Image Wall) and later I decided to share it on Github 
+              so I tried to come up with a few examples on how to use it and I realized it is a very simple plugin and yet 
+              can tranform into many useful tools with little bit of your imagination. Below are some tools I created 
+              form the eco-Scroll.
+            </p>
+          </h6>
+          
+        </div>
+      </div>
+
+      <div class="row flex-lg-row-reverse justify-content-center" style="margin: 100px 0">
+        <div class="col-8">
+          <h4 class="text-center" style="margin-bottom: 20px">Image Wall</h4>
+          <div id="img-wall" class='eContainer'>
+            <div class="wrapper">                                
+            </div>        
+          </div>        
+        </div>
+        <!--
+        <div class="col-2">
+        </div>
+        -->
+      </div>
+      
+      <div class="row flex-lg-row-reverse justify-content-center" style="margin: 100px 0">
+        <div class="col-4">
+          <div id="iPhoneContainer">
+            <img id="imgiPhone" src="./img/phone_bg.jpg"  />
+            <div id="diviPhone">
+                <div class="wrapper">                                
+                </div>        
+            </div>        
+          </div>  
+        </div>
+
+        <div class="col-4">
+          <h4 class="text-end" style="margin-top: 100px">iPhone Simulator</h4>
+        </div>
+      </div>
+
+      <div class="row justify-content-center" style="margin: 100px 0">
+        <div class="col-4">
+          <div id="image-slider">        
+          <!-- Indicators -->
+          <ol id="olIndicators" class="carousel-indicators">
+              <li data-to="0" class="active"></li>
+              <li data-to="1"></li>
+              <li data-to="2"></li>
+              <li data-to="3"></li>
+              <li data-to="4"></li>
+              <li data-to="5"></li>
+          </ol>    
+
+          <!-- Controls -->
+          <a class="left carousel-control" href="javascript:void(0)" data-slide="prev">
+              <span id="aPrev" class="glyphicon glyphicon-chevron-left" aria-hidden="true">&#8592;</span>
+              <span class="sr-only">Previous</span>
+          </a>
+
+          <a class="right carousel-control" style="right: 0px" href="javascript:void(0)" data-slide="next">
+              <span id="aNext" class="glyphicon glyphicon-chevron-right" aria-hidden="true">&#8594;</span>
+              <span class="sr-only">Next</span>
+          </a> 
+
+          <div id="divWrapper" class="wrapper">                                
+          </div> 
+        </div>    
+        </div>
+        <div class="col-4">
+          <h4 class="text-start" style="margin: 100px 50px">Image Slider</h4>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+    <script src="./js/jquery.eco-scroll.js"></script>        
+    <script>            
+      $(function() {
+        $("#demo").ecoScroll({
+            onShow:function(oParam) 
+            {
+                if (oParam.bNew)
+                    oParam.$e.text( oParam.x + ":" + oParam.y);
+            }
+        });
+
+        $("#demo2").ecoScroll({
+            onShow:function(oParam) 
+            {
+                if (oParam.bNew)
+                    oParam.$e.text( oParam.x + "," + oParam.y);
+            }
+        });
+        
+        $("#img-wall").ecoScroll({
+            itemWidth: 150,
+            itemHeight: 150,
+            onShow:function(oParam) 
+            {
+                if (oParam.bNew) 
+                {
+                    oParam.$e.append("<img src='./img/img" + Math.abs( (oParam.x + oParam.y*10)%25 ) + ".jpg' />").css({opacity:0}).animate({opacity: 1}, 400);
+                }
+            }
+        });
+
+        var arrName = [
+            "Clarence Czech", "Ignacia Ferber", "Amie Hamer", "Marina Brackin",
+            "Echo Clarke", "Randall Borrelli", "Nikita Feagin", "Kenyetta Haapala",
+            "Warren Barham", "Judith Howery", "Elwanda Eakins", "Stepanie Aguilera",
+            "Gloria Nick", "Shasta Thiem", "Lurline Newingham", "Malinda Wiren",
+            "Mora Mara", "Lexie Elling", "Kyong Schild", "Brigid Hopton", 
+            "Roseanne Caver", "Lavonna Troxell", "Maybelle Martinson", "Almeta Enos",
+            "Laree Lineberry", "Jeannine Sthilaire", "Clifton Boso", "Darby Mccullum",
+            "Laurine Hausman", "Jess Bouie", "Norman Word", "Chantelle Aguayo",
+            "Mallory Reaves", "Lai Koo", "Raymonde Woldt", "Augustina Parcell",
+            "Jackelyn Planck", "Jackie Propes", "Kandi Higgenbotham", 
+            "Blythe Perri", "Debroah Armagost", "Florida Briant",
+            "Nina Christofferse", "Kia Cortez", "Song Tilson", "Juli Messenger",
+            "Zonia Menjivar", "Neal Marone", "Ashlea Mcdill", "Sherron Dinger",
+            "Chia Covert",
+            "Clarence Czech", "Ignacia Ferber", "Amie Hamer", "Marina Brackin",
+            "Echo Clarke", "Randall Borrelli", "Nikita Feagin", "Kenyetta Haapala",
+            "Warren Barham", "Judith Howery", "Elwanda Eakins", "Stepanie Aguilera",
+            "Gloria Nick", "Shasta Thiem", "Lurline Newingham", "Malinda Wiren",
+            "Mora Mara", "Lexie Elling", "Kyong Schild", "Brigid Hopton", 
+            "Roseanne Caver", "Lavonna Troxell", "Maybelle Martinson", "Almeta Enos",
+            "Laree Lineberry", "Jeannine Sthilaire", "Clifton Boso", "Darby Mccullum",
+            "Laurine Hausman", "Jess Bouie", "Norman Word", "Chantelle Aguayo",
+            "Mallory Reaves", "Lai Koo", "Raymonde Woldt", "Augustina Parcell",
+            "Jackelyn Planck", "Jackie Propes", "Kandi Higgenbotham", 
+            "Blythe Perri", "Debroah Armagost", "Florida Briant",
+            "Nina Christofferse", "Kia Cortez", "Song Tilson", "Juli Messenger",
+            "Zonia Menjivar", "Neal Marone", "Ashlea Mcdill", "Sherron Dinger"
+        ];
+
+        $("#diviPhone").ecoScroll({
+            itemWidth: 200,
+            itemHeight: 30,
+            rangeX : [0,0],
+            rangeY : [0,100],
+            axis : "y",
+            momentum: true,
+            momentumSpeed: 8,
+            onShow:function(oParam) 
+            {
+                if (oParam.bNew && oParam.x==0) 
+                {
+                    oParam.$e.append("<div class='iPhoneName'>"+arrName[oParam.y]+"</div>");
+                }
+            }
+        });
+
+        var iCurX = 0;
+        
+        function updateIndicator() {
+            var $indicator = $("#olIndicators"),
+                iActive = Math.abs(Math.ceil(iCurX) % 6);     
+            $indicator.children().removeClass("active");                
+            $indicator.children().eq(iActive).addClass("active");
+        }
+
+        var clickEventType = (document.ontouchstart!==null) ? 'mousedown' : 'touchstart';
+        $(".glyphicon-chevron-left, .glyphicon-chevron-right").bind(clickEventType, function(e)
+        {                
+            e.preventDefault();
+            e.stopPropagation();                
+        })        
+        .click(function(e)
+        {
+            e.preventDefault();
+            e.stopPropagation();                
+
+            iCurX += (this.id == "aPrev") ? 1: -1;
+            $("#image-slider").data("plugin_ecoScroll").moveByCoord(iCurX, 0, {duration: 400});                            
+        });        
+        
+        $("#image-slider").ecoScroll({
+            itemWidth: "100%",
+            itemHeight: "100%",
+            rangeX : [undefined,undefined],
+            axis : "x",
+            snap: true,
+            onShow:function(oParam) 
+            {
+                if (oParam.bNew && oParam.y == 0)
+                    oParam.$e.append("<img src='.//img//img" + Math.abs( (oParam.x)%6 ) + ".jpg' />");
+            },
+            onStop:function(oParam) 
+            {                                                                           
+                iCurX = oParam.wrapperLeft/oParam.cellWidth;                    
+                updateIndicator();
+            },
+            onResize:function(oParam)
+            {                    
+                $("#image-slider").data("plugin_ecoScroll").moveByCoord(iCurX, 0);       
+            }
+        });    
+      });
+    
+    /*
+        $("#demo").ecoScroll(
+        {
+            itemWidth: 180,
+            itemHeight: 80,
+            //rangeX : [-10, 10],
+            //rangeY : [-10, 10],
+            axis : "yx",
+            snap : false,                     
+            momentum : false,
+            momentumSpeed : 10,
+            onStart: function(oParam)
+            {
+                return true;
+            },
+            onShow: function(oParam) 
+            {
+                if (oParam.bNew) 
+                    oParam.$e.text(oParam.x + ":" + oParam.y);
+                //oParam.$e.css({opacity: 1});    
+            },
+            onHide: function(oParam) 
+            {
+                //oParam.$e.css({opacity: 0.3});
+                //oParam.$e.hide();    
+            },
+            onRemove: function(oParam)
+            {
+                return true;    
+            },
+            onStop: function(oParam)
+            {
+                console.log("stop");
+            },
+            onResize: function(oParam)
+            {
+                console.log("resize");
+            },
+            onClick: function(oParam)
+            {
+                console.log("click");
+            },           
+        });
+      });
+    */
+    </script>
+
+<!--
+### Why?
+I wanted to create an infinite wall plugin for my own use so pictures will fill up the wall and as you drag in any direction, pictures will keep filling up the wall and it will never hit the end 
+
+### What does it do?
+It is like excel table with columns and rows. When you drag, it will keep adding cells to any new empty space and for performance cells that go out the viewpoint will get destroyed so it won't eat up the memory. Another good example is Google map. As you drag, it will show empty space and quickly it will fill out the tile and continue showing map
+
+### Now What?
+When I was trying to come up with examples to demontrate and share on github, I realize this very simple plugin has endless of possibilities. It can turn into image slider, Carousel, image Gallery, Calendar, editable table and more ..
+
+## How to use
+
+``` css
+<style>
+#divContainer 
+{
+  margin: 10px auto;
+  position: relative;
+  width: 500px;
+  height: 500px;               
+  border: 1px #000 solid;
+  overflow: hidden;
+}
+.eCell {
+  position: absolute;
+  border: 1px #000 solid;
+}
+</style>
+```
+
+``` html
+<body>       
+  <h1><center>Infinite Wall</center></h1>
+ 
+  <div id="divContainer">
+      <div class="wrapper">                               
+      </div>       
+  </div>       
+</body>
+```
+
+``` javascript
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+<script src="../js/jquery.eco-scroll.js"></script>       
+<script>           
+$(function()
+{  
+    $("#divContainer").ecoScroll({
+        onShow:function(oParam)
+        {
+            if (oParam.bNew)
+                oParam.$e.text( oParam.x + "," + oParam.y);
+        }
+    });
+});
+</script>
+```
+
+##### Output
+
+![alt text](https://github.com/Juntamng/eco-Scroll/blob/master/img/screenshot4.png "Output")
+
+-->
+
+
+
+
+
+
+  </body>
+</html>

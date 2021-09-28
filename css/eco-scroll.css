@@ -1,0 +1,12 @@
+.eContainer {
+    position: relative;
+    overflow: hidden;
+}
+
+.eCell
+{
+    position: absolute;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;    
+    box-sizing: border-box;
+}
