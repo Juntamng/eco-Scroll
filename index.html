@@ -5,10 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Eco-Scroll</title>
+    
+    <!-- Latest compiled and minified CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <link type="text/css" rel="stylesheet" href="./css/carousel.css">   
     <link type="text/css" rel="stylesheet" href="./css/eco-scroll.css">
     <style>
+      body {
+        margin-top: 50px;
+      }
+      
       /* demo - start */
       #demo.eContainer 
       {
@@ -77,7 +83,7 @@
       #diviPhone {
           margin: 10px auto;
           position: relative;
-          width: 200px; 
+          width: 220px; 
           height: 355px;       
           border: 2px #000 solid;
           overflow: hidden;
@@ -126,6 +132,107 @@
       }
       /* Image Slider - start */
 
+
+      /* Youtube Wall - start */
+      #youtube {
+        position: relative;
+        width: 100%; 
+        height: 500px;     
+        border: none;
+        overflow: hidden;
+      }
+        
+      #youtube .eCell {
+        position: absolute;
+        border: none;
+        -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+        -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+        box-sizing: border-box;
+        /* opacity: 0.8; */
+      }
+
+      #youtube .eCell img {
+        width: 320px;
+        height: 220px;
+      }
+
+      #youtube .eCell .overlay
+      {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 320px;
+        height: 220px;
+        background-color: #fff;
+        opacity: 0;
+      }
+
+      #youtube .eCell .overlay:hover+.play
+      {
+        display: block;
+      }
+
+      #youtube .eCell .lbl
+      {
+          position: absolute;
+          top: 0px;
+          left: 0;
+          width: 25px;
+          height: 20px;
+          padding: 2px;
+          background-color: #fff;
+          font-weight: bold;
+          opacity: 0.5;
+      }
+
+      #youtube .eCell .play
+      {
+        color: #fff;
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 30px;
+        padding: 3px;
+        margin-left: -20px;
+        margin-top: -20px;
+        display: none;
+        opacity: 1;
+      }
+
+      #youtube .eCell .play:hover
+      {
+        color: red;
+        display:block;
+      }
+
+      #ifrWrapper
+      {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 320px;
+        height: 220px;
+        z-index: 999;
+      }
+
+      #ifrWrapper .player
+      {
+        width: 320px;
+        height: 220px;
+      }
+
+      #ifrWrapper .cover
+      {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 320px;
+        height: 220px;
+        display: none;
+      }
+      /* Youtube Wall - end */
     </style>
   </head>
 
@@ -181,6 +288,20 @@
           </h6>
           
         </div>
+      </div>
+
+      <div class="row flex-lg-row-reverse justify-content-center" style="margin: 100px 0">
+        <div class="col-8">
+          <h4 class="text-center" style="margin-bottom: 20px">Youtube Wall</h4>
+          <div id="youtube">
+            <div class="wrapper" id="youtube-wrapper">                                
+            </div>        
+          </div>  
+        </div>
+        <!--
+        <div class="col-2">
+        </div>
+        -->
       </div>
 
       <div class="row flex-lg-row-reverse justify-content-center" style="margin: 100px 0">
@@ -247,6 +368,11 @@
       </div>
     </div>
 
+    <div id="ifrWrapper">
+      <iframe id="ifrPlayer" class="player" frameborder="0" allowfullscreen></iframe>
+      <div class="cover"></div>
+    </div>
+
     <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="https://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
     <script src="./js/jquery.eco-scroll.js"></script>        
@@ -268,6 +394,92 @@
             }
         });
         
+        // 
+        var arr = [], iCnt = 0, iCnt2 = 0;
+
+        initLoad(true);
+
+        function loadMore(nextPageToken)
+        {
+            /*
+            https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&maxResults=2&playlistId=PLrEnWoR732-BHrPp_Pm8_VleD68f9s14-&key=AIzaSyDRt20BaoPC7Srml7OMJM9zBOcYHRXeX8c
+            */
+            //
+            $.ajax({
+                dataType: "json",
+                url: "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&maxResults=2&playlistId=PLrEnWoR732-BHrPp_Pm8_VleD68f9s14-&key=AIzaSyDRt20BaoPC7Srml7OMJM9zBOcYHRXeX8c&pageToken=" + nextPageToken,
+            })
+            .done(function(data)
+            {
+                var entries = data.items || [];
+                for (var i = 0; i < entries.length; i++)
+                {
+                    var entry = entries[i];
+                    var url = entry.snippet.thumbnails.default.url;
+                    arr[iCnt] = { "url": url, vid: entry.contentDetails.videoId };
+                    iCnt++;
+                }
+
+                if (data.nextPageToken)
+                    loadMore(data.nextPageToken);
+            });
+        }
+
+        function initLoad(bLoadControl)
+        {
+            $.ajax({
+                dataType: "json",
+                url: "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&maxResults=50&playlistId=PLrEnWoR732-BHrPp_Pm8_VleD68f9s14-&key=AIzaSyDRt20BaoPC7Srml7OMJM9zBOcYHRXeX8c"
+            })
+            .done(function(data)
+            {
+                var entries = data.items || [];
+                for (var i = 0; i < entries.length; i++)
+                {
+                    var entry = entries[i];
+                    var url = entry.snippet.thumbnails.default.url;
+                    arr[iCnt] = { "url": url, vid: entry.contentDetails.videoId };
+                    iCnt++;
+                }
+                loadMore(data.nextPageToken);
+                bLoadControl && loadControl();
+            });
+        }
+
+        function loadControl()
+        {
+            $("#youtube").ecoScroll({
+                itemWidth: 320,
+                itemHeight: 220,
+                momentum: true,
+                momentumSpeed: 5,
+                onShow:function(oParam)
+                {
+                    if (oParam.bNew)
+                    {
+                        var i = iCnt2 % iCnt;
+
+                        oParam.$e.append("<img src='" + arr[i].url + "' /><div class='lbl'>" + i + "</div><div class='overlay'></div>").css({opacity:0}).animate({opacity: 1}, 100);
+                        oParam.$e.attr({"data-vid": arr[i].vid});
+
+                        $("<span class='play glyphicon glyphicon-play-circle'></span>").appendTo(oParam.$e)
+                            .click(function(){
+                              debugger
+                                if ($("#ifrWrapper").parent("body").length == 1)
+                                    $("#ifrWrapper").appendTo("#youtube-wrapper");
+
+                                $("#ifrWrapper").css({left: oParam.left, top: oParam.top});
+                                $("#ifrPlayer").prop({src: "https://www.youtube.com/embed/" + oParam.$e.attr("data-vid") + "?autoplay=true"});
+                            })
+
+                        iCnt2++;
+                    }
+                }
+            });
+        }
+
+        //
+
         $("#img-wall").ecoScroll({
             itemWidth: 150,
             itemHeight: 150,
@@ -311,7 +523,7 @@
         ];
 
         $("#diviPhone").ecoScroll({
-            itemWidth: 200,
+            itemWidth: 220,
             itemHeight: 30,
             rangeX : [0,0],
             rangeY : [0,100],
@@ -373,123 +585,7 @@
             }
         });    
       });
-    
-    /*
-        $("#demo").ecoScroll(
-        {
-            itemWidth: 180,
-            itemHeight: 80,
-            //rangeX : [-10, 10],
-            //rangeY : [-10, 10],
-            axis : "yx",
-            snap : false,                     
-            momentum : false,
-            momentumSpeed : 10,
-            onStart: function(oParam)
-            {
-                return true;
-            },
-            onShow: function(oParam) 
-            {
-                if (oParam.bNew) 
-                    oParam.$e.text(oParam.x + ":" + oParam.y);
-                //oParam.$e.css({opacity: 1});    
-            },
-            onHide: function(oParam) 
-            {
-                //oParam.$e.css({opacity: 0.3});
-                //oParam.$e.hide();    
-            },
-            onRemove: function(oParam)
-            {
-                return true;    
-            },
-            onStop: function(oParam)
-            {
-                console.log("stop");
-            },
-            onResize: function(oParam)
-            {
-                console.log("resize");
-            },
-            onClick: function(oParam)
-            {
-                console.log("click");
-            },           
-        });
-      });
-    */
     </script>
-
-<!--
-### Why?
-I wanted to create an infinite wall plugin for my own use so pictures will fill up the wall and as you drag in any direction, pictures will keep filling up the wall and it will never hit the end 
-
-### What does it do?
-It is like excel table with columns and rows. When you drag, it will keep adding cells to any new empty space and for performance cells that go out the viewpoint will get destroyed so it won't eat up the memory. Another good example is Google map. As you drag, it will show empty space and quickly it will fill out the tile and continue showing map
-
-### Now What?
-When I was trying to come up with examples to demontrate and share on github, I realize this very simple plugin has endless of possibilities. It can turn into image slider, Carousel, image Gallery, Calendar, editable table and more ..
-
-## How to use
-
-``` css
-<style>
-#divContainer 
-{
-  margin: 10px auto;
-  position: relative;
-  width: 500px;
-  height: 500px;               
-  border: 1px #000 solid;
-  overflow: hidden;
-}
-.eCell {
-  position: absolute;
-  border: 1px #000 solid;
-}
-</style>
-```
-
-``` html
-<body>       
-  <h1><center>Infinite Wall</center></h1>
- 
-  <div id="divContainer">
-      <div class="wrapper">                               
-      </div>       
-  </div>       
-</body>
-```
-
-``` javascript
-<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
-<script src="../js/jquery.eco-scroll.js"></script>       
-<script>           
-$(function()
-{  
-    $("#divContainer").ecoScroll({
-        onShow:function(oParam)
-        {
-            if (oParam.bNew)
-                oParam.$e.text( oParam.x + "," + oParam.y);
-        }
-    });
-});
-</script>
-```
-
-##### Output
-
-![alt text](https://github.com/Juntamng/eco-Scroll/blob/master/img/screenshot4.png "Output")
-
--->
-
-
-
-
-
 
   </body>
 </html>
