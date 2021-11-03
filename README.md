@@ -1,6 +1,8 @@
 # Eco-Scroll.js
 Eco-scroll is a simple draggable wall in a grid layout. 
 
+<img src='./eco-scroll-animated.gif'>
+
 Click [here] for demo
 
 ### Why?
